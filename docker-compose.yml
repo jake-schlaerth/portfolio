@@ -1,13 +1,26 @@
-version: '3'
+version: "3"
 
 services:
-  portfolio:
+  frontend:
     build:
-      context: .
+      context: ./frontend
       dockerfile: Dockerfile
     ports:
       - "3000:3000"
-    # environment:
-    #   - MY_ENV_VAR=value
     volumes:
-      - ./app:/app
+      - ./frontend:/app
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "3001:3001"
+    volumes:
+      - ./backend:/app
+      - ./.env.local:/app/.env
+    depends_on:
+      - mongo
+  mongo:
+    image: mongo:latest
+    ports:
+      - "27017:27017"
