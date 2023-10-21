@@ -26,19 +26,33 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+require("module-alias/register");
+const mongoose_1 = __importDefault(require("mongoose"));
 const express_1 = __importDefault(require("express"));
 const cors_1 = __importDefault(require("cors"));
 const dotenv = __importStar(require("dotenv"));
-dotenv.config({ path: "/app/.env" });
+const config_1 = require("@/config/config");
+const newsRoutes_1 = __importDefault(require("@/routes/newsRoutes"));
+dotenv.config({ path: ".env" });
+const config = (0, config_1.getConfig)();
+mongoose_1.default
+    .connect(config.DB_CONNECTION_STRING)
+    .then(() => {
+    console.log("Connected to MongoDB");
+})
+    .catch((error) => {
+    console.error("Error connecting to MongoDB", error);
+});
 const app = (0, express_1.default)();
 app.use((0, cors_1.default)());
-const PORT = 3001;
+app.use("/", newsRoutes_1.default);
 app.get("/", (req, res) => {
     res.json({
-        data: "asdfHello from TypeScript backend!",
-        apiKey: process.env.NEXT_PUBLIC_NEWSAPI_KEY,
+        data: "Hello from TypeScript backend!",
+        apiKey: process.env.NEWSAPI_KEY,
     });
 });
-app.listen(PORT, () => {
-    console.log(`Server is running at http://localhost:${PORT}`);
+const port = process.env.PORT;
+app.listen(port, () => {
+    console.log(`Server is running at http://localhost:${port}`);
 });
