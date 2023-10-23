@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 import { getEnvVar } from "@/config/getEnvVar";
 
-export const connect = async () => {
+export const connectToDatabase = async () => {
   try {
     await mongoose.connect(getEnvVar("DB_CONNECTION_STRING"));
   } catch (error) {

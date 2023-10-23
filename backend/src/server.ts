@@ -5,11 +5,11 @@ import * as dotenv from "dotenv";
 
 import newsRoutes from "@/routes/newsRoutes";
 import { getEnvVar } from "@/config/getEnvVar";
-import { connect } from "@/database/connect";
+import { connectToDatabase } from "@/database/connectToDatabase";
 
 dotenv.config({ path: ".env" });
 
-connect();
+connectToDatabase();
 
 const app = express();
 app.use(cors());

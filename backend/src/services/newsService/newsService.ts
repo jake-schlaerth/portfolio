@@ -1,5 +1,4 @@
 import { NewsApiClient } from "@/apiClients/newsApiClient";
-import type { NewsApiResponse } from "./types";
 import { ArticleModel } from "@/models/article/articleModel";
 import { Article } from "@/models/article/articleType";
 
