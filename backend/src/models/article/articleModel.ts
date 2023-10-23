@@ -1,6 +1,6 @@
 import mongoose, { Schema } from "mongoose";
 
-import { Article } from "./types";
+import { Article } from "./articleType";
 
 const SourceSchema = new Schema({
   id: { type: String },

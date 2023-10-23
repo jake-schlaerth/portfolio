@@ -1,3 +1,5 @@
+import { Source } from "@/models/source/sourceType";
+
 export interface Article {
   source: Source;
   author: string;
@@ -7,9 +9,4 @@ export interface Article {
   urlToImage: string;
   publishedAt: string;
   content: string;
-}
-
-export interface Source {
-  id?: string;
-  name: string;
 }

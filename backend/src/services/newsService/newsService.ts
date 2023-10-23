@@ -1,6 +1,7 @@
 import { NewsApiClient } from "@/apiClients/newsApiClient";
 import type { NewsApiResponse } from "./types";
 import { ArticleModel } from "@/models/article/articleModel";
+import { Article } from "@/models/article/articleType";
 
 class NewsService {
   private apiClient: NewsApiClient;
@@ -9,26 +10,29 @@ class NewsService {
     this.apiClient = NewsApiClient.getInstance();
   }
 
-  getSelectedArticle = async (
-    query: string,
-    sortBy?: string
-  ): Promise<NewsApiResponse> => {
+  getArticle = async (query: string, sortBy?: string): Promise<Article> => {
     const yesterday = new Date();
     yesterday.setDate(yesterday.getDate() - 1);
     const date = this.getNewsApiFormattedDate(yesterday);
 
+    const articlesFromDb = await ArticleModel.find({
+      title: new RegExp(query, "i"), // 'i' makes the search case-insensitive
+    });
+
+    if (articlesFromDb && articlesFromDb.length > 0) {
+      const randomIndex = Math.floor(Math.random() * articlesFromDb.length);
+      return articlesFromDb[randomIndex];
+    }
+
     const data = await this.apiClient.fetchEverything(query, date, sortBy);
 
-    // Save all articles to the database
     for (let article of data.articles) {
-      // Check if the article already exists to avoid duplicates
       const existingArticle = await ArticleModel.findOne({ url: article.url });
       if (!existingArticle) {
         await ArticleModel.create(article);
       }
     }
 
-    // Your article selection logic here, for example:
     const randomIndex = Math.floor(Math.random() * data.articles.length);
     return data.articles[randomIndex];
   };

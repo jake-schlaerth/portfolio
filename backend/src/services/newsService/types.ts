@@ -1,5 +1,5 @@
 import type { Request } from "express";
-import { Article } from "@/models/article/types";
+import { Article } from "@/models/article/articleType";
 
 interface NewsRequestQuery {
   query: string;

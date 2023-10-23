@@ -1,12 +1,12 @@
 import { Request, Response } from "express";
-import { newsService } from "@/services/newsService";
+import { newsService } from "@/services/newsService/newsService";
 
 class NewsController {
   getNews = async (request: Request, response: Response): Promise<void> => {
     try {
       const { query } = request.query;
 
-      const article = await newsService.getSelectedArticle(query as string);
+      const article = await newsService.getArticle(query as string);
       response.json(article);
     } catch (error) {
       console.log(error);
