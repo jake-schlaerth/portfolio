@@ -9,18 +9,17 @@ class NewsService {
     this.apiClient = NewsApiClient.getInstance();
   }
 
-  getArticle = async (query: string, sortBy?: string): Promise<Article> => {
+  getArticles = async (query: string, sortBy?: string): Promise<Article[]> => {
     const yesterday = new Date();
     yesterday.setDate(yesterday.getDate() - 1);
     const date = this.getNewsApiFormattedDate(yesterday);
 
     const articlesFromDb = await ArticleModel.find({
-      title: new RegExp(query, "i"), // 'i' makes the search case-insensitive
+      title: new RegExp(query, "i"),
     });
 
     if (articlesFromDb && articlesFromDb.length > 0) {
-      const randomIndex = Math.floor(Math.random() * articlesFromDb.length);
-      return articlesFromDb[randomIndex];
+      return this.selectRandomArticles(articlesFromDb, 3);
     }
 
     const data = await this.apiClient.fetchEverything(query, date, sortBy);
@@ -32,8 +31,12 @@ class NewsService {
       }
     }
 
-    const randomIndex = Math.floor(Math.random() * data.articles.length);
-    return data.articles[randomIndex];
+    return this.selectRandomArticles(data.articles, 3);
+  };
+
+  selectRandomArticles = (articles: Article[], count: number): Article[] => {
+    const shuffled = articles.sort(() => 0.5 - Math.random());
+    return shuffled.slice(0, count);
   };
 
   getNewsApiFormattedDate = (date: Date) => {

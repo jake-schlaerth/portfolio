@@ -6,8 +6,8 @@ class NewsController {
     try {
       const { query } = request.query;
 
-      const article = await newsService.getArticle(query as string);
-      response.json(article);
+      const articles = await newsService.getArticles(query as string);
+      response.json(articles);
     } catch (error) {
       console.log(error);
       response.status(500).json({ error: "Failed to fetch news" });

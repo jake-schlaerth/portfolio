@@ -25,7 +25,7 @@ export class NewsApiClient {
   public fetchEverything = async (
     query: string,
     date: string,
-    sortBy: string = "popularity"
+    sortBy: string = "relevance"
   ): Promise<NewsApiResponse> => {
     const url = `${this.baseUrl}/everything?q=${query}&language=en&from=${date}&sortBy=${sortBy}&apiKey=${this.apiKey}`;
     console.log(url);
