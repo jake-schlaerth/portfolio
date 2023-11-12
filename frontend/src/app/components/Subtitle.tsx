@@ -1,11 +1,3 @@
-import { FC, ReactNode } from "react";
-
-interface SubtitleProps {
-  children?: ReactNode;
-}
-
-export const Subtitle: FC<SubtitleProps> = ({ children }) => (
-  <div className="">
-    <h1>{children}</h1>
-  </div>
+export const Subtitle = ({ children }: { children: React.ReactNode }) => (
+  <h2>{children}</h2>
 );

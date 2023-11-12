@@ -1,11 +1,21 @@
 import { Subtitle } from "@components/Subtitle";
 import { Title } from "@components/Title";
+import Link from "next/link";
 
-export default function Home() {
-  return (
-    <>
-      <Title>hi i'm jake</Title>
-      <Subtitle>i write code and make music</Subtitle>
-    </>
-  );
-}
+const Home = () => (
+  <>
+    <Title>hi i&apos;m jake</Title>
+    <Subtitle>
+      i write{" "}
+      <Link href="/code" className="text-gray-400 underline">
+        code
+      </Link>{" "}
+      and make{" "}
+      <Link href="/music" className="text-gray-400 underline">
+        music
+      </Link>
+    </Subtitle>
+  </>
+);
+
+export default Home;

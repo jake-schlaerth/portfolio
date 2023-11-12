@@ -1,11 +1,3 @@
-import { FC, ReactNode } from "react";
-
-interface TitleProps {
-  children?: ReactNode;
-}
-
-export const Title: FC<TitleProps> = ({ children }) => (
-  <div className="">
-    <h2>{children}</h2>
-  </div>
+export const Title = ({ children }: { children: React.ReactNode }) => (
+  <h1>{children}</h1>
 );
