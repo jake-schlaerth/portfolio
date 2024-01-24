@@ -4,7 +4,7 @@ tasks:
   dev:
     desc: Start development environment
     cmds:
-      - docker-compose -f docker-compose.yml up frontend-dev
+      - ./bin/start-dev.sh
 
   prod:
     desc: Start production environment
