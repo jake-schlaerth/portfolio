@@ -6,17 +6,8 @@ tasks:
     cmds:
       - ./bin/start-dev.sh
 
-  prod:
-    desc: Start production environment
+  build:
+    desc: Build image
     cmds:
-      - docker-compose -f docker-compose.yml up frontend-prod
+      - docker-compose -f docker-compose.yml build frontend
 
-  dev-build:
-    desc: Build development image
-    cmds:
-      - docker-compose -f docker-compose.yml build frontend-dev
-
-  prod-build:
-    desc: Build production image
-    cmds:
-      - docker-compose -f docker-compose.yml build frontend-prod

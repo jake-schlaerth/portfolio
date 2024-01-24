@@ -1,21 +1,14 @@
 version: "3"
 
 services:
-  frontend-dev:
+  frontend:
     build:
       context: ./frontend
-      dockerfile: Dockerfile.dev
+      dockerfile: Dockerfile
     ports:
       - "3000:3000"
     volumes:
       - ./frontend:/app
-
-  frontend-prod:
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile.prod
-    ports:
-      - "80:80"
   
   caddy:
       image: caddy:latest

@@ -45,4 +45,4 @@ cd ..
 docker-compose -f docker-compose.yml up -d caddy
 
 # Start the development environment
-docker-compose -f docker-compose.yml up -d frontend-dev
+docker-compose -f docker-compose.yml up -d frontend

@@ -66,8 +66,3 @@ RUN set -ex \
 
 COPY docker-entrypoint.sh /usr/local/bin/
 ENTRYPOINT ["docker-entrypoint.sh"]
-
-WORKDIR /app
-
-
-CMD [ "npm", "run", "dev" ]
