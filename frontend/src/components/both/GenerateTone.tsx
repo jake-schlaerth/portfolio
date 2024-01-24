@@ -14,6 +14,7 @@ export const GenerateTone = ({ midiNote }: GenerateToneProps) => (
       // osc.frequency.rampTo("C3", 3);
       osc.start().stop("+3");
     }}
+    className="text-2xl hover:text-xl transition-text duration-1000 ease-in-out"
   >
     generate tone
   </button>
