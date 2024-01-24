@@ -1,3 +1,6 @@
 jakeschlaerth.localhost {
-    reverse_proxy  frontend-dev:3000
+    reverse_proxy  frontend-dev:3000 {
+        health_uri  /healthz
+        health_interval 10s
+    }
 }
