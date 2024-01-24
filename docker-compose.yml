@@ -9,17 +9,3 @@ services:
       - "3000:3000"
     volumes:
       - ./frontend:/app
-  backend:
-    build:
-      context: ./backend
-      dockerfile: Dockerfile
-    ports:
-      - "3001:3001"
-    volumes:
-      - ./backend:/backend
-    depends_on:
-      - mongo
-  mongo:
-    image: mongo:latest
-    ports:
-      - "27017:27017"
