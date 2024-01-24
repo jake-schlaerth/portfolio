@@ -1,0 +1,22 @@
+version: '3'
+
+tasks:
+  dev:
+    desc: Start development environment
+    cmds:
+      - docker-compose -f docker-compose.yml up frontend-dev
+
+  prod:
+    desc: Start production environment
+    cmds:
+      - docker-compose -f docker-compose.yml up frontend-prod
+
+  dev-build:
+    desc: Build development image
+    cmds:
+      - docker-compose -f docker-compose.yml build frontend-dev
+
+  prod-build:
+    desc: Build production image
+    cmds:
+      - docker-compose -f docker-compose.yml build frontend-prod
