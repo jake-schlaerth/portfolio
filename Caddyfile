@@ -1,0 +1,3 @@
+jakeschlaerth.localhost {
+    reverse_proxy  frontend-dev:3000
+}

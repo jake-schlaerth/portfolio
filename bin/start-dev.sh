@@ -14,23 +14,35 @@ if ! command -v docker &> /dev/null; then
   exit 1
 fi
 
-# Check if Docker daemon is running, and start it if not
 if ! docker info &> /dev/null; then
   echo "Docker daemon is not running. Starting Docker..."
-  open -a Docker # This command opens Docker for Mac
-  sleep 5 # Wait for Docker to start (you can adjust the duration)
-  if ! docker info &> /dev/null; then
-    echo "Failed to start Docker daemon. Please start Docker manually and rerun the script."
+
+  open -a Docker > /dev/null 2>&1 &
+
+  max_attempts=5
+  attempts=0
+  while [ $attempts -lt $max_attempts ]; do
+    if docker info &> /dev/null; then
+      echo "Docker daemon is now running."
+      break
+    fi
+
+    attempts=$((attempts+1))
+    sleep 1
+  done
+
+  if [ $attempts -eq $max_attempts ]; then
+    echo "Failed to start Docker daemon after $max_attempts attempts. Please start Docker manually and rerun the script."
     exit 1
   fi
 fi
 
-# Run npm install in the frontend directory on the host system
-cd frontend # Change to the frontend directory where package.json is located
+cd frontend
 npm install
-
-# Navigate back to the project's root directory
 cd ..
 
-# Start the development environment using Docker Compose
-docker-compose -f docker-compose.yml up frontend-dev
+# Start the Caddy service
+docker-compose -f docker-compose.yml up -d caddy
+
+# Start the development environment
+docker-compose -f docker-compose.yml up -d frontend-dev
