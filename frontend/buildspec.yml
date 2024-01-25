@@ -4,8 +4,6 @@ phases:
   pre_build:
     commands:
       - cd frontend
-      - echo Logging in to Amazon ECR...
-      - $(aws ecr get-login --region $AWS_DEFAULT_REGION --no-include-email)
 
   build:
     commands:
@@ -14,6 +12,10 @@ phases:
 
   post_build:
     commands:
+      - echo Logging in to Amazon ECR...
+      - $(aws ecr get-login --region $AWS_DEFAULT_REGION --no-include-email)
+      - echo Docker images available:
+      - docker images
       - echo Pushing the Docker image...
       - docker push $REPOSITORY_URI:latest
       - echo Writing image definitions file...
