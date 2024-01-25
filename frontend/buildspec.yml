@@ -6,8 +6,6 @@ phases:
       - cd frontend
       - echo Logging in to Amazon ECR...
       - $(aws ecr get-login --region $AWS_DEFAULT_REGION --no-include-email)
-      - echo Installing Node.js dependencies...
-      - npm install
 
   build:
     commands:

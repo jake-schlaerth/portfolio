@@ -66,7 +66,7 @@ RUN set -ex \
 
 
 COPY . /app
-COPY docker-entrypoint.sh /usr/local/bin/
-
 WORKDIR /app
+RUN npm install
+
 ENTRYPOINT ["docker-entrypoint.sh"]
