@@ -3,11 +3,16 @@ version: 0.2
 phases:
   pre_build:
     commands:
+      - cd frontend
       - echo Logging in to Amazon ECR...
       - $(aws ecr get-login --region $AWS_DEFAULT_REGION --no-include-email)
 
   build:
     commands:
+      - echo "Current directory is:"
+      - pwd
+      - echo "Listing contents of the current directory..."
+      - ls -l
       - echo Building the Docker image...
       - docker build -t $REPOSITORY_URI:latest .
 
@@ -19,4 +24,4 @@ phases:
       - printf '[{"name":"container_name","imageUri":"%s"}]' $REPOSITORY_URI:latest > imagedefinitions.json
 
 artifacts:
-  files: imagedefinitions.json
+  files: frontend/imagedefinitions.json
