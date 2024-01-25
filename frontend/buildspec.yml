@@ -3,6 +3,8 @@ version: 0.2
 phases:
   pre_build:
     commands:
+      - echo Logging in to Docker Hub...
+      - docker login -u $DOCKERHUB_USERNAME -p $DOCKERHUB_PASSWORD
       - cd frontend
 
   build:
