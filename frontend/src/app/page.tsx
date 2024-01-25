@@ -15,12 +15,12 @@ const Home = () => (
         music
       </Link>
     </Subtitle>
-    <Subtitle>
+    {/* <Subtitle>
       sometimes i do{" "}
       <Link href="/both" className="text-gray-400 underline">
         both
       </Link>
-    </Subtitle>
+    </Subtitle> */}
   </>
 );
 
