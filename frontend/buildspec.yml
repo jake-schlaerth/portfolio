@@ -22,4 +22,4 @@ phases:
       - printf '[{"name":"portfolio-container","imageUri":"%s"}]' $REPOSITORY_URI:latest > imagedefinitions.json
 
 artifacts:
-  files: frontend/imagedefinitions.json
+  files: imagedefinitions.json
