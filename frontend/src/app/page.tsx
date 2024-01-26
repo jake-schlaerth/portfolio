@@ -1,5 +1,4 @@
-import { Subtitle } from "@components/Subtitle";
-import { Title } from "@components/Title";
+import { Subtitle, Title } from "./components";
 import Link from "next/link";
 
 const Home = () => (
@@ -15,12 +14,6 @@ const Home = () => (
         music
       </Link>
     </Subtitle>
-    {/* <Subtitle>
-      sometimes i do{" "}
-      <Link href="/both" className="text-gray-400 underline">
-        both
-      </Link>
-    </Subtitle> */}
   </>
 );
 

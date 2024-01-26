@@ -6,6 +6,7 @@ import { Tone } from "@lib/Tone";
 interface GenerateToneProps {
   midiNote: number;
 }
+
 export const GenerateTone = ({ midiNote }: GenerateToneProps) => (
   <button
     onMouseOver={() => {

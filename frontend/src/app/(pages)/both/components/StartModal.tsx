@@ -3,7 +3,7 @@
 import { Tone } from "@lib/Tone";
 import { useState } from "react";
 
-export const Dialog = () => {
+export const StartModal = () => {
   const [isOpen, setIsOpen] = useState(true);
 
   const handleClose = async () => {
