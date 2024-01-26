@@ -1,2 +1,3 @@
 export * from "./StartModal";
-export * from "./GenerateTone";
+export * from "./ToneGenerator";
+export * from "./ChordGenerator";

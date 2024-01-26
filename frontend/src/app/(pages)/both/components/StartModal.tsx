@@ -9,6 +9,7 @@ export const StartModal = () => {
   const handleClose = async () => {
     setIsOpen(false);
     await Tone.start();
+    console.log("audio ready");
   };
 
   if (!isOpen) return null;

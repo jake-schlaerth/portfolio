@@ -7,7 +7,7 @@ interface GenerateToneProps {
   midiNote: number;
 }
 
-export const GenerateTone = ({ midiNote }: GenerateToneProps) => (
+export const ToneGenerator = ({ midiNote }: GenerateToneProps) => (
   <button
     onMouseOver={() => {
       const osc = new Tone.Oscillator().toDestination();
@@ -17,6 +17,6 @@ export const GenerateTone = ({ midiNote }: GenerateToneProps) => (
     }}
     className="text-2xl hover:text-xl transition-text duration-1000 ease-in-out"
   >
-    generate tone
+    ------------
   </button>
 );
