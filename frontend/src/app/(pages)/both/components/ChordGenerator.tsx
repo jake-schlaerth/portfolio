@@ -7,8 +7,8 @@ interface ChordGeneratorProps {
 
 export const ChordGenerator = ({ midiNotes }: ChordGeneratorProps) => (
   <div className="flex flex-col">
-    {midiNotes.map((midiNote) => (
-      <ToneGenerator midiNote={midiNote} />
+    {midiNotes.map((midiNote, index) => (
+      <ToneGenerator midiNote={midiNote} key={index} />
     ))}
   </div>
 );
