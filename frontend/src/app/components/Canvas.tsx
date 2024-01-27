@@ -1,13 +1,29 @@
 "use client";
 import { useEffect, useRef } from "react";
+import { scaleSineWave } from "../utils";
 
-export const SineWaveLine = () => {
+interface CanvasProps {
+  canvasHeight: number;
+  canvasWidth: number;
+  displayHeight: number;
+  displayWidth: number;
+  frequencyX?: number;
+  frequencyY?: number;
+}
+
+export const Canvas = ({
+  canvasHeight,
+  canvasWidth,
+  displayHeight,
+  displayWidth,
+  frequencyX = 0.02,
+  frequencyY = 0.013,
+}: CanvasProps) => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) {
-      // Canvas element not available yet, exit the function
       return;
     }
 
@@ -19,10 +35,8 @@ export const SineWaveLine = () => {
     ctx.fillStyle = "black";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-    let xOscillator = 0;
-    let yOscillator = 0;
-    const frequencyX = 0.02;
-    const frequencyY = 0.0302;
+    let oscillatorX = 0;
+    let oscillatorY = 0;
     const amplitudeX = canvas.width;
     const amplitudeY = canvas.height;
 
@@ -34,13 +48,12 @@ export const SineWaveLine = () => {
       if (!ctx) {
         return;
       }
-      //   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-      const x = amplitudeX * ((Math.sin(xOscillator) + 1) / 2);
-      const y = amplitudeY * ((Math.sin(yOscillator) + 1) / 2);
+      const x = scaleSineWave(amplitudeX, oscillatorX);
+      const y = scaleSineWave(amplitudeY, oscillatorY);
 
-      xOscillator += frequencyX;
-      yOscillator += frequencyY;
+      oscillatorX += frequencyX;
+      oscillatorY += frequencyY;
 
       ctx.lineTo(x, y);
       ctx.stroke();
@@ -49,14 +62,15 @@ export const SineWaveLine = () => {
     }
 
     draw();
-  }, []);
+  });
 
   return (
     <div>
       <canvas
         ref={canvasRef}
-        width={80} // Adjust the canvas width as needed
-        height={60} // Adjust the canvas height as needed
+        height={canvasHeight}
+        width={canvasWidth}
+        style={{ width: `${displayWidth}px`, height: `${displayHeight}px` }}
       />
     </div>
   );

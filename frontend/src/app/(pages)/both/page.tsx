@@ -1,7 +1,7 @@
 "use client";
 
 import { ChordGenerator, StartModal } from "./components";
-import { SineWaveLine } from "./components/SineWaveLine";
+import { Canvas } from "../../components/Canvas";
 import { C_MAJOR_7, F_MINOR_7 } from "./consts/chords";
 
 const Both = () => (
@@ -11,7 +11,14 @@ const Both = () => (
       <ChordGenerator midiNotes={C_MAJOR_7} />
       <ChordGenerator midiNotes={F_MINOR_7} />
     </div>
-    <SineWaveLine />
+    <Canvas
+      canvasHeight={600}
+      canvasWidth={800}
+      displayHeight={600}
+      displayWidth={800}
+      frequencyX={0.2}
+      frequencyY={0.191}
+    />
   </>
 );
 
