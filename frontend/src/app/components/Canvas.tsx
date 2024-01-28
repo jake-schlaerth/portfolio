@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useRef } from "react";
 import { scaleSineWave } from "../utils";
+import { Tone } from "@/lib/Tone";
 
 interface CanvasProps {
   canvasHeight: number;
@@ -44,8 +45,14 @@ export const Canvas = ({
     ctx.beginPath();
     ctx.moveTo(canvas.width / 2, canvas.height / 2);
 
+    function playTone() {
+      const synth = new Tone.Synth().toDestination();
+      synth.triggerAttackRelease("C4", "8n");
+      console.log("trigger");
+    }
+
     function draw() {
-      if (!ctx) {
+      if (!ctx || !canvas) {
         return;
       }
 
@@ -54,6 +61,10 @@ export const Canvas = ({
 
       oscillatorX += frequencyX;
       oscillatorY += frequencyY;
+
+      if (x <= 1 || x >= canvas.width - 1 || y <= 1 || y >= canvas.height - 1) {
+        playTone();
+      }
 
       ctx.lineTo(x, y);
       ctx.stroke();

@@ -16,8 +16,8 @@ const Both = () => (
       canvasWidth={800}
       displayHeight={600}
       displayWidth={800}
-      frequencyX={0.2}
-      frequencyY={0.191}
+      frequencyX={0.02}
+      frequencyY={0.0191}
     />
   </>
 );
