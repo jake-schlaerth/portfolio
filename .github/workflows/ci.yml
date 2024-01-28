@@ -1,0 +1,26 @@
+name: frontend
+
+on:
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    container:
+      image: node:alpine
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Change to Frontend Directory
+        run: cd frontend
+      - name: Install Dependencies
+        run: npm install
+        working-directory: ./frontend
+      - name: Run TypeScript Compiler
+        run: npx tsc --noEmit
+        working-directory: ./frontend
+      - name: Run ESLint
+        run: npx eslint . --ext .ts,.tsx
+        working-directory: ./frontend
