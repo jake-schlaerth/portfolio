@@ -1,6 +1,5 @@
-import { Canvas } from "./components/Canvas";
-import { Subtitle, Title } from "./components";
 import Link from "next/link";
+import { Canvas, Subtitle, Title } from "@components";
 
 const Home = () => (
   <>

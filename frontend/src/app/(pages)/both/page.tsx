@@ -1,7 +1,7 @@
 "use client";
 
+import { Canvas } from "@components";
 import { ChordGenerator, StartModal } from "./components";
-import { Canvas } from "../../components/Canvas";
 import { C_MAJOR_7, F_MINOR_7 } from "./consts/chords";
 
 const Both = () => (
