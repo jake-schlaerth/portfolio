@@ -1,19 +1,11 @@
-import { Canvas } from "./components/Canvas";
-import { Subtitle, Title } from "./components";
-import Link from "next/link";
+import { Subtitle, Title, InternalLink } from "./components";
 
 const Home = () => (
   <>
     <Title>hi i&apos;m jake</Title>
     <Subtitle>
-      i write{" "}
-      <Link href="/code" className="text-gray-400 underline">
-        code
-      </Link>{" "}
-      and make{" "}
-      <Link href="/music" className="text-gray-400 underline">
-        music
-      </Link>
+      i write <InternalLink href="/code">code</InternalLink> and make{" "}
+      <InternalLink href="/music">music</InternalLink>
     </Subtitle>
   </>
 );
