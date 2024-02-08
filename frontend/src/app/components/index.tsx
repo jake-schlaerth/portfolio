@@ -4,3 +4,4 @@ export * from "./Title";
 export * from "./Canvas";
 export * from "./InternalLink";
 export * from "./ExternalLink";
+export * from "./Analytics";
