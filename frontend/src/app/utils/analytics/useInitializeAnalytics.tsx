@@ -1,17 +1,22 @@
-import { useRouter } from "next/router";
+import { usePathname } from "next/navigation";
+import { useEffect, useRef } from "react";
+
 import { emitAnalyticsEvent } from ".";
-import { useEffect } from "react";
+
+const getUnixTimestamp = (date = new Date()) =>
+  Math.floor(date.getTime() / 1000);
+const sessionStartTime = getUnixTimestamp();
 
 export const useInitializeAnalytics = () => {
-  const router = useRouter();
+  const pathname = usePathname();
+
+  useEffect(() => emitAnalyticsEvent("pageView"), [pathname]);
 
   useEffect(() => {
-    const handleRouteChange = () => emitAnalyticsEvent("pageView");
+    if (document.visibilityState === "hidden") {
+      const duration = getUnixTimestamp() - sessionStartTime;
 
-    handleRouteChange();
-
-    router.events.on("routeChangeComplete", handleRouteChange);
-
-    return () => router.events.off("routeChangeComplete", handleRouteChange);
-  }, []);
+      emitAnalyticsEvent("sessionDuration", { duration });
+    }
+  });
 };

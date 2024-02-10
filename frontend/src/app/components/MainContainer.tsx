@@ -1,12 +1,15 @@
 "use client";
 
-import { Analytics } from ".";
-import { isClient } from "@/app/utils";
+import type { PropsWithChildren } from "react";
 
-export const MainContainer = ({ children }: { children: React.ReactNode }) => (
-  <div className="min-h-screen flex items-center justify-center flex-col">
-    {isClient() && <Analytics />}
+import { useInitializeAnalytics } from "@/app/utils/analytics";
 
-    {children}
-  </div>
-);
+export const MainContainer = ({ children }: PropsWithChildren) => {
+  useInitializeAnalytics();
+
+  return (
+    <div className="min-h-screen flex items-center justify-center flex-col">
+      {children}
+    </div>
+  );
+};

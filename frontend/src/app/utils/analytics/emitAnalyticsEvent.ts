@@ -1,5 +1,4 @@
-"use client";
-
+import { getUnixTimestamp } from ".";
 import { AnalyticsEvent } from "./types";
 
 export const emitAnalyticsEvent = <
@@ -15,12 +14,11 @@ export const emitAnalyticsEvent = <
   const eventData = {
     eventName,
     url: window.location.href,
-    timestamp: new Date().getTime() / 1000,
+    timestamp: getUnixTimestamp(),
     ...(payload ?? {}),
   };
 
-  console.log(eventData);
-  fetch("api/track", {
+  fetch("track", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
