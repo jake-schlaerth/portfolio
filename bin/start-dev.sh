@@ -41,8 +41,17 @@ cd frontend
 npm install
 cd ..
 
-# Start the Caddy service
+# Start the Caddy reverse proxy service
 docker-compose -f docker-compose.yml up -d caddy
 
-# Start the development environment
+# Start the NextJS server
 docker-compose -f docker-compose.yml up -d frontend
+
+# Start the Kafka broker
+docker-compose -f docker-compose.yml up -d kafka
+
+# Start the Zookeeper instance
+docker-compose -f docker-compose.yml up -d zookeeper
+
+# Start the Kafka topic creation service
+docker-compose -f docker-compose.yml up -d init-kafka
