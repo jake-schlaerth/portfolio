@@ -18,7 +18,7 @@ export const emitAnalyticsEvent = <
     ...(payload ?? {}),
   };
 
-  fetch("track", {
+  fetch("/track", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

@@ -1,4 +1,5 @@
 export async function POST(request: Request) {
-  console.log(await request.json());
-  return new Response(undefined, { status: 200 });
+  const data = await request.json();
+  console.log(data);
+  return Response.json({ data });
 }

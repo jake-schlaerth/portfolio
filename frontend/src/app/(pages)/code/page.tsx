@@ -1,4 +1,4 @@
-import { ExternalLink } from "@/app/components";
+import { ExternalLink } from "@/components";
 
 const Code = () => (
   <>

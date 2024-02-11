@@ -2,7 +2,7 @@
 
 import type { PropsWithChildren } from "react";
 
-import { useInitializeAnalytics } from "@/app/utils/analytics";
+import { useInitializeAnalytics } from "@/utils/analytics";
 
 export const MainContainer = ({ children }: PropsWithChildren) => {
   useInitializeAnalytics();

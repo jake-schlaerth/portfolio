@@ -2,7 +2,7 @@ export type AnalyticsEvent =
   | {
       eventName: "sessionDuration";
       payload: {
-        duration: number;
+        sessionDuration: number;
       };
     }
   | {
@@ -11,6 +11,6 @@ export type AnalyticsEvent =
   | {
       eventName: "location";
       payload: {
-        location: string;
+        location: number[];
       };
     };

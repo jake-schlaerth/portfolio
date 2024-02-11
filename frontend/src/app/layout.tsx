@@ -1,9 +1,10 @@
 import "./globals.css";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import { ReactNode } from "react";
+import type { PropsWithChildren } from "react";
 
 import { MainContainer } from "./components";
+import { Provider } from "jotai";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -12,11 +13,13 @@ export const metadata: Metadata = {
   description: "Software Engineer",
 };
 
-export default function RootLayout({ children }: { children: ReactNode }) {
+export default function RootLayout({ children }: PropsWithChildren) {
   return (
     <html lang="en">
       <body className={inter.className}>
-        <MainContainer>{children}</MainContainer>
+        <Provider>
+          <MainContainer>{children}</MainContainer>
+        </Provider>
       </body>
     </html>
   );
