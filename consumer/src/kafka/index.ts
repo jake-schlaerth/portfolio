@@ -1,2 +1,1 @@
-export * from "./consumer";
-export * from "./kafkaClient";
+export * from "./runConsumer";

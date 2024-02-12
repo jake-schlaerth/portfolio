@@ -1,8 +1,8 @@
 import { config } from "@/config";
-import { consumer } from "@/kafka/consumer";
-import { broadcastMessage } from "@/webSocket/broadcastMessage";
+import { broadcastMessage } from "@/webSocket";
+import { consumer } from "./consumer";
 
-export const run = async () => {
+export const runConsumer = async () => {
   await consumer.connect();
   await consumer.subscribe({
     topic: config.kafkaTopic,
