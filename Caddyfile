@@ -1,6 +1,10 @@
 jakeschlaerth.localhost {
-    reverse_proxy  frontend:3000 {
+    reverse_proxy frontend:3000 {
         health_uri  /healthz
         health_interval 10s
     }
+}
+
+analytics-streamer.localhost {
+    reverse_proxy analytics-streamer:3001
 }
