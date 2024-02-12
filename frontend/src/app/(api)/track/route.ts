@@ -8,10 +8,9 @@ const kafka = new Kafka({
 const producer = kafka.producer();
 
 export async function POST(request: Request) {
-  console.log(process.env.KAFKA_BROKER_BASE_URL);
   const data = await request.json();
 
-  console.log(data);
+  // console.log(data);
 
   await producer.connect();
 

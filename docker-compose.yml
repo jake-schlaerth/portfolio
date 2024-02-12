@@ -59,12 +59,12 @@ services:
       kafka-topics --bootstrap-server kafka:29092 --list
       "
 
-  consumer:
+  analytics-streamer:
     build:
-      context: ./consumer
+      context: ./analytics-streamer
     ports:
       - "3001:3001"
     depends_on:
       - kafka
     volumes:
-      - ./consumer:/usr/src/app
+      - ./analytics-streamer:/usr/src/app

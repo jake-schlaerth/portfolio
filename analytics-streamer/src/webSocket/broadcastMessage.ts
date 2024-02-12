@@ -1,3 +1,4 @@
+import WebSocket from "ws";
 import { webSocketServer } from "./webSocketServer";
 
 export const broadcastMessage = (data: string) => {

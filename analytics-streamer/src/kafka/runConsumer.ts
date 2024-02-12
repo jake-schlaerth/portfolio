@@ -15,7 +15,9 @@ export const runConsumer = async () => {
         return;
       }
 
-      console.log(`Received message: ${message.value.toString()}`);
+      console.log(
+        `consumer received kafka message: ${message.value.toString()}`
+      );
       broadcastMessage(message.value.toString());
     },
   });
