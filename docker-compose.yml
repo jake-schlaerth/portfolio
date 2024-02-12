@@ -58,3 +58,13 @@ services:
       echo -e 'Successfully created the following topics:'
       kafka-topics --bootstrap-server kafka:29092 --list
       "
+
+  consumer:
+    build:
+      context: ./consumer
+    ports:
+      - "3001:3001"
+    depends_on:
+      - kafka
+    volumes:
+      - ./consumer:/usr/src/app

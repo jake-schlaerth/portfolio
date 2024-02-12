@@ -8,6 +8,7 @@ const kafka = new Kafka({
 const producer = kafka.producer();
 
 export async function POST(request: Request) {
+  console.log(process.env.KAFKA_BROKER_BASE_URL);
   const data = await request.json();
 
   console.log(data);
@@ -15,7 +16,7 @@ export async function POST(request: Request) {
   await producer.connect();
 
   await producer.send({
-    topic: "your-topic-name",
+    topic: "analytics",
     messages: [{ value: JSON.stringify(data) }],
   });
 

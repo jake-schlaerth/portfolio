@@ -55,3 +55,6 @@ docker-compose -f docker-compose.yml up -d zookeeper
 
 # Start the Kafka topic creation service
 docker-compose -f docker-compose.yml up -d init-kafka
+
+# Start the Kafka consumer service
+docker-compose -f docker-compose.yml up -d consumer
