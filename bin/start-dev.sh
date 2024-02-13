@@ -28,7 +28,7 @@ if ! docker info &> /dev/null; then
     fi
 
     attempts=$((attempts+1))
-    sleep 1
+    sleep 5
   done
 
   if [ $attempts -eq $max_attempts ]; then
@@ -37,5 +37,6 @@ if ! docker info &> /dev/null; then
   fi
 fi
 
-# Start the Caddy reverse proxy service
+export $(cat ./analytics-writer/.env | xargs)
+
 docker compose up
