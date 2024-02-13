@@ -1,7 +1,7 @@
 import { Kafka } from "kafkajs";
-import { config } from "@/config";
+import { getEnvVar } from "@/config";
 
 export const kafkaClient = new Kafka({
-  clientId: config.kafkaClientId,
-  brokers: [config.kafkaBrokerBaseUrl],
+  clientId: getEnvVar("KAFKA_CLIENT_ID"),
+  brokers: [getEnvVar("KAFKA_BROKER_BASE_URL")],
 });

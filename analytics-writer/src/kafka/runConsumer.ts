@@ -1,10 +1,10 @@
-import { config } from "@/config";
+import { getEnvVar } from "@/config";
 import { consumer } from "./consumer";
 
 export const runConsumer = async () => {
   await consumer.connect();
   await consumer.subscribe({
-    topic: config.kafkaTopic,
+    topic: getEnvVar("KAFKA_TOPIC"),
     fromBeginning: true,
   });
 
@@ -15,9 +15,9 @@ export const runConsumer = async () => {
       }
 
       console.log(
-        `${
-          config.kafkaClientId
-        } received kafka message: ${message.value.toString()}`
+        `${getEnvVar(
+          "KAFKA_CLIENT_ID"
+        )} received kafka message: ${message.value.toString()}`
       );
 
       // todo: persist to db
