@@ -68,3 +68,30 @@ services:
       - kafka
     volumes:
       - ./analytics-streamer:/usr/src/app
+
+  analytics-writer:
+    build:
+      context: ./analytics-streamer
+    ports:
+      - "3002:3002"
+    depends_on:
+      - kafka
+      - postgres
+    volumes:
+      - ./analytics-writer:/usr/src/app
+
+  postgres:
+    image: postgres:latest
+    env_file:
+      - ./analytics-writer/.env
+    environment:
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data_container:/var/lib/postgresql/data
+
+volumes:
+  postgres_data_container:

@@ -37,9 +37,5 @@ if ! docker info &> /dev/null; then
   fi
 fi
 
-cd frontend
-npm install
-cd ..
-
 # Start the Caddy reverse proxy service
 docker compose up
