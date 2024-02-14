@@ -6,5 +6,8 @@ jakeschlaerth.localhost {
 }
 
 analytics-streamer.localhost {
-    reverse_proxy analytics-streamer:3001
+    reverse_proxy analytics-streamer:3001 {
+        health_uri  /healthz
+        health_interval 10s
+    }
 }
