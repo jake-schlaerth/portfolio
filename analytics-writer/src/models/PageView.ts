@@ -1,6 +1,22 @@
-import { sequelizeClient } from "@/sequelize";
-import { DataTypes } from "sequelize";
+import { DataTypes, ModelDefined, Optional } from "sequelize";
 
-export const PageView = sequelizeClient.define("pageView", {
+import { sequelizeClient } from "@/sequelize";
+
+interface PageViewAttributes {
+  url: string;
+  id: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
+type PageViewCreationAttributes = Optional<
+  PageViewAttributes,
+  "id" | "createdAt" | "updatedAt"
+>;
+
+export const PageView: ModelDefined<
+  PageViewAttributes,
+  PageViewCreationAttributes
+> = sequelizeClient.define("pageView", {
   url: DataTypes.STRING,
 });

@@ -1,11 +1,11 @@
 import { getEnvVar } from "@/config";
+import { writeAnalyticsEvent } from "@/analytics";
 import { consumer } from "./consumer";
 
 export const runConsumer = async () => {
   await consumer.connect();
   await consumer.subscribe({
     topic: getEnvVar("KAFKA_TOPIC"),
-    fromBeginning: true,
   });
 
   await consumer.run({
@@ -20,7 +20,7 @@ export const runConsumer = async () => {
         )} received kafka message: ${message.value.toString()}`
       );
 
-      // todo: persist to db
+      writeAnalyticsEvent(JSON.parse(message.value.toString()));
     },
   });
 };

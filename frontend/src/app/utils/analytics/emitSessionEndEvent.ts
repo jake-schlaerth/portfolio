@@ -1,10 +1,10 @@
 import { getUnixTimestamp } from "./getUnixTimestamp";
 
-export const emitSessionEndEvent = (sessionLength: number) =>
+export const emitSessionEndEvent = (duration: number) =>
   navigator.sendBeacon(
     "/track",
     JSON.stringify({
-      sessionLength,
+      duration,
       eventName: "sessionDuration",
       url: window.location.href,
       timestamp: getUnixTimestamp(),
