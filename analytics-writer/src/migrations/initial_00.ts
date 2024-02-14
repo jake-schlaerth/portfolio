@@ -3,11 +3,12 @@ import { Migration } from "@/umzug";
 import { DataTypes } from "sequelize";
 
 export const up: Migration = ({ context: queryInterface }) => {
-  return queryInterface.createTable("pageView", {
+  return queryInterface.createTable("pageViews", {
     id: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.BIGINT,
       allowNull: false,
       primaryKey: true,
+      autoIncrement: true,
     },
     url: {
       type: DataTypes.STRING,
