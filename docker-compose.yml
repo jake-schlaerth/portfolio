@@ -62,10 +62,16 @@ services:
   analytics-streamer:
     build:
       context: ./analytics-streamer
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3001/healthz"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
     ports:
       - "3001:3001"
     depends_on:
-      - kafka
+      - kafka # todo: the kafka service takes a minute to spin up the actual kafka broker after the container is started, so this is not sufficient
     volumes:
       - ./analytics-streamer:/usr/src/app
 
