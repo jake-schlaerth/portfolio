@@ -5,6 +5,7 @@ import type { PropsWithChildren } from "react";
 
 import { MainContainer } from "./components";
 import { Provider } from "jotai";
+import { Analytics } from "./components/Analytics";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -18,6 +19,7 @@ export default function RootLayout({ children }: PropsWithChildren) {
     <html lang="en">
       <body className={inter.className}>
         <Provider>
+          <Analytics />
           <MainContainer>{children}</MainContainer>
         </Provider>
       </body>

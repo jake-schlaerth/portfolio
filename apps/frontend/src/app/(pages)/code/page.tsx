@@ -64,7 +64,7 @@ const Code = () => (
       <p>
         {" "}
         it leverages a{" "}
-        <ExternalLink href="https://github.com/jake-schlaerth/portfolio/blob/main/frontend/buildspec.yml">
+        <ExternalLink href="https://github.com/jake-schlaerth/portfolio/blob/main/apps/frontend/buildspec.yml">
           continuous deployment pipeline
         </ExternalLink>{" "}
         that triggers a deployment on a push to main
