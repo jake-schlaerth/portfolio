@@ -10,6 +10,7 @@
   "license": "ISC",
   "dependencies": {
     "databasemodels": "*",
+    "utils": "*",
     "dotenv": "^16.4.3",
     "kafkajs": "^2.2.4",
     "sequelize": "^6.37.0",
