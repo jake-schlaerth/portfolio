@@ -37,6 +37,6 @@ if ! docker info &> /dev/null; then
   fi
 fi
 
-export $(cat ./analytics-writer/.env | xargs)
+export $(cat ./apps/analytics-writer/.env | xargs)
 
 docker compose up
