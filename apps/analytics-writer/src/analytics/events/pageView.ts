@@ -1,9 +1,5 @@
+import { PageViewEvent } from "analytics-events";
 import { PageView } from "@/models";
-import { BaseAnalyticsEvent } from "./base";
-
-export interface PageViewEvent extends BaseAnalyticsEvent {
-  url: string;
-}
 
 export async function writePageViewEvent(pageViewEvent: PageViewEvent) {
   try {

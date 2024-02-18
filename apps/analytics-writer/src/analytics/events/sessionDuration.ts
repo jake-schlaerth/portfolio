@@ -1,9 +1,5 @@
+import { SessionDurationEvent } from "analytics-events";
 import { SessionDuration } from "@/models";
-import { BaseAnalyticsEvent } from "./base";
-
-export interface SessionDurationEvent extends BaseAnalyticsEvent {
-  duration: number;
-}
 
 export async function writeSessionDurationEvent(event: SessionDurationEvent) {
   try {

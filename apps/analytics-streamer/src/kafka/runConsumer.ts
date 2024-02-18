@@ -1,6 +1,7 @@
 import { config } from "@/config";
 import { broadcastMessage } from "@/webSocket";
 import { consumer } from "./consumer";
+import { AnalyticsEventSchema, eventNames } from "analytics-events";
 
 export const runConsumer = async () => {
   await consumer.connect();
@@ -15,7 +16,18 @@ export const runConsumer = async () => {
         return;
       }
 
-      broadcastMessage(message.value.toString());
+      let validatedEvent;
+      try {
+        const analyticsEvent = JSON.parse(message.value.toString());
+        validatedEvent = AnalyticsEventSchema.parse(analyticsEvent);
+      } catch (error) {
+        console.error(error);
+        return;
+      }
+
+      if (validatedEvent.eventName === eventNames.location) {
+        broadcastMessage(validatedEvent);
+      }
     },
   });
 };

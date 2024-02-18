@@ -1,26 +1,33 @@
 import {
-  LocationEvent,
-  PageViewEvent,
-  SessionDurationEvent,
+  type AnalyticsEvent,
+  eventNames,
+  AnalyticsEventSchema,
+} from "analytics-events";
+import {
   writeLocationEvent,
   writePageViewEvent,
   writeSessionDurationEvent,
 } from "./events";
 
-type AnalyticsEvent = PageViewEvent | LocationEvent | SessionDurationEvent;
-
 export async function writeAnalyticsEvent(event: AnalyticsEvent) {
-  switch (event.eventName) {
-    case "sessionDuration":
-      await writeSessionDurationEvent(event as SessionDurationEvent);
+  let validatedEvent;
+
+  try {
+    validatedEvent = AnalyticsEventSchema.parse(event);
+  } catch (error) {
+    console.error("Invalid event data:", error);
+    return;
+  }
+
+  switch (validatedEvent.eventName) {
+    case eventNames.sessionDuration:
+      await writeSessionDurationEvent(validatedEvent);
       break;
-    case "pageView":
-      await writePageViewEvent(event as PageViewEvent);
+    case eventNames.pageView:
+      await writePageViewEvent(validatedEvent);
       break;
-    case "location":
-      await writeLocationEvent(event as LocationEvent);
+    case eventNames.location:
+      await writeLocationEvent(validatedEvent);
       break;
-    default:
-      console.error("Unhandled event type:", event.eventName);
   }
 }

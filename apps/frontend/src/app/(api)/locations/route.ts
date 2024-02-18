@@ -6,14 +6,16 @@ export async function GET() {
   const cacheKey = "locations";
   let locations;
 
-  const cachedEvents = await redisClient.get(cacheKey);
-  if (cachedEvents) {
-    locations = JSON.parse(cachedEvents);
+  const cachedLocations = await redisClient.get(cacheKey);
+  if (cachedLocations) {
+    console.log("cache hit");
+    locations = JSON.parse(cachedLocations);
   } else {
+    console.log("cache miss");
     locations = await getLocationsFromDatabase();
 
     await redisClient.set(cacheKey, JSON.stringify(locations), {
-      EX: 60 * 60,
+      EX: 60,
     });
   }
 

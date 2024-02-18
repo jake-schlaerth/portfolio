@@ -1,17 +1,14 @@
 {
-  "name": "databasemodels",
+  "name": "analytics-events",
   "version": "1.0.0",
   "description": "",
   "main": "dist/index.js",
-  "types": "dist/index.d.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "pg": "^8.11.3",
-    "pg-hstore": "^2.3.4",
-    "sequelize": "^6.37.0"
+    "zod": "^3.22.4"
   }
 }

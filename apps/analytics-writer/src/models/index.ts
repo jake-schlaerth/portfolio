@@ -1,4 +1,4 @@
-import { getModels } from "databasemodels";
+import { getModels } from "database-models";
 
 import { sequelizeClient } from "@/sequelize";
 

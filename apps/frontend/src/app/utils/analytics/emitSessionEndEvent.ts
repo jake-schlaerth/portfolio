@@ -1,12 +1,9 @@
-import { getUnixTimestamp } from "./getUnixTimestamp";
+import { type SessionDurationEvent, eventNames } from "analytics-events";
 
-export const emitSessionEndEvent = (duration: number) =>
-  navigator.sendBeacon(
-    "/track",
-    JSON.stringify({
-      duration,
-      eventName: "sessionDuration",
-      url: window.location.href,
-      timestamp: getUnixTimestamp(),
-    })
-  );
+export const emitSessionEndEvent = (duration: number) => {
+  const eventData: SessionDurationEvent = {
+    eventName: eventNames.sessionDuration,
+    duration,
+  };
+  return navigator.sendBeacon("/track", JSON.stringify(eventData));
+};

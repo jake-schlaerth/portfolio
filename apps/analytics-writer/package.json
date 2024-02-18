@@ -9,13 +9,14 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "databasemodels": "*",
-    "utils": "*",
+    "analytics-events": "^1.0.0",
+    "database-models": "*",
     "dotenv": "^16.4.3",
     "kafkajs": "^2.2.4",
     "sequelize": "^6.37.0",
     "typescript": "^5.3.3",
-    "umzug": "^3.6.1"
+    "umzug": "^3.6.1",
+    "utils": "*"
   },
   "devDependencies": {
     "@types/node": "^20.11.17",

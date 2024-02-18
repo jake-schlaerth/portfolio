@@ -1,25 +1,32 @@
+import { AnalyticsEventSchema } from "analytics-events";
 import { Kafka } from "kafkajs";
+import { getEnvVar } from "utils";
 
 const kafka = new Kafka({
-  clientId: "my-app",
-  brokers: [process.env.KAFKA_BROKER_BASE_URL ?? ""],
+  clientId: getEnvVar("KAFKA_CLIENT_ID"),
+  brokers: [getEnvVar("KAFKA_BROKER_BASE_URL")],
 });
 
 const producer = kafka.producer();
 
 export async function POST(request: Request) {
-  const data = await request.json();
+  let validatedEvent;
+
+  try {
+    validatedEvent = AnalyticsEventSchema.parse(await request.json());
+  } catch (error) {
+    console.error(error);
+    return;
+  }
 
   await producer.connect();
 
   await producer.send({
-    topic: "analytics",
-    messages: [{ value: JSON.stringify(data) }],
+    topic: getEnvVar("KAFKA_TOPIC"),
+    messages: [{ value: JSON.stringify(validatedEvent) }],
   });
 
   await producer.disconnect();
 
-  return new Response(JSON.stringify({ data }), {
-    headers: { "Content-Type": "application/json" },
-  });
+  return new Response();
 }
