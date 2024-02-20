@@ -1,13 +1,11 @@
 #!/bin/bash
 
-declare -A APP_SECRETS=(
-    ["analytics-streamer"]="dev/analytics-streamer"
-    ["analytics-writer"]="dev/analytics-writer"
-    ["frontend"]="dev/frontend"
-)
+ENV_PREFIX="${ENV_PREFIX:-dev}"
 
-for app in "${!APP_SECRETS[@]}"; do
-    secret="${APP_SECRETS[$app]}"
+app_directories=$(find ./apps -maxdepth 1 -mindepth 1 -type d -exec basename {} \;)
+
+for app in $app_directories; do
+    secret="${ENV_PREFIX}/${app}"
     path="./apps/$app/.env"
 
     ./bin/build-env/build-env.sh "$secret" "$path"
