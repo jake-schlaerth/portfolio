@@ -1,7 +1,7 @@
 "use client";
 
 import { locationsAtom } from "@/atoms";
-import { AnalyticsEventSchema, LocationEventSchema } from "analytics-events";
+import { LocationEventSchema } from "analytics-events";
 import { useSetAtom } from "jotai";
 
 export const WebSocketClient = () => {

@@ -1,6 +1,8 @@
 import { setupRedisClient } from "@/redis";
 import { getLocationsFromDatabase } from "./getLocationsFromDatabase";
 
+export const dynamic = "force-dynamic";
+
 export async function GET() {
   const redisClient = await setupRedisClient();
   const cacheKey = "locations";
