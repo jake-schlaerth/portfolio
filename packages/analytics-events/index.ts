@@ -6,19 +6,21 @@ export const eventNames = {
   sessionDuration: "sessionDuration",
 } as const;
 
+export type EventName = (typeof eventNames)[keyof typeof eventNames];
+
 export const LocationEventSchema = z.object({
-  eventName: z.literal("location"),
+  eventName: z.literal(eventNames.location),
   longitude: z.number(),
   latitude: z.number(),
 });
 
 export const PageViewEventSchema = z.object({
-  eventName: z.literal("pageView"),
+  eventName: z.literal(eventNames.pageView),
   url: z.string(),
 });
 
 export const SessionDurationEventSchema = z.object({
-  eventName: z.literal("sessionDuration"),
+  eventName: z.literal(eventNames.sessionDuration),
   duration: z.number(),
 });
 
