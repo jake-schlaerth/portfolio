@@ -1,12 +1,15 @@
-import { SessionDurationEvent } from "analytics-events";
-import { SessionDuration } from "@/models";
+import type { SessionDurationEvent } from "analytics-events";
+import type { SessionDurationModelType } from "database-models";
 
-export async function writeSessionDurationEvent(event: SessionDurationEvent) {
+export const writeSessionDurationEvent = async (
+  sessionDurationEvent: SessionDurationEvent,
+  SessionDurationModel: SessionDurationModelType
+) => {
   try {
-    await SessionDuration.create({
-      duration: event.duration,
+    await SessionDurationModel.create({
+      duration: sessionDurationEvent.duration,
     });
   } catch (error) {
     console.error("Error writing sessionDuration event:", error);
   }
-}
+};

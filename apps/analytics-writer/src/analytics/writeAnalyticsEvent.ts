@@ -1,33 +1,44 @@
+import { z } from "zod";
+
 import {
-  type AnalyticsEvent,
+  AnalyticsEvent,
+  LocationEventSchema,
+  PageViewEventSchema,
+  SessionDurationEventSchema,
   eventNames,
-  AnalyticsEventSchema,
 } from "analytics-events";
-import {
-  writeLocationEvent,
-  writePageViewEvent,
-  writeSessionDurationEvent,
-} from "./events";
+import type { EventHandlers } from "./eventHandlers";
 
-export async function writeAnalyticsEvent(event: AnalyticsEvent) {
-  let validatedEvent;
-
-  try {
-    validatedEvent = AnalyticsEventSchema.parse(event);
-  } catch (error) {
-    console.error("Invalid event data:", error);
-    return;
-  }
-
-  switch (validatedEvent.eventName) {
-    case eventNames.sessionDuration:
-      await writeSessionDurationEvent(validatedEvent);
+export const writeAnalyticsEvent = async (
+  event: AnalyticsEvent,
+  eventHandlers: EventHandlers
+) => {
+  switch (event.eventName) {
+    case eventNames.location:
+      handleEvent(LocationEventSchema, event, eventHandlers.location);
       break;
     case eventNames.pageView:
-      await writePageViewEvent(validatedEvent);
+      handleEvent(PageViewEventSchema, event, eventHandlers.pageView);
       break;
-    case eventNames.location:
-      await writeLocationEvent(validatedEvent);
+    case eventNames.sessionDuration:
+      handleEvent(
+        SessionDurationEventSchema,
+        event,
+        eventHandlers.sessionDuration
+      );
       break;
   }
-}
+};
+
+const handleEvent = async <T>(
+  schema: z.ZodSchema<T>,
+  event: T,
+  handler: (event: T) => Promise<void>
+) => {
+  try {
+    const validatedEvent = schema.parse(event);
+    await handler(validatedEvent);
+  } catch (error) {
+    console.error("Invalid event data:", error);
+  }
+};

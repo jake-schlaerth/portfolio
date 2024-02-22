@@ -1,12 +1,15 @@
-import { PageViewEvent } from "analytics-events";
-import { PageView } from "@/models";
+import type { PageViewEvent } from "analytics-events";
+import type { PageViewModelType } from "database-models";
 
-export async function writePageViewEvent(pageViewEvent: PageViewEvent) {
+export const writePageViewEvent = async (
+  pageViewEvent: PageViewEvent,
+  PageViewModel: PageViewModelType
+) => {
   try {
-    await PageView.create({
+    await PageViewModel.create({
       url: pageViewEvent.url,
     });
   } catch (error) {
     console.error("Error writing pageView event:", error);
   }
-}
+};

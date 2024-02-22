@@ -1,5 +1,5 @@
 import { getEnvVar } from "@/config";
-import { writeAnalyticsEvent } from "@/analytics";
+import { eventHandlers, writeAnalyticsEvent } from "@/analytics";
 import { consumer } from "./consumer";
 
 export const runConsumer = async () => {
@@ -20,7 +20,10 @@ export const runConsumer = async () => {
         )} received kafka message: ${message.value.toString()}`
       );
 
-      await writeAnalyticsEvent(JSON.parse(message.value.toString()));
+      await writeAnalyticsEvent(
+        JSON.parse(message.value.toString()),
+        eventHandlers
+      );
     },
   });
 };
