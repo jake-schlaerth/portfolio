@@ -6,6 +6,8 @@ import {
   defineSessionDurationModel,
 } from "./models";
 
+export * from "./models";
+
 export const getModels = (sequelizeClient: Sequelize) => {
   return {
     PageView: definePageViewModel(sequelizeClient),
