@@ -18,12 +18,16 @@ export type LocationCreationAttributes = Optional<
   "id" | "createdAt" | "updatedAt"
 >;
 
+export type LocationModelType = ModelDefined<
+  LocationAttributes,
+  LocationCreationAttributes
+>;
+
 export const defineLocationModel = (sequelizeClient: Sequelize) => {
-  const Location: ModelDefined<LocationAttributes, LocationCreationAttributes> =
-    sequelizeClient.define("location", {
-      latitude: DataTypes.REAL,
-      longitude: DataTypes.REAL,
-    });
+  const Location = sequelizeClient.define("location", {
+    latitude: DataTypes.REAL,
+    longitude: DataTypes.REAL,
+  });
 
   return Location;
 };

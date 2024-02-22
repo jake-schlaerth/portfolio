@@ -17,11 +17,15 @@ export type PageViewCreationAttributes = Optional<
   "id" | "createdAt" | "updatedAt"
 >;
 
+export type PageViewModelType = ModelDefined<
+  PageViewAttributes,
+  PageViewCreationAttributes
+>;
+
 export const definePageViewModel = (sequelizeClient: Sequelize) => {
-  const PageView: ModelDefined<PageViewAttributes, PageViewCreationAttributes> =
-    sequelizeClient.define("pageView", {
-      url: DataTypes.STRING,
-    });
+  const PageView = sequelizeClient.define("pageView", {
+    url: DataTypes.STRING,
+  });
 
   return PageView;
 };

@@ -17,11 +17,13 @@ export type SessionDurationCreationAttributes = Optional<
   "id" | "createdAt" | "updatedAt"
 >;
 
+export type SessionDurationModelType = ModelDefined<
+  SessionDurationAttributes,
+  SessionDurationCreationAttributes
+>;
+
 export const defineSessionDurationModel = (sequelizeClient: Sequelize) => {
-  const SessionDuration: ModelDefined<
-    SessionDurationAttributes,
-    SessionDurationCreationAttributes
-  > = sequelizeClient.define("sessionDuration", {
+  const SessionDuration = sequelizeClient.define("sessionDuration", {
     duration: DataTypes.NUMBER,
   });
 
