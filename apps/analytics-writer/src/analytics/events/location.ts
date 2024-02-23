@@ -5,12 +5,8 @@ export const writeLocationEvent = async (
   locationEvent: LocationEvent,
   LocationModel: LocationModelType
 ) => {
-  try {
-    await LocationModel.create({
-      latitude: locationEvent.latitude,
-      longitude: locationEvent.longitude,
-    });
-  } catch (error) {
-    console.error("Error writing location event:", error);
-  }
+  await LocationModel.create({
+    latitude: locationEvent.latitude,
+    longitude: locationEvent.longitude,
+  });
 };

@@ -5,11 +5,7 @@ export const writeSessionDurationEvent = async (
   sessionDurationEvent: SessionDurationEvent,
   SessionDurationModel: SessionDurationModelType
 ) => {
-  try {
-    await SessionDurationModel.create({
-      duration: sessionDurationEvent.duration,
-    });
-  } catch (error) {
-    console.error("Error writing sessionDuration event:", error);
-  }
+  await SessionDurationModel.create({
+    duration: sessionDurationEvent.duration,
+  });
 };
