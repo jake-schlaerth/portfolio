@@ -1,12 +1,12 @@
-import { config } from "@/config";
+import { getEnvVar } from "utils";
+import { AnalyticsEventSchema, eventNames } from "analytics-events";
 import { broadcastMessage } from "@/webSocket";
 import { consumer } from "./consumer";
-import { AnalyticsEventSchema, eventNames } from "analytics-events";
 
 export const runConsumer = async () => {
   await consumer.connect();
   await consumer.subscribe({
-    topic: config.kafkaTopic,
+    topic: getEnvVar("KAFKA_TOPIC"),
     fromBeginning: true,
   });
 

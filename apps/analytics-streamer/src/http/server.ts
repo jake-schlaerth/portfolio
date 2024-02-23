@@ -1,5 +1,6 @@
 import http from "http";
-import { config } from "@/config";
+
+import { getEnvVar } from "utils";
 
 const setupServer = () => {
   const server = http.createServer((req, res) => {
@@ -13,8 +14,8 @@ const setupServer = () => {
     }
   });
 
-  server.listen(config.port, () => {
-    console.log(`Server started on port ${config.port}`);
+  server.listen(getEnvVar("PORT"), () => {
+    console.log(`Server started on port ${getEnvVar("PORT")}`);
   });
 
   return server;

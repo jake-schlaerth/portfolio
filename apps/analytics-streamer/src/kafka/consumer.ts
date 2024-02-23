@@ -1,6 +1,6 @@
-import { config } from "@/config";
+import { getEnvVar } from "utils";
 import { kafkaClient } from "./kafkaClient";
 
 export const consumer = kafkaClient.consumer({
-  groupId: config.kafkaGroupId,
+  groupId: getEnvVar("KAFKA_GROUP_ID"),
 });
