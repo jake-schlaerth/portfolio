@@ -2,3 +2,5 @@
 node_modules
 
 .turbo
+
+caddy_data
