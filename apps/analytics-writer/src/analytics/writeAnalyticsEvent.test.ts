@@ -4,25 +4,9 @@ import {
   SessionDurationEvent,
   eventNames,
 } from "analytics-events";
-import { writeAnalyticsEvent } from "./writeAnalyticsEvent";
+import { writeAnalyticsEvent } from ".";
 
 describe("writeAnalyticsEvent", () => {
-  const {
-    LocationEventSchema,
-    PageViewEventSchema,
-    SessionDurationEventSchema,
-  } = {
-    LocationEventSchema: {
-      parse: jest.fn((event) => event),
-    },
-    PageViewEventSchema: {
-      parse: jest.fn((event) => event),
-    },
-    SessionDurationEventSchema: {
-      parse: jest.fn((event) => event),
-    },
-  };
-
   const mockWriteLocationEvent = jest.fn();
   const mockWritePageViewEvent = jest.fn();
   const mockWriteSessionDurationEvent = jest.fn();

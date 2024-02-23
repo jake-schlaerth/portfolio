@@ -1,5 +1,3 @@
-import { z } from "zod";
-
 import {
   AnalyticsEvent,
   LocationEventSchema,
@@ -7,7 +5,7 @@ import {
   SessionDurationEventSchema,
   eventNames,
 } from "analytics-events";
-import type { EventHandlers } from "./eventHandlers";
+import { type EventHandlers, handleEvent } from ".";
 
 export const writeAnalyticsEvent = async (
   event: AnalyticsEvent,
@@ -27,18 +25,5 @@ export const writeAnalyticsEvent = async (
         eventHandlers.sessionDuration
       );
       break;
-  }
-};
-
-const handleEvent = async <T>(
-  schema: z.ZodSchema<T>,
-  event: T,
-  handler: (event: T) => Promise<void>
-) => {
-  try {
-    const validatedEvent = schema.parse(event);
-    await handler(validatedEvent);
-  } catch (error) {
-    console.error("Invalid event data:", error);
   }
 };
