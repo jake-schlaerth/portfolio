@@ -7,6 +7,17 @@
       "inputs": ["src/**", "package.json", "tsconfig.json"],
       "cache": true
     },
+    "test": {
+      "dependsOn": ["build"],
+      "inputs": [
+        "src/apps/analytics-writer/**/*.ts",
+        "src/apps/analytics-writer/**/*.test.ts",
+        "package.json",
+        "tsconfig.json"
+      ],
+      "outputs": [],
+      "cache": false
+    },
     "dev": {
       "cache": false
     }

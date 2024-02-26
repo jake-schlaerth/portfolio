@@ -7,6 +7,9 @@ services:
       dockerfile: ./apps/frontend/Dockerfile
     ports:
       - "3000:3000"
+    depends_on:
+      - kafka
+      - postgres
     volumes:
       - .:/app
 
@@ -68,6 +71,7 @@ services:
       - "3001:3001"
     depends_on:
       - kafka # todo: the kafka service takes a minute to spin up the actual kafka broker after the container is started, so this is not sufficient
+      - postgres
     volumes:
       - .:/usr/src/app
 
