@@ -11,7 +11,7 @@ phases:
     commands:
       - echo "Hash does not match, proceeding with build"
       # Insert build commands here
-post_build:
-  commands:
-    - echo $CURRENT_HASH > build-hash.txt
-    - aws s3 cp build-hash.txt s3://turbo-hashes/analytics-streamer-hash.txt
+  post_build:
+    commands:
+      - echo $CURRENT_HASH > build-hash.txt
+      - aws s3 cp build-hash.txt s3://turbo-hashes/analytics-streamer-hash.txt
