@@ -19,6 +19,7 @@ COPY --from=builder /app/out/package-lock.json ./package-lock.json
 RUN npm install
  
 # Build the project
+# Todo: enable remote cache in this image
 COPY --from=builder /app/out/full/ .
 RUN npm turbo run build --filter=analytics-streamer...
  

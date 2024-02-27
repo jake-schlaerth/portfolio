@@ -1,17 +1,5 @@
 version: 0.2
 phases:
-  pre_build:
-    commands:
-      - >
-        CURRENT_HASH=$(turbo run build --dry=json --filter analytics-streamer | 
-        jq '.tasks[] | select(.taskId == "analytics-streamer#build").hash' -r)
-      - PREVIOUS_HASH=$(aws s3 cp s3://turbo-hashes/analytics-streamer-hash.txt - || echo "")
-      - if [ "$CURRENT_HASH" == "$PREVIOUS_HASH" ]; then echo "Hash matches, skipping build"; aws codebuild stop-build --id ${CODEBUILD_BUILD_ID}; fi
   build:
     commands:
-      - echo "Hash does not match, proceeding with build"
-      # Insert build commands here
-  post_build:
-    commands:
-      - echo $CURRENT_HASH > build-hash.txt
-      - aws s3 cp build-hash.txt s3://turbo-hashes/analytics-streamer-hash.txt
+      - ./bin/build.sh analytics-streamer
