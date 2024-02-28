@@ -43,8 +43,7 @@ RUN adduser --system --uid 1001 analytics-streamer
 USER analytics-streamer
  
 COPY --from=installer --chown=analytics-streamer:nodejs /app ./
-COPY --chown=analytics-streamer:nodejs /app/bin ./bin
-COPY --from=installer /app ./
+COPY --from=builder --chown=analytics-streamer:nodejs /app/bin ./bin
  
 ENTRYPOINT ["./bin/entrypoint.sh"]
 CMD ["apps/analytics-streamer/dist/index.js"]
