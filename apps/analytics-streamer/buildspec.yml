@@ -1,4 +1,10 @@
 version: 0.2
+env:
+  secrets-manager:
+    REPOSITORY_URI: "prod/analytics-streamer:REPOSITORY_URI"
+    DOCKERHUB_USERNAME: "prod/analytics-streamer:DOCKERHUB_USERNAME"
+    DOCKERHUB_PASSWORD: "prod/analytics-streamer:DOCKERHUB_PASSWORD"
+    AWS_DEFAULT_REGION: "prod/analytics-streamer:AWS_DEFAULT_REGION"
 phases:
   build:
     commands:
