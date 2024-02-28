@@ -9,11 +9,11 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "analytics-events": "^1.0.0",
+    "analytics-events": "*",
     "dotenv": "^16.4.2",
     "kafkajs": "^2.2.4",
     "typescript": "^5.3.3",
-    "utils": "^1.0.0",
+    "utils": "*",
     "ws": "^8.16.0"
   },
   "devDependencies": {

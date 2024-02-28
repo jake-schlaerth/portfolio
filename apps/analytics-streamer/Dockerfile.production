@@ -19,11 +19,22 @@ COPY --from=builder /app/out/package-lock.json ./package-lock.json
 RUN npm install
  
 # Build the project
-# Todo: enable remote cache in this image
+# TODO enable remote cache in this image
 COPY --from=builder /app/out/full/ .
-RUN npm turbo run build --filter=analytics-streamer...
+RUN npx turbo run build --filter=analytics-streamer...
+
+#TODO remove src code here
  
 FROM base AS runner
+
+RUN apt-get update && \
+    apt-get install -y \
+    awscli \
+    jq && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
+
 WORKDIR /app
  
 # Don't run production as root
@@ -31,6 +42,10 @@ RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 analytics-streamer
 USER analytics-streamer
  
-COPY --from=installer /app/apps/analytics-streamer/package.json .
+COPY --from=installer --chown=analytics-streamer:nodejs /app ./
+COPY --chown=analytics-streamer:nodejs /app/bin ./bin
+COPY --from=installer /app ./
  
-CMD ["node", "dist/index.js"]
+ENTRYPOINT ["./bin/entrypoint.sh"]
+CMD ["apps/analytics-streamer/dist/index.js"]
+
