@@ -2,4 +2,4 @@ version: 0.2
 phases:
   build:
     commands:
-      - ./bin/build.sh analytics-streamer
+      - ./bin/codeBuild/build.sh analytics-streamer
