@@ -9,12 +9,6 @@ SECRET_NAME="$1"
 
 ENV_FILE_PATH="$2"
 
-ENV_DIR=$(dirname "$ENV_FILE_PATH")
-if [ ! -d "$ENV_DIR" ]; then
-    echo "Directory $ENV_DIR does not exist, creating it now..."
-    mkdir -p "$ENV_DIR"
-fi
-
 SECRET_VALUES=$(aws secretsmanager get-secret-value --secret-id $SECRET_NAME --query SecretString --output text)
 
 if [ $? -eq 0 ]; then

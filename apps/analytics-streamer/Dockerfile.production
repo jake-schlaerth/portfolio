@@ -24,7 +24,7 @@ COPY --from=builder /app/out/full/ .
 RUN npx turbo run build --filter=analytics-streamer...
 
 #TODO remove src code here
- 
+
 FROM base AS runner
 
 RUN apt-get update && \
@@ -36,12 +36,13 @@ RUN apt-get update && \
 
 
 WORKDIR /app
- 
+
 # Don't run production as root
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 analytics-streamer
-USER analytics-streamer
- 
+RUN chown analytics-streamer:nodejs /app
+USER analytics-streamer:nodejs
+
 COPY --from=installer --chown=analytics-streamer:nodejs /app ./
 COPY --from=builder --chown=analytics-streamer:nodejs /app/bin ./bin
  
