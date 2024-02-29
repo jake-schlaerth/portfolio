@@ -1,7 +1,6 @@
 version: 0.2
 env:
   secrets-manager:
-    REPOSITORY_URI: "portfolio-build-environment:REPOSITORY_URI"
     DOCKERHUB_USERNAME: "portfolio-build-environment:DOCKERHUB_USERNAME"
     DOCKERHUB_PASSWORD: "portfolio-build-environment:DOCKERHUB_PASSWORD"
     AWS_DEFAULT_REGION: "portfolio-build-environment:AWS_DEFAULT_REGION"

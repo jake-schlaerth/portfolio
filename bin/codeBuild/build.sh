@@ -34,9 +34,10 @@ pre_build() {
 }
 
 build() {
+  REPOSITORY_URI="$AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$APP_NAME"
   echo "Building $APP_NAME..."
   echo Logging in to Docker Hub...
-  docker login -u "$DOCKERHUB_USERNAME" -p "$DOCKERHUB_PASSWORD"
+  docker login -u "$DOCKERHUB_USERNAME" --password-stdin "$DOCKERHUB_PASSWORD"
   echo Building the Docker image...
   docker build -t "$REPOSITORY_URI:latest" -f "./apps/$APP_NAME/Dockerfile.production" .
   echo Logging in to Amazon ECR...
