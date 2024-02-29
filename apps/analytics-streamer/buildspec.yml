@@ -6,6 +6,10 @@ env:
     DOCKERHUB_PASSWORD: "portfolio-build-environment:DOCKERHUB_PASSWORD"
     AWS_DEFAULT_REGION: "portfolio-build-environment:AWS_DEFAULT_REGION"
 phases:
+  install:
+    commands:
+      - nohup /usr/local/bin/dockerd --host=unix:///var/run/docker.sock --host=tcp://127.0.0.1:2375 --storage-driver=overlay2 &
+      - timeout -t 15 sh -c "until docker info; do echo .; sleep 1; done"
   build:
     commands:
       - ./bin/codeBuild/build.sh analytics-streamer

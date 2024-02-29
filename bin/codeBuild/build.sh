@@ -1,6 +1,7 @@
 #!/bin/sh
 
 set -e
+set -o pipefail
 
 if [ $# -eq 0 ]; then
   echo "Usage: $0 <package.json app name>"
