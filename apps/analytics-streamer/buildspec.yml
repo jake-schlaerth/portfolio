@@ -13,3 +13,5 @@ phases:
   build:
     commands:
       - ./bin/codeBuild/build.sh analytics-streamer
+artifacts:
+  files: imagedefinitions.json
