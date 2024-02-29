@@ -45,7 +45,7 @@ build() {
   echo Pushing the Docker image...
   docker push "$REPOSITORY_URI:latest"
   echo Writing image definitions file...
-  printf '[{"name":"%s-image","imageUri":"%s"}]' "$APP_NAME" "$REPOSITORY_URI:latest" > imagedefinitions.json
+  printf '[{"name":"%s","imageUri":"%s"}]' "$APP_NAME" "$REPOSITORY_URI:latest" > imagedefinitions.json
 
   post_build
 }
