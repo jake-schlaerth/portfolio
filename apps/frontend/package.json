@@ -1,5 +1,5 @@
 {
-  "name": "app",
+  "name": "frontend",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -24,7 +24,8 @@
     "sequelize": "^6.37.0",
     "tonal": "^5.2.0",
     "tone": "^14.8.49",
-    "utils": "*"
+    "utils": "*",
+    "kafka": "*"
   },
   "devDependencies": {
     "@types/leaflet": "^1.9.8",

@@ -1,8 +1,9 @@
+import { runConsumer } from "kafka";
 import { umzug } from "@/umzug";
-import { runConsumer } from "@/kafka";
+import { consumerCallback } from "@/kafka";
 
 (async () => {
   await umzug.up();
 })();
 
-runConsumer().catch(console.error);
+runConsumer(consumerCallback).catch(console.error);

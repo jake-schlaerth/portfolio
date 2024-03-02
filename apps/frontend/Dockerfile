@@ -71,5 +71,7 @@ COPY . .
 WORKDIR /app/apps/frontend
 
 RUN npm install
+RUN npm install turbo -g
+
 
 ENTRYPOINT ["./docker-entrypoint.sh"]

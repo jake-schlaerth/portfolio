@@ -1,3 +1,4 @@
-import { runConsumer } from "@/kafka";
+import { runConsumer } from "kafka";
+import { consumerCallback } from "@/kafka";
 
-runConsumer().catch(console.error);
+runConsumer(consumerCallback).catch(console.error);

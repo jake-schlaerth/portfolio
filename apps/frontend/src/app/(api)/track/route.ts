@@ -1,13 +1,6 @@
 import { AnalyticsEventSchema } from "analytics-events";
-import { Kafka } from "kafkajs";
+import { producer } from "kafka";
 import { getEnvVar } from "utils";
-
-const kafka = new Kafka({
-  clientId: getEnvVar("KAFKA_CLIENT_ID"),
-  brokers: [getEnvVar("KAFKA_BROKER_BASE_URL")],
-});
-
-const producer = kafka.producer();
 
 export async function POST(request: Request) {
   let validatedEvent;

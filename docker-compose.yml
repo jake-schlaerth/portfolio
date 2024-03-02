@@ -8,7 +8,7 @@ services:
     ports:
       - "3000:3000"
     depends_on:
-      - kafka
+      - broker
       - postgres
     volumes:
       - .:/app
@@ -23,45 +23,47 @@ services:
       - "443:443"
 
   zookeeper:
-    image: confluentinc/cp-zookeeper:latest
+    build:
+      context: ./kafka/zookeeper
+    env_file:
+      - ./kafka/zookeeper/.env
+    ports:
+      - "2181:2181"
+    restart: always
     environment:
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_TICK_TIME: 2000
-    ports:
-      - "2181:2181"
+      KAFKA_OPTS:
+        -Djava.security.auth.login.config=/etc/kafka/zookeeper_server_jaas.conf
+        -Dzookeeper.authProvider.1=org.apache.zookeeper.server.auth.SASLAuthenticationProvider
+        -Dzookeeper.allowSaslFailedClients=false
+        -Dzookeeper.requireClientAuthScheme=sasl
+    entrypoint: ["/etc/confluent/docker/entrypoint.sh"]
 
-  kafka:
-    image: confluentinc/cp-kafka:latest
+  broker:
+    build:
+      context: ./kafka/broker
+    env_file:
+      - ./kafka/broker/.env
     depends_on:
       - zookeeper
     ports:
       - "9092:9092"
+      - "29092:29092"
+      - "10000:10000"
     expose:
       - "29092"
     environment:
+      KAFKA_BROKER_ID: 1
       KAFKA_ZOOKEEPER_CONNECT: "zookeeper:2181"
-      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
-      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:29092,PLAINTEXT_HOST://localhost:9092
-      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: "1"
-      KAFKA_MIN_INSYNC_REPLICAS: "1"
-
-  init-kafka:
-    image: confluentinc/cp-kafka:latest
-    depends_on:
-      - kafka
-    entrypoint: ["/bin/sh", "-c"]
-    command: |
-      "
-      # blocks until kafka is reachable
-      kafka-topics --bootstrap-server kafka:29092 --list
-
-      echo -e 'Creating kafka topics'
-      kafka-topics --bootstrap-server kafka:29092 --create --if-not-exists --topic analytics --replication-factor 1 --partitions 1
-
-      echo -e 'Successfully created the following topics:'
-      kafka-topics --bootstrap-server kafka:29092 --list
-      "
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: SASL_PLAINTEXT:SASL_PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: SASL_PLAINTEXT
+      KAFKA_ADVERTISED_LISTENERS: SASL_PLAINTEXT://broker:9092
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_SASL_ENABLED_MECHANISMS: SCRAM-SHA-256
+      KAFKA_SASL_MECHANISM_INTER_BROKER_PROTOCOL: SCRAM-SHA-256
+      KAFKA_OPTS: "-Djava.security.auth.login.config=/etc/kafka/kafka_server_jaas.conf"
+    entrypoint: ["/etc/confluent/docker/entrypoint.sh"]
 
   analytics-streamer:
     build:
@@ -70,10 +72,10 @@ services:
     ports:
       - "3001:3001"
     depends_on:
-      - kafka # todo: the kafka service takes a minute to spin up the actual kafka broker after the container is started, so this is not sufficient
+      - broker
       - postgres
     volumes:
-      - .:/usr/src/app
+      - .:/app
 
   analytics-writer:
     build:
@@ -82,7 +84,7 @@ services:
     ports:
       - "3002:3002"
     depends_on:
-      - kafka
+      - broker
       - postgres
     volumes:
       - .:/usr/src/app

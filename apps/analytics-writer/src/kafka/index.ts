@@ -1,1 +1,1 @@
-export * from "./runConsumer";
+export * from "./consumerCallback";
