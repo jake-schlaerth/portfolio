@@ -1,5 +1,5 @@
 import { AnalyticsEventSchema } from "analytics-events";
-import { producer } from "kafka";
+import { producer } from "kafka-utils";
 import { getEnvVar } from "utils";
 
 export async function POST(request: Request) {

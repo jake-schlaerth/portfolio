@@ -45,6 +45,7 @@ USER analytics-streamer:nodejs
 
 COPY --from=installer --chown=analytics-streamer:nodejs /app ./
 COPY --from=builder --chown=analytics-streamer:nodejs /app/bin ./bin
+
  
 ENTRYPOINT ["./bin/entrypoint.sh"]
 CMD ["apps/analytics-streamer/dist/index.js"]

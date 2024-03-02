@@ -1,4 +1,4 @@
-import { runConsumer } from "kafka";
+import { runConsumer } from "kafka-utils";
 import { umzug } from "@/umzug";
 import { consumerCallback } from "@/kafka";
 

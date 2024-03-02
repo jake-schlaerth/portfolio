@@ -13,7 +13,7 @@
     "analytics-events": "^1.0.0",
     "database-models": "*",
     "dotenv": "^16.4.3",
-    "kafka": "*",
+    "kafka-utils": "*",
     "kafkajs": "^2.2.4",
     "sequelize": "^6.37.0",
     "typescript": "^5.3.3",

@@ -11,7 +11,7 @@
   "dependencies": {
     "analytics-events": "*",
     "dotenv": "^16.4.2",
-    "kafka": "*",
+    "kafka-utils": "*",
     "typescript": "^5.3.3",
     "utils": "*",
     "ws": "^8.16.0"

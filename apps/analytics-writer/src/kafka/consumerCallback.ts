@@ -1,4 +1,5 @@
 import type { KafkaMessage } from "kafkajs";
+
 import { getEnvVar } from "utils";
 import { eventHandlers, writeAnalyticsEvent } from "@/analytics";
 
