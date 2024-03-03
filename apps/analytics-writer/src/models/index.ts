@@ -1,5 +1,4 @@
 import { getModels } from "database-models";
-
 import { sequelizeClient } from "@/sequelize";
 
 const models = getModels(sequelizeClient);

@@ -10,9 +10,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "analytics-events": "^1.0.0",
+    "analytics-events": "*",
     "database-models": "*",
-    "dotenv": "^16.4.3",
     "kafka-utils": "*",
     "kafkajs": "^2.2.4",
     "sequelize": "^6.37.0",
