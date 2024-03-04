@@ -1,12 +1,12 @@
 import { SequelizeStorage, Umzug } from "umzug";
 
-import { sequelizeClient } from "@/sequelize";
+import { sequelizeClient } from "@/databaseClient";
 
-export const umzug = new Umzug({
+export const umzugClient = new Umzug({
   migrations: { glob: "src/migrations/*.ts" },
   context: sequelizeClient.getQueryInterface(),
   storage: new SequelizeStorage({ sequelize: sequelizeClient }),
   logger: console,
 });
 
-export type Migration = typeof umzug._types.migration;
+export type Migration = typeof umzugClient._types.migration;

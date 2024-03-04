@@ -1,9 +1,12 @@
 import { runConsumer } from "kafka-utils";
-import { umzug } from "@/umzug";
+import { umzugClient } from "@/umzugClient";
 import { consumerCallback } from "@/kafka";
+import { setupServer } from "./http";
 
 (async () => {
-  await umzug.up();
+  await umzugClient.up();
 })();
+
+setupServer();
 
 runConsumer(consumerCallback).catch(console.error);

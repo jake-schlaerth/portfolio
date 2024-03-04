@@ -1,5 +1,5 @@
 import { getModels } from "database-models";
-import { sequelizeClient } from "@/sequelize";
+import { sequelizeClient } from "@/databaseClient";
 
 const models = getModels(sequelizeClient);
 

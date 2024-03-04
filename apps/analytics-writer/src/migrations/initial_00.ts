@@ -1,5 +1,5 @@
 // migrations/00_initial.ts
-import { Migration } from "@/umzug";
+import { Migration } from "@/umzugClient";
 import { DataTypes } from "sequelize";
 
 export const up: Migration = ({ context: queryInterface }) => {

@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "jest",
-    "build": "tsc"
+    "build": "tsc && tsc-alias"
   },
   "author": "",
   "license": "ISC",
@@ -20,6 +20,7 @@
     "utils": "*"
   },
   "devDependencies": {
+    "tsc-alias": "^1.8.8",
     "@types/jest": "^29.5.12",
     "@types/node": "^20.11.17",
     "jest": "^29.7.0",

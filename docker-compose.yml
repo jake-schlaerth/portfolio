@@ -80,14 +80,14 @@ services:
   analytics-writer:
     build:
       context: .
-      dockerfile: ./apps/analytics-writer/Dockerfile
+      dockerfile: ./apps/analytics-writer/Dockerfile.development
     ports:
       - "3002:3002"
     depends_on:
       - broker
       - postgres
     volumes:
-      - .:/usr/src/app
+      - .:/app
 
   postgres:
     image: postgres:latest
