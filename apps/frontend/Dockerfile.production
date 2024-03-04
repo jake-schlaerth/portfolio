@@ -10,14 +10,9 @@ RUN turbo prune frontend --docker
  
 # Add lockfile and package.json's of isolated subworkspace
 FROM base AS installer
-ENV AWS_DEFAULT_REGION=us-east-1
+ARG DOTENV
 
-RUN apt-get update && \
-    apt-get install -y \
-    awscli \
-    jq && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
+RUN echo DOTENV > .env
 
 WORKDIR /app
  
@@ -31,8 +26,6 @@ RUN npm install
 # TODO enable remote cache in this image
 COPY --from=builder /app/out/full/ .
 COPY --from=builder /app/bin ./bin
-
-RUN ./bin/build-env/build-env.sh "prod/frontend" ".env"
 
 RUN npx turbo run build --filter=frontend...
 

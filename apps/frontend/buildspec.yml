@@ -12,6 +12,6 @@ phases:
       - timeout 15 sh -c "until docker info; do echo .; sleep 1; done"
   build:
     commands:
-      - ./bin/codeBuild/build.sh frontend
+      - ./apps/frontend/bin/build.sh frontend
 artifacts:
   files: imagedefinitions.json
