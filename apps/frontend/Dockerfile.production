@@ -10,6 +10,7 @@ RUN turbo prune frontend --docker
  
 # Add lockfile and package.json's of isolated subworkspace
 FROM base AS installer
+ENV AWS_DEFAULT_REGION=us-east-1
 
 RUN apt-get update && \
     apt-get install -y \
