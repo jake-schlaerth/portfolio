@@ -10,10 +10,8 @@ RUN turbo prune frontend --docker
  
 # Add lockfile and package.json's of isolated subworkspace
 FROM base AS installer
-ARG DOTENV
-
-RUN echo DOTENV > .env
-
+ARG DB_USER
+ENV DB_USER=${DB_USER}
 WORKDIR /app
  
 # First install the dependencies (as they change less often)
@@ -32,6 +30,9 @@ RUN npx turbo run build --filter=frontend...
 #TODO remove src code here
 
 FROM base AS runner
+ARG DB_USER
+ENV DB_USER=${DB_USER}
+
 WORKDIR /app
 
 RUN addgroup --system --gid 1001 nodejs

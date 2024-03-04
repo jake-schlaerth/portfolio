@@ -5,6 +5,7 @@ env:
     DOCKERHUB_PASSWORD: "portfolio-build-environment:DOCKERHUB_PASSWORD"
     AWS_DEFAULT_REGION: "portfolio-build-environment:AWS_DEFAULT_REGION"
     AWS_ACCOUNT_ID: "portfolio-build-environment:AWS_ACCOUNT_ID"
+    DB_USER: "prod/frontend:DB_USER"
 phases:
   install:
     commands:
