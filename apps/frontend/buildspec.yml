@@ -1,25 +1,17 @@
 version: 0.2
-
+env:
+  secrets-manager:
+    DOCKERHUB_USERNAME: "portfolio-build-environment:DOCKERHUB_USERNAME"
+    DOCKERHUB_PASSWORD: "portfolio-build-environment:DOCKERHUB_PASSWORD"
+    AWS_DEFAULT_REGION: "portfolio-build-environment:AWS_DEFAULT_REGION"
+    AWS_ACCOUNT_ID: "portfolio-build-environment:AWS_ACCOUNT_ID"
 phases:
-  pre_build:
+  install:
     commands:
-      - echo Logging in to Docker Hub...
-      - docker login -u $DOCKERHUB_USERNAME -p $DOCKERHUB_PASSWORD
-      - cd frontend
-
+      - nohup /usr/bin/dockerd --host=unix:///var/run/docker.sock --host=tcp://127.0.0.1:2375 &
+      - timeout 15 sh -c "until docker info; do echo .; sleep 1; done"
   build:
     commands:
-      - echo Building the Docker image...
-      - docker build -t $REPOSITORY_URI:latest .
-
-  post_build:
-    commands:
-      - echo Logging in to Amazon ECR...
-      - $(aws ecr get-login --region $AWS_DEFAULT_REGION --no-include-email)
-      - echo Pushing the Docker image...
-      - docker push $REPOSITORY_URI:latest
-      - echo Writing image definitions file...
-      - printf '[{"name":"portfolio-container","imageUri":"%s"}]' $REPOSITORY_URI:latest > ../imagedefinitions.json
-
+      - ./bin/codeBuild/build.sh frontend
 artifacts:
   files: imagedefinitions.json

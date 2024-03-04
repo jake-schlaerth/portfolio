@@ -9,9 +9,6 @@ export const useTrackSessionDuration = () => {
 
   useEffect(() => {
     const handleBeforeUnload = () => {
-      console.log(
-        `Session Duration: ${getUnixTimestamp() - sessionStart} seconds`
-      );
       emitSessionEndEvent(getUnixTimestamp() - sessionStart);
     };
 

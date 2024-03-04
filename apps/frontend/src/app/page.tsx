@@ -14,12 +14,14 @@ const AnalyticsMap = dynamic(
 const Home = () => (
   <>
     <WebSocketClient />
-    <Title>hi i&apos;m jake</Title>
-    <Subtitle className="mb-20">
+    <h1>hi i&apos;m jake</h1>
+    <h2 className="mb-10">
       i write <InternalLink href="/code">code</InternalLink> and make{" "}
       <InternalLink href="/music">music</InternalLink>
-    </Subtitle>
-
+    </h2>
+    <h2 className="mb-5">
+      this a real-time map of people who have viewed my site
+    </h2>
     <AnalyticsMap />
   </>
 );

@@ -29,12 +29,14 @@ const AnalyticsMap = () => {
     fetchLocations();
   }, []);
 
-  console.log(locations);
   return (
     <MapContainer
       center={defaultPosition}
       zoom={zoom}
-      style={{ height: "400px", width: "100%" }}
+      style={{ height: "370px", width: "600px" }}
+      zoomControl={false}
+      attributionControl={false}
+      doubleClickZoom={false}
     >
       <TileLayer url="https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png" />
       {locations.map((location: Omit<LocationEvent, "eventName">, idx) => {

@@ -74,4 +74,4 @@ RUN npm install
 RUN npm install turbo -g
 
 
-ENTRYPOINT ["./docker-entrypoint.sh"]
+CMD npm run dev
