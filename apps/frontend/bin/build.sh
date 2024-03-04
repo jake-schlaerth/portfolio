@@ -53,7 +53,7 @@ build() {
   --build-arg DB_PASSWORD="${DB_PASSWORD}" \
   --build-arg REDIS_BASE_URL="${REDIS_BASE_URL}" \
   --build-arg DB_SSL_MODE="${DB_SSL_MODE}" \
-  --build-arg WEBSOCKET_SERVER="${WEBSOCKET_SERVER}" \
+  --build-arg NEXT_PUBLIC_WEBSOCKET_SERVER="${NEXT_PUBLIC_WEBSOCKET_SERVER}" \
   -t "$REPOSITORY_URI:latest" \
   -f "./apps/$APP_NAME/Dockerfile.production" .
 

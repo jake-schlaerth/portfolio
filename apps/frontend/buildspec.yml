@@ -19,7 +19,7 @@ env:
     DB_PASSWORD: "prod/frontend:DB_PASSWORD"
     REDIS_BASE_URL: "prod/frontend:REDIS_BASE_URL"
     DB_SSL_MODE: "prod/frontend:DB_SSL_MODE"
-    WEBSOCKET_SERVER: "prod/frontend:WEBSOCKET_SERVER"
+    NEXT_PUBLIC_WEBSOCKET_SERVER: "prod/frontend:WEBSOCKET_SERVER"
     ENV: "prod/frontend:ENV"
 phases:
   install:
