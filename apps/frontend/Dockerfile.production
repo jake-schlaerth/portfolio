@@ -10,6 +10,14 @@ RUN turbo prune frontend --docker
  
 # Add lockfile and package.json's of isolated subworkspace
 FROM base AS installer
+
+RUN apt-get update && \
+    apt-get install -y \
+    awscli \
+    jq && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
 WORKDIR /app
  
 # First install the dependencies (as they change less often)
@@ -21,29 +29,21 @@ RUN npm install
 # Build the project
 # TODO enable remote cache in this image
 COPY --from=builder /app/out/full/ .
+COPY --from=builder /app/bin ./bin
+
+RUN ./bin/build-env/build-env.sh "prod/frontend" ".env"
+
 RUN npx turbo run build --filter=frontend...
 
 #TODO remove src code here
 
 FROM base AS runner
-
-RUN apt-get update && \
-    apt-get install -y \
-    awscli \
-    jq && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
-
-
 WORKDIR /app
 
-# Don't run production as root
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 frontend --home /home/frontend
-RUN chown frontend:nodejs /app
 USER frontend:nodejs
 
 COPY --from=installer --chown=frontend:nodejs /app ./
-COPY --from=builder --chown=frontend:nodejs /app/bin ./bin 
 
-ENTRYPOINT ["./apps/frontend/docker-entrypoint.sh"]
+CMD (cd apps/frontend && npm run start)
