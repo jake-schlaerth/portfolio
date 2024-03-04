@@ -4,11 +4,10 @@ import { useSetAtom } from "jotai";
 
 import { locationsAtom } from "@/atoms";
 import { LocationEventSchema } from "analytics-events";
-import { getEnvVar } from "utils";
 
 export const WebSocketClient = () => {
   const setLocations = useSetAtom(locationsAtom);
-  const socket = new WebSocket(getEnvVar("WEBSOCKET_SERVER"));
+  const socket = new WebSocket(process.env.NEXT_PUBLIC_WEBSOCKET_SERVER || "");
 
   // Listen for messages
   socket.addEventListener("message", function (event) {
