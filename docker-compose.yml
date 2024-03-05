@@ -3,17 +3,114 @@ version: "3"
 services:
   frontend:
     build:
-      context: ./frontend
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: ./apps/frontend/Dockerfile
     ports:
       - "3000:3000"
+    depends_on:
+      - broker
+      - postgres
     volumes:
-      - ./frontend:/app
-  
+      - .:/app
+
   caddy:
-      image: caddy:latest
-      volumes:
-        - ./Caddyfile:/etc/caddy/Caddyfile
-      ports:
-        - "80:80"
-        - "443:443"
+    image: caddy:latest
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile
+      - ./caddy_data:/data
+    ports:
+      - "80:80"
+      - "443:443"
+
+  zookeeper:
+    build:
+      context: ./kafka/zookeeper
+    env_file:
+      - ./kafka/zookeeper/.env
+    ports:
+      - "2181:2181"
+    restart: always
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+      KAFKA_OPTS:
+        -Djava.security.auth.login.config=/etc/kafka/zookeeper_server_jaas.conf
+        -Dzookeeper.authProvider.1=org.apache.zookeeper.server.auth.SASLAuthenticationProvider
+        -Dzookeeper.allowSaslFailedClients=false
+        -Dzookeeper.requireClientAuthScheme=sasl
+    entrypoint: ["/etc/confluent/docker/entrypoint.sh"]
+
+  broker:
+    build:
+      context: ./kafka/broker
+    env_file:
+      - ./kafka/broker/.env
+    depends_on:
+      - zookeeper
+    ports:
+      - "9092:9092"
+      - "29092:29092"
+      - "10000:10000"
+    expose:
+      - "29092"
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: "zookeeper:2181"
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: SASL_PLAINTEXT:SASL_PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: SASL_PLAINTEXT
+      KAFKA_ADVERTISED_LISTENERS: SASL_PLAINTEXT://broker:9092
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_SASL_ENABLED_MECHANISMS: SCRAM-SHA-256
+      KAFKA_SASL_MECHANISM_INTER_BROKER_PROTOCOL: SCRAM-SHA-256
+      KAFKA_OPTS: "-Djava.security.auth.login.config=/etc/kafka/kafka_server_jaas.conf"
+    entrypoint: ["/etc/confluent/docker/entrypoint.sh"]
+
+  analytics-streamer:
+    build:
+      context: .
+      dockerfile: ./apps/analytics-streamer/Dockerfile.development
+    ports:
+      - "3001:3001"
+    depends_on:
+      - broker
+      - postgres
+    volumes:
+      - .:/app
+
+  analytics-writer:
+    build:
+      context: .
+      dockerfile: ./apps/analytics-writer/Dockerfile.development
+    ports:
+      - "3002:3002"
+    depends_on:
+      - broker
+      - postgres
+    volumes:
+      - .:/app
+
+  postgres:
+    image: postgres:latest
+    env_file:
+      - ./apps/analytics-writer/.env
+    environment:
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data_container:/var/lib/postgresql/data
+
+  redis:
+    image: redis:latest
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+      - ./redis.conf:/usr/local/etc/redis/redis.conf
+    command: redis-server /usr/local/etc/redis/redis.conf
+
+volumes:
+  postgres_data_container:
+  redis-data:

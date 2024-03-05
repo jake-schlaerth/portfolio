@@ -28,7 +28,7 @@ if ! docker info &> /dev/null; then
     fi
 
     attempts=$((attempts+1))
-    sleep 1
+    sleep 5
   done
 
   if [ $attempts -eq $max_attempts ]; then
@@ -37,12 +37,6 @@ if ! docker info &> /dev/null; then
   fi
 fi
 
-cd frontend
-npm install
-cd ..
+export $(cat ./apps/analytics-writer/.env | xargs)
 
-# Start the Caddy service
-docker-compose -f docker-compose.yml up -d caddy
-
-# Start the development environment
-docker-compose -f docker-compose.yml up -d frontend
+docker compose up

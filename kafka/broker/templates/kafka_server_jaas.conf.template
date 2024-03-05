@@ -1,0 +1,13 @@
+KafkaServer {
+   org.apache.kafka.common.security.scram.ScramLoginModule required
+   username="${BROKER_USERNAME}"
+   password="${BROKER_PASSWORD}"
+   user_${BROKER_USERNAME}="${BROKER_PASSWORD}"
+   user_${CLIENT_USERNAME}="${CLIENT_PASSWORD}";
+};
+
+Client {
+   org.apache.zookeeper.server.auth.DigestLoginModule required
+   username="${ZOOKEEPER_USERNAME}"
+   password="${ZOOKEEPER_PASSWORD}";
+};

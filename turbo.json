@@ -1,0 +1,26 @@
+{
+  "$schema": "https://turbo.build/schema.json",
+  "globalDependencies": ["bin/**"],
+  "pipeline": {
+    "build": {
+      "dependsOn": ["^build"],
+      "outputs": ["dist/**", "build/**", ".next/**", "!.next/cache/**"],
+      "inputs": ["src/**", "package.json", "tsconfig.json", "buildspec.yml"],
+      "cache": true
+    },
+    "test": {
+      "dependsOn": ["build"],
+      "inputs": [
+        "src/apps/analytics-writer/**/*.ts",
+        "src/apps/analytics-writer/**/*.test.ts",
+        "package.json",
+        "tsconfig.json"
+      ],
+      "outputs": [],
+      "cache": false
+    },
+    "dev": {
+      "cache": false
+    }
+  }
+}

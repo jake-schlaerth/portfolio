@@ -1,0 +1,126 @@
+FROM node:20 AS base
+ 
+FROM base AS builder
+
+# Set working directory
+WORKDIR /app
+RUN npm install -g turbo
+COPY . .
+RUN turbo prune frontend --docker
+ 
+# Add lockfile and package.json's of isolated subworkspace
+FROM base AS installer
+
+# ugh 
+ARG ENV
+ENV ENV=${ENV}
+
+ARG KAFKA_BROKER_BASE_URL
+ENV KAFKA_BROKER_BASE_URL=${KAFKA_BROKER_BASE_URL}
+
+ARG KAFKA_USERNAME
+ENV KAFKA_USERNAME=${KAFKA_USERNAME}
+
+ARG KAFKA_PASSWORD
+ENV KAFKA_PASSWORD=${KAFKA_PASSWORD}
+
+ARG KAFKA_TOPIC
+ENV KAFKA_TOPIC=${KAFKA_TOPIC}
+
+ARG KAFKA_CLIENT_ID
+ENV KAFKA_CLIENT_ID=${KAFKA_CLIENT_ID}
+
+ARG KAFKA_GROUP_ID
+ENV KAFKA_GROUP_ID=${KAFKA_GROUP_ID}
+
+ARG DB_USER
+ENV DB_USER=${DB_USER}
+
+ARG DB_NAME
+ENV DB_NAME=${DB_NAME}
+
+ARG DB_URI
+ENV DB_URI=${DB_URI}
+
+ARG DB_PASSWORD
+ENV DB_PASSWORD=${DB_PASSWORD}
+
+ARG REDIS_BASE_URL
+ENV REDIS_BASE_URL=${REDIS_BASE_URL}
+
+ARG DB_SSL_MODE
+ENV DB_SSL_MODE=${DB_SSL_MODE}
+
+ARG NEXT_PUBLIC_WEBSOCKET_SERVER
+ENV NEXT_PUBLIC_WEBSOCKET_SERVER=${NEXT_PUBLIC_WEBSOCKET_SERVER}
+
+WORKDIR /app
+ 
+# First install the dependencies (as they change less often)
+COPY .gitignore .gitignore
+COPY --from=builder /app/out/json/ .
+COPY --from=builder /app/out/package-lock.json ./package-lock.json
+RUN npm install
+ 
+# Build the project
+# TODO enable remote cache in this image
+COPY --from=builder /app/out/full/ .
+COPY --from=builder /app/bin ./bin
+
+RUN npx turbo run build --filter=frontend...
+
+#TODO remove src code here
+
+FROM base AS runner
+
+ARG ENV
+ENV ENV=${ENV}
+
+ARG KAFKA_BROKER_BASE_URL
+ENV KAFKA_BROKER_BASE_URL=${KAFKA_BROKER_BASE_URL}
+
+ARG KAFKA_USERNAME
+ENV KAFKA_USERNAME=${KAFKA_USERNAME}
+
+ARG KAFKA_PASSWORD
+ENV KAFKA_PASSWORD=${KAFKA_PASSWORD}
+
+ARG KAFKA_TOPIC
+ENV KAFKA_TOPIC=${KAFKA_TOPIC}
+
+ARG KAFKA_CLIENT_ID
+ENV KAFKA_CLIENT_ID=${KAFKA_CLIENT_ID}
+
+ARG KAFKA_GROUP_ID
+ENV KAFKA_GROUP_ID=${KAFKA_GROUP_ID}
+
+ARG DB_USER
+ENV DB_USER=${DB_USER}
+
+ARG DB_NAME
+ENV DB_NAME=${DB_NAME}
+
+ARG DB_URI
+ENV DB_URI=${DB_URI}
+
+ARG DB_PASSWORD
+ENV DB_PASSWORD=${DB_PASSWORD}
+
+ARG REDIS_BASE_URL
+ENV REDIS_BASE_URL=${REDIS_BASE_URL}
+
+ARG DB_SSL_MODE
+ENV DB_SSL_MODE=${DB_SSL_MODE}
+
+ARG NEXT_PUBLIC_WEBSOCKET_SERVER
+ENV NEXT_PUBLIC_WEBSOCKET_SERVER=${NEXT_PUBLIC_WEBSOCKET_SERVER}
+
+WORKDIR /app
+
+RUN addgroup --system --gid 1001 nodejs
+RUN adduser --system --uid 1001 frontend --home /home/frontend
+USER frontend:nodejs
+
+COPY --from=installer --chown=frontend:nodejs /app ./
+
+CMD (cd apps/frontend && npm run start)

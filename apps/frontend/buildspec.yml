@@ -1,0 +1,33 @@
+version: 0.2
+env:
+  secrets-manager:
+    DOCKERHUB_USERNAME: "portfolio-build-environment:DOCKERHUB_USERNAME"
+    DOCKERHUB_PASSWORD: "portfolio-build-environment:DOCKERHUB_PASSWORD"
+    AWS_DEFAULT_REGION: "portfolio-build-environment:AWS_DEFAULT_REGION"
+    AWS_ACCOUNT_ID: "portfolio-build-environment:AWS_ACCOUNT_ID"
+    KAFKA_BROKER_BASE_URL: "prod/frontend:KAFKA_BROKER_BASE_URL"
+    KAFKA_USERNAME: "prod/frontend:KAFKA_USERNAME"
+    KAFKA_PASSWORD: "prod/frontend:KAFKA_PASSWORD"
+    KAFKA_TOPIC: "prod/frontend:KAFKA_TOPIC"
+    KAFKA_GROUP_ID: "prod/frontend:KAFKA_GROUP_ID"
+    KAFKA_CLIENT_ID: "prod/frontend:KAFKA_CLIENT_ID"
+    KAFKA_GROUP_ID: "prod/frontend:KAFKA_GROUP_ID"
+    KAFKA_CLIENT_ID: "prod/frontend:KAFKA_CLIENT_ID"
+    DB_USER: "prod/frontend:DB_USER"
+    DB_URI: "prod/frontend:DB_URI"
+    DB_NAME: "prod/frontend:DB_NAME"
+    DB_PASSWORD: "prod/frontend:DB_PASSWORD"
+    REDIS_BASE_URL: "prod/frontend:REDIS_BASE_URL"
+    DB_SSL_MODE: "prod/frontend:DB_SSL_MODE"
+    NEXT_PUBLIC_WEBSOCKET_SERVER: "prod/frontend:WEBSOCKET_SERVER"
+    ENV: "prod/frontend:ENV"
+phases:
+  install:
+    commands:
+      - nohup /usr/bin/dockerd --host=unix:///var/run/docker.sock --host=tcp://127.0.0.1:2375 &
+      - timeout 15 sh -c "until docker info; do echo .; sleep 1; done"
+  build:
+    commands:
+      - ./apps/frontend/bin/build.sh frontend
+artifacts:
+  files: imagedefinitions.json

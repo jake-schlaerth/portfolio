@@ -19,10 +19,10 @@ jobs:
         run: cd frontend
       - name: Install Dependencies
         run: npm install
-        working-directory: ./frontend
+        working-directory: ./apps/frontend
       - name: Run TypeScript Compiler
         run: npx tsc --noEmit
-        working-directory: ./frontend
+        working-directory: ./apps/frontend
       - name: Run ESLint
         run: npx eslint . --ext .ts,.tsx
-        working-directory: ./frontend
+        working-directory: ./apps/frontend
