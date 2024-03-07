@@ -10,7 +10,7 @@ export const WebSocketClient = () => {
   const socket = new WebSocket(process.env.NEXT_PUBLIC_WEBSOCKET_SERVER || "");
 
   socket.addEventListener("message", function (event) {
-    console.log("recieved websocket message", event);
+    console.log("received websocket message");
 
     let validatedEvent;
 
