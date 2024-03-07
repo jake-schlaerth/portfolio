@@ -1,4 +1,6 @@
 "use client";
 import { Chart } from "./components";
 
-export default () => <Chart />;
+const HowIBuiltIt = () => <Chart />;
+
+export default HowIBuiltIt;
