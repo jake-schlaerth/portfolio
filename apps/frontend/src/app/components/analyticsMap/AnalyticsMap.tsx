@@ -40,6 +40,7 @@ const AnalyticsMap = () => {
           zoomControl={false}
           attributionControl={false}
           doubleClickZoom={false}
+          scrollWheelZoom={false}
         >
           <TileLayer url="https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png" />
           {locations.map((location: Omit<LocationEvent, "eventName">, idx) => {
