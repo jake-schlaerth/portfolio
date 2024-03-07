@@ -1,0 +1,95 @@
+import { BidirectionalEdge } from "./BidirectionalEdge";
+import { CurvedEdge } from "./CurvedEdge";
+
+export const customEdgeTypes = {
+  bidirectionalEdge: BidirectionalEdge,
+  curvedEdge: CurvedEdge,
+};
+
+export const edges = [
+  {
+    id: "b1-k",
+    source: "browser-1",
+    sourceHandle: "bottom",
+    target: "kafka",
+    targetHandle: "top",
+    animated: true,
+  },
+  {
+    id: "k-as",
+    source: "kafka",
+    sourceHandle: "right",
+    target: "analytics-streamer",
+    targetHandle: "left",
+    animated: true,
+  },
+  {
+    id: "as-b2",
+    source: "analytics-streamer",
+    sourceHandle: "top",
+    target: "browser-2",
+    targetHandle: "bottom",
+    animated: true,
+  },
+  {
+    id: "k-aw",
+    source: "kafka",
+    sourceHandle: "bottom",
+    target: "analytics-writer",
+    targetHandle: "top",
+    animated: true,
+  },
+  {
+    id: "aw-d",
+    source: "analytics-writer",
+    sourceHandle: "bottom",
+    target: "database",
+    targetHandle: "top",
+    animated: true,
+  },
+  {
+    id: "r-b1",
+    source: "redis",
+    sourceHandle: "left",
+    target: "browser-1",
+    targetHandle: "top",
+    animated: true,
+    type: "bidirectionalEdge",
+  },
+  {
+    id: "b1-r",
+    target: "redis",
+    targetHandle: "left",
+    source: "browser-1",
+    sourceHandle: "top",
+    animated: true,
+    type: "bidirectionalEdge",
+  },
+  {
+    id: "b2-r",
+    source: "browser-2",
+    sourceHandle: "top",
+    target: "redis",
+    targetHandle: "right",
+    animated: true,
+    type: "bidirectionalEdge",
+  },
+  {
+    id: "r-b2",
+    source: "redis",
+    sourceHandle: "right",
+    target: "browser-2",
+    targetHandle: "top",
+    animated: true,
+    type: "bidirectionalEdge",
+  },
+  {
+    id: "d-b1",
+    source: "database",
+    sourceHandle: "left",
+    target: "browser-1",
+    targetHandle: "left",
+    animated: true,
+    type: "curvedEdge",
+  },
+];

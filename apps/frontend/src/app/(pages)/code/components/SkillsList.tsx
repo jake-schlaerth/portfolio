@@ -34,6 +34,8 @@ export const SkillsList = () => (
         <li>ecr</li>
         <li>ecs</li>
         <li>ec2</li>
+        <li>s3</li>
+        <li>lambda</li>
         <li>codepipeline</li>
         <li>codebuild</li>
         <li>route 53</li>

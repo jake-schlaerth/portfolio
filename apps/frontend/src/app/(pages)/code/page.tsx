@@ -5,20 +5,15 @@ const Code = () => (
   <>
     <h1>these are some of the technologies i use</h1>
     <SkillsList />
-    <div className="flex flex-col items-center ">
-      <p>
+    <div className="flex flex-col items-start text-left">
+      <p className="max-w-prose">
+        this platform operates on a{" "}
         <ExternalLink href="https://github.com/jake-schlaerth/portfolio">
-          this site
+          monorepo architecture
         </ExternalLink>{" "}
-        is hosted on aws
-      </p>
-      <p>
-        {" "}
-        it leverages a{" "}
-        <ExternalLink href="https://github.com/jake-schlaerth/portfolio/blob/main/apps/frontend/buildspec.yml">
-          continuous deployment pipeline
-        </ExternalLink>{" "}
-        that triggers a deployment on a push to main
+        with distributed services, where each application within the monorepo is
+        equipped with an independent deployment pipeline. automatic deployment
+        of any modified app occurs upon a push to the main branch.
       </p>
     </div>
   </>

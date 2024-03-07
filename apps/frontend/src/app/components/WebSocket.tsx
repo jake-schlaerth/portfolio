@@ -9,7 +9,6 @@ export const WebSocketClient = () => {
   const setLocations = useSetAtom(locationsAtom);
   const socket = new WebSocket(process.env.NEXT_PUBLIC_WEBSOCKET_SERVER || "");
 
-  // Listen for messages
   socket.addEventListener("message", function (event) {
     let validatedEvent;
     try {
@@ -27,7 +26,6 @@ export const WebSocketClient = () => {
     setLocations((prev) => [newLocation, ...prev]);
   });
 
-  // Listen for errors
   socket.addEventListener("error", function (event) {
     console.error("WebSocket error:", event);
   });

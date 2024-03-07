@@ -6,11 +6,6 @@ tasks:
     cmds:
       - ./bin/start-dev.sh
 
-  build:
-    desc: Build image
-    cmds:
-      - docker-compose -f docker-compose.yml build frontend
-
   build-envs:
     desc: Generate .env files for all applications
     cmds:
