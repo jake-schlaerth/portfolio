@@ -25,3 +25,16 @@ body {
     )
     rgb(var(--background-start-rgb));
 }
+
+.react-flow__handle {
+  opacity: 0;
+  bottom: 0;
+}
+
+.react-flow__handle-top {
+  top: 0;
+}
+
+.react-flow__pane {
+  cursor: default !important;
+}

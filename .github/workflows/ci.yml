@@ -15,8 +15,6 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-      - name: Change to Frontend Directory
-        run: cd frontend
       - name: Install Dependencies
         run: npm install
         working-directory: ./apps/frontend
