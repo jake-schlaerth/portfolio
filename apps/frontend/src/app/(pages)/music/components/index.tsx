@@ -1,3 +1,3 @@
+"use client";
 export * from "./StartModal";
-export * from "./ToneGenerator";
-export * from "./ChordGenerator";
+export * from "./IsorhythmGenerator";
