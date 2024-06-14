@@ -10,6 +10,7 @@ RUN turbo prune frontend --docker
  
 # Add lockfile and package.json's of isolated subworkspace
 FROM base AS installer
+RUN npm install -g turbo@1.12.3
 
 # ugh 
 ARG ENV
