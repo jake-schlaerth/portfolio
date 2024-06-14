@@ -4,7 +4,7 @@ FROM base AS builder
 
 # Set working directory
 WORKDIR /app
-RUN npm install -g turbo
+RUN npm install -g turbo@1.12.3
 COPY . .
 RUN turbo prune frontend --docker
  

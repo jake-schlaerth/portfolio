@@ -71,7 +71,7 @@ COPY . .
 WORKDIR /app/apps/frontend
 
 RUN npm install
-RUN npm install turbo -g
+RUN npm install turbo@1.12.3 -g
 
 
 CMD npm run dev

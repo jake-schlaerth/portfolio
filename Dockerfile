@@ -2,6 +2,6 @@
 FROM node:20-alpine
 
 RUN apk add --no-cache jq aws-cli docker
-RUN npm install turbo -g
+RUN npm install turbo@1.12.3 -g
 
 WORKDIR /app
