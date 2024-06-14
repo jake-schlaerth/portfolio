@@ -16,11 +16,12 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({ children }: PropsWithChildren) {
+  const isAnalyticsEnabled = false;
   return (
     <html lang="en">
       <body className={inter.className}>
         <Provider>
-          <Analytics />
+          {isAnalyticsEnabled && <Analytics />}
           <MainContainer>{children}</MainContainer>
         </Provider>
       </body>

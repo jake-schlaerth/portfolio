@@ -13,7 +13,9 @@ export const SkillsList = () => (
         <li>gatsby</li>
         <li>react</li>
         <li>express</li>
+        <li>hapi</li>
         <li>laravel</li>
+        <li>symfony</li>
         <li>flutter</li>
       </ul>
     </div>
@@ -22,6 +24,8 @@ export const SkillsList = () => (
         <li>cypress</li>
         <li>playwright</li>
         <li>jest</li>
+        <li>mocha</li>
+        <li>chai</li>
         <li>phpunit</li>
         <li>pest</li>
         <li>tailwind</li>

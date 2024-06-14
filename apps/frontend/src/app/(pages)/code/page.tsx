@@ -1,4 +1,4 @@
-import { ExternalLink } from "@/components";
+import { ExternalLink, InternalLink } from "@/components";
 import { SkillsList } from "./components/SkillsList";
 
 const Code = () => (
@@ -13,7 +13,8 @@ const Code = () => (
         </ExternalLink>{" "}
         with distributed services, where each application within the monorepo is
         equipped with an independent deployment pipeline. automatic deployment
-        of any modified app occurs upon a push to the main branch.
+        of any modified app occurs upon a push to the main branch.{" "}
+        <InternalLink href="/how-i-built-it">see how i built it</InternalLink>
       </p>
     </div>
   </>

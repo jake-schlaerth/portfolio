@@ -1,4 +1,5 @@
 import dynamic from "next/dynamic";
+import { useAtomValue } from "jotai";
 
 import { InternalLink } from "./components";
 import { WebSocketClient } from "./components/WebSocket";
@@ -11,17 +12,20 @@ const AnalyticsMap = dynamic(
   }
 );
 
-const Home = () => (
-  <>
-    <WebSocketClient />
-    <p>hi i&apos;m jake</p>
-    <p className="mb-3">
-      i write <InternalLink href="/code">code</InternalLink> and make{" "}
-      <InternalLink href="/music">music</InternalLink>
-    </p>
+const Home = () => {
+  const isAnalyticsEnabled = false;
+  return (
+    <>
+      {isAnalyticsEnabled && <WebSocketClient />}
+      <p>hi i&apos;m jake</p>
+      <p className="mb-3">
+        i write <InternalLink href="/code">code</InternalLink> and make{" "}
+        <InternalLink href="/music">music</InternalLink>
+      </p>
 
-    <AnalyticsMap />
-  </>
-);
+      {isAnalyticsEnabled && <AnalyticsMap />}
+    </>
+  );
+};
 
 export default Home;
