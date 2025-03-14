@@ -1,20 +1,16 @@
-# Use the official Node.js image as the base image
+# Use a lightweight Node.js image
 FROM node:23
 
-# Set the working directory inside the container
+# RUN useradd -m myuser
+# USER myuser
 WORKDIR /app
 
-# Copy package.json and package-lock.json to the working directory
-COPY package*.json ./
+COPY package.json package-lock.json ./
 
-# Install dependencies
 RUN npm install
 
-# Copy the rest of the application code to the working directory
 COPY . .
 
-# Expose the port the app runs on
-EXPOSE 3000
+EXPOSE 5173
 
-# Start the application
-CMD ["npm", "start"]
+CMD ["npm", "run", "dev", "--", "--host"]
