@@ -1,0 +1,19 @@
+services:
+  rust-app:
+    build: .
+    ports:
+      - "8080:8080"
+    volumes:
+      - .:/app
+    environment:
+      RUST_LOG: "info"
+    command: ["cargo", "watch", "-x", "run"]
+
+  database:
+    image: postgres:latest
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: "user"
+      POSTGRES_PASSWORD: "password"
+      POSTGRES_DB: "app"

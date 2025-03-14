@@ -1,0 +1,11 @@
+[package]
+name = "app"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+axum = "0.8.1"
+diesel = { version = "2.2.8", features = ["postgres", "r2d2"] }
+dotenvy = "0.15.7"
+serde = { version = "1.0.219", features = ["derive"] }
+tokio = { version = "1.44.1", features = ["full"] }
