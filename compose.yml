@@ -1,13 +1,21 @@
 services:
-  rust-app:
-    build: .
+  backend:
+    build: ./apps/backend
     ports:
       - "8080:8080"
     volumes:
-      - .:/app
+      - ./apps/backend:/app
     environment:
       RUST_LOG: "info"
     command: ["cargo", "watch", "-x", "run"]
+
+  frontend:
+    build: ./apps/frontend
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./apps/frontend:/app
+    command: ["sleep", "infinity"]
 
   database:
     image: postgres:latest

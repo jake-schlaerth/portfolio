@@ -1,6 +1,3 @@
-// todo
-// this file is currently unused
-
 use diesel::pg::PgConnection;
 use diesel::r2d2::{ConnectionManager, Pool};
 use dotenvy::dotenv;
