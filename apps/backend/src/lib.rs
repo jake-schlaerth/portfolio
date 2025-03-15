@@ -1,14 +1,17 @@
-pub mod run_app;
+pub mod app;
 
-pub mod routes;
+pub use app::App;
+
+pub mod handlers {
+    pub mod root;
+    pub mod websocket;
+}
 
 pub mod schema;
 
 pub mod db;
 
-pub mod handlers {
-    pub mod root;
-}
+pub mod websocket_clients;
 
 pub mod models {
     pub mod user;

@@ -1,6 +1,6 @@
-use app::run_app::run_app;
+use backend::App;
 
 #[tokio::main]
 async fn main() {
-    run_app().await;
+    App::new().run().await;
 }
