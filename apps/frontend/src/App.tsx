@@ -5,7 +5,7 @@ function App() {
   const [socket, setSocket] = useState<WebSocket | null>(null);
 
   useEffect(() => {
-    const ws = new WebSocket("ws://localhost:8080/ws");
+    const ws = new WebSocket("ws://localhost:8080/websocket");
 
     ws.onopen = () => {
       console.log("WebSocket is open");

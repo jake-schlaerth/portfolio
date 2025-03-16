@@ -8,27 +8,28 @@ pub type Client = SplitSink<WebSocket, Message>;
 
 #[derive(Debug, Clone)]
 pub struct WebSocketClientList {
-    list: Arc<Mutex<Vec<Client>>>,
+    clients: Arc<Mutex<Vec<Client>>>,
 }
 
 impl WebSocketClientList {
     pub fn new() -> Self {
         Self {
-            list: Arc::new(Mutex::new(Vec::new())),
+            clients: Arc::new(Mutex::new(Vec::new())),
         }
     }
 
     pub async fn add_client(&self, client: Client) {
-        let mut clients = self.list.lock().await;
+        let mut clients = self.clients.lock().await;
         clients.push(client);
     }
 
     pub async fn broadcast(&self, message: &str) {
-        let mut clients = self.list.lock().await;
+        let mut clients = self.clients.lock().await;
 
         let mut failed_indices = Vec::new();
 
         for (index, client) in clients.iter_mut().enumerate() {
+            println!("client: {:?}", client);
             if client.send(Message::Text(message.into())).await.is_err() {
                 failed_indices.push(index);
             }

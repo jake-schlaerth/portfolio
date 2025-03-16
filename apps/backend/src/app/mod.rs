@@ -1,17 +1,16 @@
-pub mod app_router;
-use crate::websocket_client_list::WebSocketClientList;
+mod app_router;
 use app_router::AppRouter;
 use axum::{Router, serve};
 use tokio::net::TcpListener;
 
 pub struct App {
     router: Router,
+    // database:
 }
 
 impl App {
     pub fn new() -> Self {
-        let clients = WebSocketClientList::new();
-        let router = AppRouter::new(clients).router;
+        let router = AppRouter::new().router;
 
         Self { router }
     }

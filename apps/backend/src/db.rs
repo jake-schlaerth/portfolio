@@ -1,18 +1,37 @@
 use diesel::pg::PgConnection;
-use diesel::r2d2::{ConnectionManager, Pool};
+use diesel::r2d2::{ConnectionManager, Pool, PooledConnection};
 use dotenvy::dotenv;
 use std::env;
 
-pub type DbPool = Pool<ConnectionManager<PgConnection>>;
+type DatabasePool = Pool<ConnectionManager<PgConnection>>;
+type DatabaseConnection = PooledConnection<ConnectionManager<PgConnection>>;
 
-pub fn establish_connection() -> DbPool {
-    dotenv().ok();
+pub struct Database {
+    database_pool: DatabasePool,
+}
 
-    let database_url = env::var("DATABASE_URL").expect("DATABASE_URL must be set");
-    println!("Connecting to database at: {}", database_url);
-    let manager = ConnectionManager::<PgConnection>::new(database_url);
+impl Database {
+    pub fn new() -> Self {
+        Self {
+            database_pool: Self::create_database_pool(),
+        }
+    }
 
-    Pool::builder()
-        .build(manager)
-        .expect("Failed to create database pool")
+    fn create_database_pool() -> DatabasePool {
+        dotenv().ok();
+
+        let database_url = env::var("DATABASE_URL").expect("DATABASE_URL must be set");
+        println!("Connecting to database at: {}", database_url);
+        let manager = ConnectionManager::<PgConnection>::new(database_url);
+
+        Pool::builder()
+            .build(manager)
+            .expect("Failed to create database pool")
+    }
+
+    pub fn get_connection(&self) -> DatabaseConnection {
+        self.database_pool
+            .get()
+            .expect("Failed to get database connection")
+    }
 }
