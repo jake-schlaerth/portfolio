@@ -16,7 +16,17 @@ diesel::table! {
     }
 }
 
+diesel::table! {
+    whiteboards (id) {
+        id -> Uuid,
+        name -> Varchar,
+        password -> Nullable<Varchar>,
+        created_at -> Nullable<Timestamp>,
+    }
+}
+
 diesel::allow_tables_to_appear_in_same_query!(
     sessions,
     users,
+    whiteboards,
 );
