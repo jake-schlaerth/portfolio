@@ -6,6 +6,7 @@ use std::env;
 type DatabasePool = Pool<ConnectionManager<PgConnection>>;
 type DatabaseConnection = PooledConnection<ConnectionManager<PgConnection>>;
 
+#[derive(Clone)]
 pub struct Database {
     database_pool: DatabasePool,
 }

@@ -1,20 +1,19 @@
 use axum::extract::ws::{Message, WebSocket};
 use futures::SinkExt;
 use futures::stream::SplitSink;
-use std::sync::Arc;
 use tokio::sync::Mutex;
 
 pub type Client = SplitSink<WebSocket, Message>;
 
-#[derive(Debug, Clone)]
+#[derive(Debug)]
 pub struct WebSocketClientList {
-    clients: Arc<Mutex<Vec<Client>>>,
+    clients: Mutex<Vec<Client>>,
 }
 
 impl WebSocketClientList {
     pub fn new() -> Self {
         Self {
-            clients: Arc::new(Mutex::new(Vec::new())),
+            clients: Mutex::new(Vec::new()),
         }
     }
 
@@ -29,7 +28,6 @@ impl WebSocketClientList {
         let mut failed_indices = Vec::new();
 
         for (index, client) in clients.iter_mut().enumerate() {
-            println!("client: {:?}", client);
             if client.send(Message::Text(message.into())).await.is_err() {
                 failed_indices.push(index);
             }

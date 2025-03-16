@@ -5,9 +5,10 @@ mod route_handlers {
     pub mod web_socket;
 }
 
-use route_handlers::*;
+mod app_state;
+pub use app_state::AppState;
 
-use crate::{database::Database, web_socket_client_list::WebSocketClientList};
+use route_handlers::*;
 
 pub struct AppRouter {
     pub router: Router,
@@ -15,13 +16,10 @@ pub struct AppRouter {
 
 impl AppRouter {
     pub fn new() -> Self {
-        let websocket_client_list = WebSocketClientList::new();
-        let router = Router::new().route("/", get(root::handler)).route(
-            "/websocket",
-            get(move |web_socket_upgrade| {
-                web_socket::handler(web_socket_upgrade, websocket_client_list.clone())
-            }),
-        );
+        let router = Router::new()
+            .route("/", get(root::handler))
+            .route("/web_socket", get(web_socket::handler))
+            .with_state(AppState::new());
 
         Self { router }
     }

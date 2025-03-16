@@ -1,11 +1,15 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 function App() {
   const [messages, setMessages] = useState<string[]>([]);
   const [socket, setSocket] = useState<WebSocket | null>(null);
 
+  const idRef = useRef<string>(Math.random().toString(36).substring(7));
+  const id = idRef.current;
+  console.log(id);
+
   useEffect(() => {
-    const ws = new WebSocket("ws://localhost:8080/websocket");
+    const ws = new WebSocket("ws://localhost:8080/web_socket");
 
     ws.onopen = () => {
       console.log("WebSocket is open");
@@ -32,7 +36,7 @@ function App() {
 
   const sendMessage = () => {
     if (socket) {
-      socket.send("Hello from React!");
+      socket.send(`Hello from id ${id}!`);
     }
   };
 
