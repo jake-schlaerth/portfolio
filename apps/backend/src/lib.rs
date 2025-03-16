@@ -9,5 +9,6 @@ pub mod database;
 pub mod web_socket_client_list;
 
 pub mod models {
+    pub mod session;
     pub mod user;
 }

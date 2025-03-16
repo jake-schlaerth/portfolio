@@ -4,7 +4,7 @@ diesel::table! {
     sessions (id) {
         id -> Uuid,
         name -> Varchar,
-        created_at -> Nullable<Timestamp>,
+        created_at -> Timestamp,
     }
 }
 
