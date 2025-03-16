@@ -1,5 +1,5 @@
 pub mod app_router;
-use crate::websocket_clients::WebSocketClients;
+use crate::websocket_client_list::WebSocketClientList;
 use app_router::AppRouter;
 use axum::{Router, serve};
 use tokio::net::TcpListener;
@@ -10,7 +10,7 @@ pub struct App {
 
 impl App {
     pub fn new() -> Self {
-        let clients = WebSocketClients::new();
+        let clients = WebSocketClientList::new();
         let router = AppRouter::new(clients).router;
 
         Self { router }

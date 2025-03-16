@@ -11,7 +11,7 @@ pub mod schema;
 
 pub mod db;
 
-pub mod websocket_clients;
+pub mod websocket_client_list;
 
 pub mod models {
     pub mod user;

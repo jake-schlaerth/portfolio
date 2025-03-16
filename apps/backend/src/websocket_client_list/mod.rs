@@ -7,24 +7,24 @@ use tokio::sync::Mutex;
 pub type Client = SplitSink<WebSocket, Message>;
 
 #[derive(Debug, Clone)]
-pub struct WebSocketClients {
-    clients: Arc<Mutex<Vec<Client>>>,
+pub struct WebSocketClientList {
+    list: Arc<Mutex<Vec<Client>>>,
 }
 
-impl WebSocketClients {
+impl WebSocketClientList {
     pub fn new() -> Self {
         Self {
-            clients: Arc::new(Mutex::new(Vec::new())),
+            list: Arc::new(Mutex::new(Vec::new())),
         }
     }
 
     pub async fn add_client(&self, client: Client) {
-        let mut clients = self.clients.lock().await;
+        let mut clients = self.list.lock().await;
         clients.push(client);
     }
 
     pub async fn broadcast(&self, message: &str) {
-        let mut clients = self.clients.lock().await;
+        let mut clients = self.list.lock().await;
 
         let mut failed_indices = Vec::new();
 

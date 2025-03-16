@@ -2,7 +2,7 @@ use axum::{Router, routing::get};
 
 use crate::{
     handlers::{root::root, websocket::ws_handler},
-    websocket_clients::WebSocketClients,
+    websocket_client_list::WebSocketClientList,
 };
 
 pub struct AppRouter {
@@ -10,7 +10,7 @@ pub struct AppRouter {
 }
 
 impl AppRouter {
-    pub fn new(clients: WebSocketClients) -> Self {
+    pub fn new(clients: WebSocketClientList) -> Self {
         let router = Router::new().route("/", get(root)).route(
             "/ws",
             get(move |web_socket_upgrade| ws_handler(web_socket_upgrade, clients.clone())),
