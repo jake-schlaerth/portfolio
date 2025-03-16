@@ -2,12 +2,12 @@ use axum::{Router, routing::get};
 
 mod route_handlers {
     pub mod root;
-    pub mod websocket;
+    pub mod web_socket;
 }
 
 use route_handlers::*;
 
-use crate::websocket_client_list::WebSocketClientList;
+use crate::{database::Database, web_socket_client_list::WebSocketClientList};
 
 pub struct AppRouter {
     pub router: Router,
@@ -19,7 +19,7 @@ impl AppRouter {
         let router = Router::new().route("/", get(root::handler)).route(
             "/websocket",
             get(move |web_socket_upgrade| {
-                websocket::handler(web_socket_upgrade, websocket_client_list.clone())
+                web_socket::handler(web_socket_upgrade, websocket_client_list.clone())
             }),
         );
 

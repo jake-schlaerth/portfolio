@@ -4,9 +4,9 @@ pub use app::App;
 
 pub mod schema;
 
-pub mod db;
+pub mod database;
 
-pub mod websocket_client_list;
+pub mod web_socket_client_list;
 
 pub mod models {
     pub mod user;
