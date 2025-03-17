@@ -1,6 +1,7 @@
 import { useAtomValue } from "jotai";
 import { messagesAtom, sessionIdAtom } from "../atoms";
 import { useWebSocket } from "../hooks";
+import { WhiteboardCanvas } from "./WhiteboardCanvas";
 
 export function Whiteboard() {
   const messages = useAtomValue(messagesAtom);
@@ -9,6 +10,7 @@ export function Whiteboard() {
 
   return (
     <div>
+      <WhiteboardCanvas />
       <button onClick={() => sendMessage(`Hello from ${sessionId}`)}>
         Send Message
       </button>
