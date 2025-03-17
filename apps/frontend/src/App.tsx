@@ -1,11 +1,21 @@
-import { useAtom } from "jotai";
-import { sessionIdAtom } from "./atoms";
+import { useAtom, useAtomValue } from "jotai";
+import { selectedWhiteboardIdAtom, sessionIdAtom } from "./atoms";
 import { Whiteboard, Register } from "./components";
+import { WhiteboardList } from "./components/WhiteboardList";
 
 function App() {
   const [sessionId] = useAtom(sessionIdAtom);
+  const selectedWhiteboardId = useAtomValue(selectedWhiteboardIdAtom);
 
-  return <div>{sessionId ? <Whiteboard /> : <Register />}</div>;
+  if (!sessionId) {
+    return <Register />;
+  }
+
+  if (!selectedWhiteboardId) {
+    return <WhiteboardList />;
+  }
+
+  return <Whiteboard />;
 }
 
 export default App;
