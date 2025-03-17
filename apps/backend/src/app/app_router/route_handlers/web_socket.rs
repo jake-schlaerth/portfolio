@@ -39,9 +39,17 @@ async fn on_upgrade_callback(
     client_list.add_client(&whiteboard_id, sender).await;
 
     while let Some(Ok(received_message)) = receiver.next().await {
-        if let Message::Text(text) = received_message {
-            println!("Received: {}", text);
-            client_list.broadcast(&whiteboard_id, &text).await;
-        }
+        handle_received_message(received_message, &whiteboard_id, client_list.clone()).await;
+    }
+}
+
+async fn handle_received_message(
+    message: Message,
+    whiteboard_id: &str,
+    client_list: Arc<WebSocketClientList>,
+) {
+    if let Message::Text(text) = message {
+        println!("Received: {}", text);
+        client_list.broadcast(whiteboard_id, &text).await;
     }
 }
