@@ -10,6 +10,7 @@ mod route_handlers {
     pub mod root;
     pub mod web_socket;
     pub mod whiteboard_create;
+    pub mod whiteboard_history;
     pub mod whiteboard_list;
 }
 use route_handlers::*;
@@ -29,6 +30,7 @@ impl AppRouter {
             .route("/register", post(register::handler))
             .route("/whiteboard", post(whiteboard_create::handler))
             .route("/whiteboard", get(whiteboard_list::handler))
+            .route("/whiteboard/{id}/history", get(whiteboard_history::handler))
             .with_state(AppState::new())
             .layer(CorsLayer::permissive())
             .layer(TraceLayer::new_for_http());
