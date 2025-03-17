@@ -22,7 +22,6 @@ impl Database {
         dotenv().ok();
 
         let database_url = env::var("DATABASE_URL").expect("DATABASE_URL must be set");
-        println!("Connecting to database at: {}", database_url);
         let manager = ConnectionManager::<PgConnection>::new(database_url);
 
         Pool::builder()

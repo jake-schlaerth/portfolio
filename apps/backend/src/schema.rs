@@ -17,6 +17,16 @@ diesel::table! {
 }
 
 diesel::table! {
+    whiteboard_events (id) {
+        id -> Uuid,
+        whiteboard_id -> Uuid,
+        event_type -> Text,
+        payload -> Jsonb,
+        created_at -> Nullable<Timestamp>,
+    }
+}
+
+diesel::table! {
     whiteboards (id) {
         id -> Uuid,
         name -> Varchar,
@@ -25,8 +35,11 @@ diesel::table! {
     }
 }
 
+diesel::joinable!(whiteboard_events -> whiteboards (whiteboard_id));
+
 diesel::allow_tables_to_appear_in_same_query!(
     sessions,
     users,
+    whiteboard_events,
     whiteboards,
 );

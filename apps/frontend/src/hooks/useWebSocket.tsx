@@ -18,7 +18,7 @@ export function useWebSocket() {
 
     const url = new URL("/web_socket", import.meta.env.VITE_BACKEND_BASE_URL);
     url.protocol = "ws:";
-    url.searchParams.set("whiteboard_id", selectedWhiteboardId);
+    url.searchParams.set("id", selectedWhiteboardId);
     const socket = new WebSocket(url);
 
     socket.onopen = () => console.log("WebSocket connected");

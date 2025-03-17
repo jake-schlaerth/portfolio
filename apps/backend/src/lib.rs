@@ -12,4 +12,5 @@ pub mod models {
     pub mod session;
     pub mod user;
     pub mod whiteboard;
+    pub mod whiteboard_event;
 }
