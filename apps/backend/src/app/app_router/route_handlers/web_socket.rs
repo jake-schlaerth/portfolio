@@ -1,33 +1,47 @@
-use crate::app::app_router::app_state::AppState;
-use crate::web_socket_client_list::WebSocketClientList;
 use axum::{
     extract::{
-        State,
+        Query, State,
         ws::{Message, WebSocket, WebSocketUpgrade},
     },
     response::IntoResponse,
 };
 use futures::StreamExt;
+use serde::Deserialize;
 use std::sync::Arc;
 
+use crate::{app::app_router::app_state::AppState, web_socket_client_list::WebSocketClientList};
+
+#[derive(Deserialize)]
+pub struct WhiteboardQuery {
+    whiteboard_id: String,
+}
+
 pub async fn handler(
+    Query(query): Query<WhiteboardQuery>,
     State(state): State<AppState>,
     web_socket_upgrade: WebSocketUpgrade,
 ) -> impl IntoResponse {
+    let whiteboard_id = query.whiteboard_id.clone();
     let client_list = state.web_socket_client_list.clone();
 
-    web_socket_upgrade.on_upgrade(move |web_socket| on_upgrade_callback(web_socket, client_list))
+    web_socket_upgrade.on_upgrade(move |web_socket| async move {
+        on_upgrade_callback(web_socket, whiteboard_id, client_list).await
+    })
 }
 
-async fn on_upgrade_callback(web_socket: WebSocket, client_list: Arc<WebSocketClientList>) {
+async fn on_upgrade_callback(
+    web_socket: WebSocket,
+    whiteboard_id: String,
+    client_list: Arc<WebSocketClientList>,
+) {
     let (sender, mut receiver) = web_socket.split();
 
-    client_list.add_client(sender).await;
+    client_list.add_client(&whiteboard_id, sender).await;
 
     while let Some(Ok(received_message)) = receiver.next().await {
         if let Message::Text(text) = received_message {
             println!("Received: {}", text);
-            client_list.broadcast(&text).await;
+            client_list.broadcast(&whiteboard_id, &text).await;
         }
     }
 }
