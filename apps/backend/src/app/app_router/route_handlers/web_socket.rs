@@ -29,9 +29,7 @@ pub async fn handler(
     State(state): State<AppState>,
     web_socket_upgrade: WebSocketUpgrade,
 ) -> impl IntoResponse {
-    println!("Websocket connection requested");
     let whiteboard_identifier = query.id.to_string();
-    println!("Whiteboard ID: {}", whiteboard_identifier);
     let client_list = state.web_socket_client_list.clone();
 
     web_socket_upgrade.on_upgrade(move |web_socket| async move {
@@ -53,7 +51,6 @@ async fn on_upgrade_callback(
 ) {
     let (sender, mut receiver) = web_socket.split();
 
-    println!("Client connected to whiteboard: {}", whiteboard_identifier);
     client_list.add_client(&whiteboard_identifier, sender).await;
 
     while let Some(Ok(received_message)) = receiver.next().await {
@@ -68,10 +65,6 @@ async fn on_upgrade_callback(
                 };
 
                 let mut database_connection = database.get_connection();
-
-                println!("Inserting event into database");
-                println!("Whiteboard ID: {}", whiteboard_identifier);
-                println!("Payload: {}", extracted_payload);
 
                 diesel::insert_into(whiteboard_events)
                     .values(NewWhiteboardEvent {
@@ -90,15 +83,3 @@ async fn on_upgrade_callback(
         }
     }
 }
-
-// async fn handle_received_message(
-//     message: Message,
-//     whiteboard_id: &str,
-//     client_list: Arc<WebSocketClientList>,
-
-// ) {
-//     if let Message::Text(text) = message {
-//         println!("Received: {}", text);
-//         client_list.broadcast(whiteboard_id, &text).await;
-//     }
-// }

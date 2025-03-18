@@ -16,9 +16,33 @@ export function WhiteboardCanvas() {
   const { sendMessage } = useWebSocket();
   const [drawing, setDrawing] = useState(false);
   const [color, setColor] = useState("black");
+  const [history, setHistory] = useState<DrawData[]>([]);
   const [currentPoints, setCurrentPoints] = useState<
     { x: number; y: number }[]
   >([]);
+
+  useEffect(() => {
+    const fetchHistory = async () => {
+      const url = new URL(import.meta.env.VITE_BACKEND_BASE_URL);
+      url.pathname = `/whiteboard/${selectedWhiteboardId}/history`;
+      const response = await fetch(url);
+      const historyResponse = await response.json();
+
+      setHistory(
+        historyResponse.map((whiteboardEvent: any) => whiteboardEvent.payload)
+      );
+    };
+
+    try {
+      fetchHistory();
+    } catch (error) {
+      console.error("Failed to fetch history:", error);
+    }
+  }, [selectedWhiteboardId]);
+
+  useEffect(() => {
+    history.forEach(drawOnCanvas);
+  }, [history]);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -92,7 +116,7 @@ export function WhiteboardCanvas() {
     if (!ctxRef.current) return;
 
     const { color, points } = drawData;
-    if (!points.length) return;
+    if (!points?.length) return;
 
     ctxRef.current.strokeStyle = color;
     ctxRef.current.lineWidth = 5;
