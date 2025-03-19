@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
-import { useWebSocket } from "../hooks";
 import { useAtomValue } from "jotai";
-import { messagesAtom, selectedWhiteboardIdAtom } from "../atoms";
+import { messagesAtom, selectedWhiteboardIdAtom } from "../../atoms";
+import { useWebSocket, useWhiteboardHistory } from "./hooks";
 
 interface DrawData {
   color: string;
@@ -13,32 +13,13 @@ export function WhiteboardCanvas() {
   const ctxRef = useRef<CanvasRenderingContext2D | null>(null);
   const messages = useAtomValue(messagesAtom);
   const selectedWhiteboardId = useAtomValue(selectedWhiteboardIdAtom);
+  const history = useWhiteboardHistory(selectedWhiteboardId);
   const { sendMessage } = useWebSocket();
   const [drawing, setDrawing] = useState(false);
-  const [color, setColor] = useState("black");
-  const [history, setHistory] = useState<DrawData[]>([]);
+  const [color, setColor] = useState("white");
   const [currentPoints, setCurrentPoints] = useState<
     { x: number; y: number }[]
   >([]);
-
-  useEffect(() => {
-    const fetchHistory = async () => {
-      const url = new URL(import.meta.env.VITE_BACKEND_BASE_URL);
-      url.pathname = `/whiteboard/${selectedWhiteboardId}/history`;
-      const response = await fetch(url);
-      const historyResponse = await response.json();
-
-      setHistory(
-        historyResponse.map((whiteboardEvent: any) => whiteboardEvent.payload)
-      );
-    };
-
-    try {
-      fetchHistory();
-    } catch (error) {
-      console.error("Failed to fetch history:", error);
-    }
-  }, [selectedWhiteboardId]);
 
   useEffect(() => {
     history.forEach(drawOnCanvas);
@@ -68,7 +49,7 @@ export function WhiteboardCanvas() {
         console.error("Invalid message format:", error);
       }
     });
-  }, [messages, selectedWhiteboardId]);
+  }, [messages]);
 
   const handleMouseDown = (e: React.MouseEvent) => {
     setDrawing(true);
@@ -80,10 +61,10 @@ export function WhiteboardCanvas() {
     ctxRef.current?.moveTo(offsetX, offsetY);
   };
 
-  const handleMouseMove = (e: React.MouseEvent) => {
+  const handleMouseMove = (event: React.MouseEvent) => {
     if (!drawing) return;
 
-    const { offsetX, offsetY } = e.nativeEvent;
+    const { offsetX, offsetY } = event.nativeEvent;
 
     ctxRef.current!.strokeStyle = color;
     ctxRef.current!.lineWidth = 5;
@@ -140,13 +121,13 @@ export function WhiteboardCanvas() {
         onMouseDown={handleMouseDown}
         onMouseMove={handleMouseMove}
         onMouseUp={handleMouseUp}
-        style={{ border: "1px solid black", background: "white" }}
+        style={{ border: "1px solid black", background: "gray" }}
       />
       <div>
-        <button onClick={() => setColor("black")}>🖊️ Black</button>
-        <button onClick={() => setColor("red")}>🖊️ Red</button>
-        <button onClick={() => setColor("blue")}>🖊️ Blue</button>
-        <button onClick={() => setColor("green")}>🖊️ Green</button>
+        <button onClick={() => setColor("white")}>🖊️ white</button>
+        <button onClick={() => setColor("red")}>🖊️ red</button>
+        <button onClick={() => setColor("blue")}>🖊️ blue</button>
+        <button onClick={() => setColor("green")}>🖊️ green</button>
       </div>
     </div>
   );

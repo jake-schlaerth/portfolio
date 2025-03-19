@@ -5,7 +5,7 @@ import {
   selectedWhiteboardIdAtom,
   sessionIdAtom,
   webSocketAtom,
-} from "../atoms";
+} from "../../../atoms";
 
 export function useWebSocket() {
   const sessionId = useAtomValue(sessionIdAtom);
