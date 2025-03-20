@@ -1,20 +1,26 @@
 services:
   backend:
-    build: ./apps/backend
+    build:
+      context: ./apps/backend
+      dockerfile: Dockerfile.prod
     ports:
       - "8080:8080"
-    volumes:
-      - ./apps/backend:/app
+    env_file:
+      - .env
     environment:
       RUST_LOG: "info"
-    command: ["cargo", "watch", "-x", "run"]
+      DATABASE_URL: "postgres://${DATABASE_USER}:${DATABASE_PASSWORD}@database/${DATABASE_NAME}"
+    depends_on:
+      - database
+    restart: unless-stopped
 
   frontend:
-    build: ./apps/frontend
+    build:
+      context: ./apps/frontend
+      dockerfile: Dockerfile.prod
     ports:
-      - "5173:5173"
-    volumes:
-      - ./apps/frontend:/app
+      - "80:80"
+    restart: unless-stopped
 
   database:
     image: postgres:17-alpine
@@ -28,6 +34,7 @@ services:
       POSTGRES_DB: "${DATABASE_NAME}"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    restart: unless-stopped
 
 volumes:
   postgres_data:

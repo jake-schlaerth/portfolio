@@ -1,6 +1,6 @@
 import { useAtomValue } from "jotai";
-import { messagesAtom } from "../atoms";
-import { WhiteboardCanvas } from "./whiteboardCanvas/WhiteboardCanvas";
+import { messagesAtom } from "../../atoms";
+import { WhiteboardCanvas } from "../whiteboardCanvas/WhiteboardCanvas";
 
 export function Whiteboard() {
   const messages = useAtomValue(messagesAtom);

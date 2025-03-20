@@ -3,18 +3,16 @@ import { useAtom, useAtomValue, useSetAtom } from "jotai";
 import {
   messagesAtom,
   selectedWhiteboardIdAtom,
-  sessionIdAtom,
   webSocketAtom,
 } from "../../../atoms";
 
 export function useWebSocket() {
-  const sessionId = useAtomValue(sessionIdAtom);
   const selectedWhiteboardId = useAtomValue(selectedWhiteboardIdAtom);
   const setMessages = useSetAtom(messagesAtom);
   const [webSocket, setWebSocket] = useAtom(webSocketAtom);
 
   useEffect(() => {
-    if (!sessionId || !selectedWhiteboardId) return;
+    if (!selectedWhiteboardId) return;
 
     const url = new URL("/web_socket", import.meta.env.VITE_BACKEND_BASE_URL);
     url.protocol = "ws:";
@@ -32,7 +30,7 @@ export function useWebSocket() {
       socket.close();
       setWebSocket(null);
     };
-  }, [sessionId]);
+  }, []);
 
   return { sendMessage: (message: string) => webSocket?.send(message) };
 }

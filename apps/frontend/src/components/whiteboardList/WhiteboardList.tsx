@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useAtomValue, useSetAtom } from "jotai";
-import { selectedWhiteboardIdAtom, sessionIdAtom } from "../atoms";
+import { selectedWhiteboardIdAtom } from "../../atoms";
 
 interface WhiteboardSummary {
   id: string;
@@ -8,7 +8,6 @@ interface WhiteboardSummary {
 }
 
 export function WhiteboardList() {
-  const sessionId = useAtomValue(sessionIdAtom);
   const setSelectedWhiteboardId = useSetAtom(selectedWhiteboardIdAtom);
   const [whiteboards, setWhiteboards] = useState<WhiteboardSummary[]>([]);
   const [page, setPage] = useState(0);
@@ -38,10 +37,8 @@ export function WhiteboardList() {
       }
     };
 
-    if (sessionId) {
-      fetchWhiteboards();
-    }
-  }, [sessionId, page]);
+    fetchWhiteboards();
+  }, [page]);
 
   return (
     <div>

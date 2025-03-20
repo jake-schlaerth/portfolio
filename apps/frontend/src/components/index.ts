@@ -1,2 +1,3 @@
-export * from "./Whiteboard";
-export * from "./Register";
+export * from "./whiteboard";
+export * from "./whiteboardList";
+export * from "./whiteboardCanvas";
