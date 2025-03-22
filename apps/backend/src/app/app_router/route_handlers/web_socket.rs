@@ -64,17 +64,24 @@ async fn on_upgrade_callback(
                     json_value
                 };
 
-                let mut database_connection = database.get_connection();
+                let is_live = extracted_payload
+                    .get("isLive")
+                    .and_then(|v| v.as_bool())
+                    .unwrap_or(false);
 
-                diesel::insert_into(whiteboard_events)
-                    .values(NewWhiteboardEvent {
-                        whiteboard_id: uuid::Uuid::parse_str(&whiteboard_identifier).unwrap(),
-                        event_type: "draw".to_string(),
-                        payload: extracted_payload,
-                    })
-                    .returning(id)
-                    .get_result::<Uuid>(&mut database_connection)
-                    .expect("Error inserting session");
+                if !is_live {
+                    let mut database_connection = database.get_connection();
+
+                    diesel::insert_into(whiteboard_events)
+                        .values(NewWhiteboardEvent {
+                            whiteboard_id: uuid::Uuid::parse_str(&whiteboard_identifier).unwrap(),
+                            event_type: "draw".to_string(),
+                            payload: extracted_payload,
+                        })
+                        .returning(id)
+                        .get_result::<Uuid>(&mut database_connection)
+                        .expect("Error inserting session");
+                }
 
                 client_list.broadcast(&whiteboard_identifier, &text).await;
             } else {

@@ -6,6 +6,7 @@ import { useWebSocket, useWhiteboardHistory } from "./hooks";
 interface DrawData {
   color: string;
   points: { x: number; y: number }[];
+  isLive?: boolean;
 }
 
 export function WhiteboardCanvas() {
@@ -20,6 +21,10 @@ export function WhiteboardCanvas() {
   const [currentPoints, setCurrentPoints] = useState<
     { x: number; y: number }[]
   >([]);
+  const [lastSentPoint, setLastSentPoint] = useState<{
+    x: number;
+    y: number;
+  } | null>(null);
 
   useEffect(() => {
     history.forEach(drawOnCanvas);
@@ -43,7 +48,6 @@ export function WhiteboardCanvas() {
     messages.forEach((message) => {
       try {
         const { payload } = JSON.parse(message);
-
         drawOnCanvas(payload);
       } catch (error) {
         console.error("Invalid message format:", error);
@@ -53,9 +57,9 @@ export function WhiteboardCanvas() {
 
   const handleMouseDown = (e: React.MouseEvent) => {
     setDrawing(true);
-
     const { offsetX, offsetY } = e.nativeEvent;
     setCurrentPoints([{ x: offsetX, y: offsetY }]);
+    setLastSentPoint({ x: offsetX, y: offsetY });
 
     ctxRef.current?.beginPath();
     ctxRef.current?.moveTo(offsetX, offsetY);
@@ -65,6 +69,7 @@ export function WhiteboardCanvas() {
     if (!drawing) return;
 
     const { offsetX, offsetY } = event.nativeEvent;
+    const currentPoint = { x: offsetX, y: offsetY };
 
     ctxRef.current!.strokeStyle = color;
     ctxRef.current!.lineWidth = 5;
@@ -72,7 +77,26 @@ export function WhiteboardCanvas() {
     ctxRef.current!.lineTo(offsetX, offsetY);
     ctxRef.current!.stroke();
 
-    setCurrentPoints((prev) => [...prev, { x: offsetX, y: offsetY }]);
+    setCurrentPoints((prev) => [...prev, currentPoint]);
+
+    if (
+      lastSentPoint &&
+      (Math.abs(currentPoint.x - lastSentPoint.x) > 5 ||
+        Math.abs(currentPoint.y - lastSentPoint.y) > 5)
+    ) {
+      sendMessage(
+        JSON.stringify({
+          whiteboardId: selectedWhiteboardId,
+          type: "draw",
+          payload: {
+            color,
+            points: [lastSentPoint, currentPoint],
+            isLive: true,
+          },
+        })
+      );
+      setLastSentPoint(currentPoint);
+    }
   };
 
   const handleMouseUp = () => {
@@ -86,17 +110,19 @@ export function WhiteboardCanvas() {
         payload: {
           color,
           points: currentPoints,
+          isLive: false,
         },
       })
     );
 
     setCurrentPoints([]);
+    setLastSentPoint(null);
   };
 
   const drawOnCanvas = (drawData: DrawData) => {
     if (!ctxRef.current) return;
 
-    const { color, points } = drawData;
+    const { color, points, isLive } = drawData;
     if (!points?.length) return;
 
     ctxRef.current.strokeStyle = color;
@@ -111,7 +137,9 @@ export function WhiteboardCanvas() {
     }
 
     ctxRef.current.stroke();
-    ctxRef.current.closePath();
+    if (!isLive) {
+      ctxRef.current.closePath();
+    }
   };
 
   return (
