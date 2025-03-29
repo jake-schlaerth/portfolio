@@ -1,11 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { Layout } from "../../components";
-import {
-  CreateWhiteboardModal,
-  DeleteWhiteboardModal,
-  ProjectDescription,
-} from "./components";
+import { CreateWhiteboardModal, ProjectDescription } from "./components";
 
 interface WhiteboardResponse {
   whiteboards: WhiteboardSummary[];
@@ -23,9 +19,6 @@ export const WhiteboardList = () => {
   const [totalCount, setTotalCount] = useState(0);
   const [page, setPage] = useState(0);
   const [createModalOpen, setCreateModalOpen] = useState<boolean>(false);
-  const [deleteModalOpen, setDeleteModalOpen] = useState<boolean>(false);
-  const [selectedWhiteboard, setSelectedWhiteboard] =
-    useState<WhiteboardSummary | null>(null);
   const limit = 10;
 
   const openCreateWhiteboardModal = () => {
@@ -60,40 +53,6 @@ export const WhiteboardList = () => {
       await fetchWhiteboards();
     } catch (error) {
       console.error("Failed to create whiteboard:", error);
-    }
-  };
-
-  const handleDeleteClick = (
-    e: React.MouseEvent,
-    whiteboard: WhiteboardSummary
-  ) => {
-    e.preventDefault(); // Prevent navigation
-    e.stopPropagation(); // Prevent event bubbling
-    setSelectedWhiteboard(whiteboard);
-    setDeleteModalOpen(true);
-  };
-
-  const handleDeleteConfirm = async () => {
-    if (!selectedWhiteboard) return;
-
-    const url = new URL(
-      `/whiteboard/${selectedWhiteboard.id}`,
-      import.meta.env.VITE_BACKEND_BASE_URL
-    );
-    try {
-      const response = await fetch(url, {
-        method: "DELETE",
-      });
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-
-      setDeleteModalOpen(false);
-      setSelectedWhiteboard(null);
-      await fetchWhiteboards();
-    } catch (error) {
-      console.error("Failed to delete whiteboard:", error);
     }
   };
 
@@ -138,21 +97,13 @@ export const WhiteboardList = () => {
 
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 mb-8">
           {whiteboards.map((whiteboard) => (
-            <div key={whiteboard.id} className="relative group">
-              <Link
-                to={`/whiteboard/${whiteboard.id}`}
-                className="p-4 rounded-lg border border-gray-700 hover:border-gray-600 transition-colors block"
-              >
-                {whiteboard.name}
-              </Link>
-              <button
-                onClick={(e) => handleDeleteClick(e, whiteboard)}
-                className="absolute top-2 right-2 p-1 text-gray-400 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-opacity"
-                aria-label="Delete whiteboard"
-              >
-                🗑️
-              </button>
-            </div>
+            <Link
+              key={whiteboard.id}
+              to={`/whiteboard/${whiteboard.id}`}
+              className="p-4 rounded-lg border border-gray-700 hover:border-gray-600 transition-colors block"
+            >
+              {whiteboard.name}
+            </Link>
           ))}
         </div>
 
@@ -178,17 +129,6 @@ export const WhiteboardList = () => {
         onClose={() => setCreateModalOpen(false)}
         onSubmit={handleCreateWhiteboard}
       />
-      {selectedWhiteboard && (
-        <DeleteWhiteboardModal
-          isOpen={deleteModalOpen}
-          onClose={() => {
-            setDeleteModalOpen(false);
-            setSelectedWhiteboard(null);
-          }}
-          onConfirm={handleDeleteConfirm}
-          whiteboardName={selectedWhiteboard.name}
-        />
-      )}
     </Layout>
   );
 };
