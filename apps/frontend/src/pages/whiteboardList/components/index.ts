@@ -1,1 +1,2 @@
-export { CreateWhiteboardModal } from "./CreateWhiteboardModal";
+export * from "./CreateWhiteboardModal";
+export * from "./ProjectDescription";

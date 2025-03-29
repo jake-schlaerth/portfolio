@@ -5,7 +5,7 @@ import whiteboardScreenshot from "../../assets/whiteboard.png";
 export const Code = () => {
   return (
     <Layout>
-      <p>Tthese are some of the technologies i use</p>
+      <p>these are some of the technologies i use</p>
       <div className="grid grid-cols-4 gap-8 p-8">
         <ul className="space-y-2 list-none">
           <li>typescript</li>

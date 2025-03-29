@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { Layout } from "../../components";
-import { CreateWhiteboardModal } from "./components";
+import { CreateWhiteboardModal, ProjectDescription } from "./components";
 
 interface WhiteboardResponse {
   whiteboards: WhiteboardSummary[];
@@ -84,6 +84,7 @@ export const WhiteboardList = () => {
   return (
     <Layout>
       <div className="max-w-4xl mx-auto p-8">
+        <ProjectDescription />
         <div className="flex justify-between items-center mb-8">
           <h2 className="text-2xl font-bold">select a whiteboard</h2>
           <button
