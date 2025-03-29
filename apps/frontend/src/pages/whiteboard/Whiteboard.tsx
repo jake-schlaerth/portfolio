@@ -35,6 +35,7 @@ export const Whiteboard = () => {
       }
 
       setDeleteModalOpen(false);
+      setMessages([]);
       navigate("/whiteboard");
     } catch (error) {
       console.error("Failed to delete whiteboard:", error);

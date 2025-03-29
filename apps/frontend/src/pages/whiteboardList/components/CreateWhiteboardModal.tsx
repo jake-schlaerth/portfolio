@@ -1,4 +1,4 @@
-import { FormEvent } from "react";
+import { FormEvent, useRef, useEffect } from "react";
 
 interface CreateWhiteboardModalProps {
   isOpen: boolean;
@@ -11,6 +11,14 @@ export const CreateWhiteboardModal = ({
   onClose,
   onSubmit,
 }: CreateWhiteboardModalProps) => {
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (isOpen && inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, [isOpen]);
+
   if (!isOpen) return null;
 
   return (
@@ -22,6 +30,7 @@ export const CreateWhiteboardModal = ({
           <label className="block">
             name:
             <input
+              ref={inputRef}
               type="text"
               name="name"
               required
