@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-export const useWhiteboardHistory = (whiteboardId: string | null) => {
+export const useWhiteboardHistory = (whiteboardId: string) => {
   const [history, setHistory] = useState<any[]>([]);
 
   useEffect(() => {

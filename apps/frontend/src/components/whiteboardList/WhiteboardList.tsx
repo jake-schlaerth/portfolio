@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
-import { useAtomValue, useSetAtom } from "jotai";
-import { selectedWhiteboardIdAtom } from "../../atoms";
+import { useNavigate } from "react-router-dom";
 
 interface WhiteboardSummary {
   id: string;
@@ -8,14 +7,13 @@ interface WhiteboardSummary {
 }
 
 export function WhiteboardList() {
-  const setSelectedWhiteboardId = useSetAtom(selectedWhiteboardIdAtom);
+  const navigate = useNavigate();
   const [whiteboards, setWhiteboards] = useState<WhiteboardSummary[]>([]);
   const [page, setPage] = useState(0);
   const [modalOpen, setModalOpen] = useState<boolean>(false);
   const limit = 10;
 
   const openCreateWhiteboardModal = () => {
-    setSelectedWhiteboardId(null);
     setModalOpen(true);
   };
 
@@ -39,7 +37,10 @@ export function WhiteboardList() {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
 
+      const data = await response.json();
       setModalOpen(false);
+      // Navigate to the new whiteboard
+      navigate(`/whiteboard/${data.id}`);
       // refresh the list of whiteboards
       await fetchWhiteboards();
     } catch (error) {
@@ -92,7 +93,7 @@ export function WhiteboardList() {
       <ul>
         {whiteboards.map((whiteboard) => (
           <li key={whiteboard.id}>
-            <button onClick={() => setSelectedWhiteboardId(whiteboard.id)}>
+            <button onClick={() => navigate(`/whiteboard/${whiteboard.id}`)}>
               {whiteboard.name}
             </button>
           </li>

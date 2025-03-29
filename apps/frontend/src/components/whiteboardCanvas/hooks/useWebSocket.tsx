@@ -1,22 +1,17 @@
 import { useEffect } from "react";
-import { useAtom, useAtomValue, useSetAtom } from "jotai";
-import {
-  messagesAtom,
-  selectedWhiteboardIdAtom,
-  webSocketAtom,
-} from "../../../atoms";
+import { useAtom, useSetAtom } from "jotai";
+import { messagesAtom, webSocketAtom } from "../../../atoms";
 
-export function useWebSocket() {
-  const selectedWhiteboardId = useAtomValue(selectedWhiteboardIdAtom);
+export function useWebSocket(whiteboardId: string) {
   const setMessages = useSetAtom(messagesAtom);
   const [webSocket, setWebSocket] = useAtom(webSocketAtom);
 
   useEffect(() => {
-    if (!selectedWhiteboardId) return;
+    if (!whiteboardId) return;
 
     const url = new URL("/web_socket", import.meta.env.VITE_BACKEND_BASE_URL);
     url.protocol = "ws:";
-    url.searchParams.set("id", selectedWhiteboardId);
+    url.searchParams.set("id", whiteboardId);
     const socket = new WebSocket(url);
 
     socket.onopen = () => console.log("WebSocket connected");
@@ -30,7 +25,7 @@ export function useWebSocket() {
       socket.close();
       setWebSocket(null);
     };
-  }, []);
+  }, [whiteboardId]);
 
   return { sendMessage: (message: string) => webSocket?.send(message) };
 }

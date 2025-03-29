@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useAtomValue } from "jotai";
-import { messagesAtom, selectedWhiteboardIdAtom } from "../../atoms";
+import { messagesAtom } from "../../atoms";
 import { useWebSocket, useWhiteboardHistory } from "./hooks";
 
 interface DrawData {
@@ -9,22 +9,20 @@ interface DrawData {
   isLive?: boolean;
 }
 
-export function WhiteboardCanvas() {
+interface WhiteboardCanvasProps {
+  whiteboardId: string;
+}
+
+export function WhiteboardCanvas({ whiteboardId }: WhiteboardCanvasProps) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const ctxRef = useRef<CanvasRenderingContext2D | null>(null);
   const messages = useAtomValue(messagesAtom);
-  const selectedWhiteboardId = useAtomValue(selectedWhiteboardIdAtom);
-  const history = useWhiteboardHistory(selectedWhiteboardId);
-  const { sendMessage } = useWebSocket();
+  const history = useWhiteboardHistory(whiteboardId);
+  const { sendMessage } = useWebSocket(whiteboardId);
   const [drawing, setDrawing] = useState(false);
   const [color, setColor] = useState("white");
-  const [currentPoints, setCurrentPoints] = useState<
-    { x: number; y: number }[]
-  >([]);
-  const [lastSentPoint, setLastSentPoint] = useState<{
-    x: number;
-    y: number;
-  } | null>(null);
+  const [currentPoints, setCurrentPoints] = useState<{ x: number; y: number }[]>([]);
+  const [lastSentPoint, setLastSentPoint] = useState<{ x: number; y: number } | null>(null);
 
   useEffect(() => {
     history.forEach(drawOnCanvas);
@@ -71,6 +69,7 @@ export function WhiteboardCanvas() {
     const { offsetX, offsetY } = event.nativeEvent;
     const currentPoint = { x: offsetX, y: offsetY };
 
+    // Draw locally
     ctxRef.current!.strokeStyle = color;
     ctxRef.current!.lineWidth = 5;
     ctxRef.current!.lineCap = "round";
@@ -79,19 +78,18 @@ export function WhiteboardCanvas() {
 
     setCurrentPoints((prev) => [...prev, currentPoint]);
 
-    if (
-      lastSentPoint &&
-      (Math.abs(currentPoint.x - lastSentPoint.x) > 5 ||
-        Math.abs(currentPoint.y - lastSentPoint.y) > 5)
-    ) {
+    // Send live update if we've moved enough (to prevent too many messages)
+    if (lastSentPoint && 
+        (Math.abs(currentPoint.x - lastSentPoint.x) > 5 || 
+         Math.abs(currentPoint.y - lastSentPoint.y) > 5)) {
       sendMessage(
         JSON.stringify({
-          whiteboardId: selectedWhiteboardId,
+          whiteboardId,
           type: "draw",
           payload: {
             color,
             points: [lastSentPoint, currentPoint],
-            isLive: true,
+            isLive: true
           },
         })
       );
@@ -103,14 +101,15 @@ export function WhiteboardCanvas() {
     setDrawing(false);
     ctxRef.current?.closePath();
 
+    // Send final line for persistence
     sendMessage(
       JSON.stringify({
-        whiteboardId: selectedWhiteboardId,
+        whiteboardId,
         type: "draw",
         payload: {
           color,
           points: currentPoints,
-          isLive: false,
+          isLive: false
         },
       })
     );

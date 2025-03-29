@@ -1,15 +1,13 @@
-import { useAtomValue } from "jotai";
-import { selectedWhiteboardIdAtom } from "./atoms";
+import { Routes, Route } from "react-router-dom";
 import { Whiteboard, WhiteboardList } from "./components";
 
 function App() {
-  const selectedWhiteboardId = useAtomValue(selectedWhiteboardIdAtom);
-
-  if (!selectedWhiteboardId) {
-    return <WhiteboardList />;
-  }
-
-  return <Whiteboard />;
+  return (
+    <Routes>
+      <Route path="/" element={<WhiteboardList />} />
+      <Route path="/whiteboard/:id" element={<Whiteboard />} />
+    </Routes>
+  );
 }
 
 export default App;
