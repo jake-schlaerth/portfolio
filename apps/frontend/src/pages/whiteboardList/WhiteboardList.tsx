@@ -1,12 +1,14 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { Layout } from "../../components";
+import { CreateWhiteboardModal } from "./components";
 
 interface WhiteboardSummary {
   id: string;
   name: string;
 }
 
-export function WhiteboardList() {
+export const WhiteboardList = () => {
   const navigate = useNavigate();
   const [whiteboards, setWhiteboards] = useState<WhiteboardSummary[]>([]);
   const [page, setPage] = useState(0);
@@ -73,23 +75,14 @@ export function WhiteboardList() {
   }, [page]);
 
   return (
-    <div>
-      {modalOpen ? (
-        <div>
-          <h2>Create a Whiteboard</h2>
-          <form onSubmit={handleCreateWhiteboard}>
-            <label>
-              Name:
-              <input type="text" name="name" required />
-            </label>
-            <button type="submit">Create</button>
-          </form>
-        </div>
-      ) : (
-        <button onClick={openCreateWhiteboardModal}>+</button>
-      )}
-      <h2>Select a Whiteboard</h2>
-
+    <Layout>
+      <CreateWhiteboardModal
+        isOpen={modalOpen}
+        onClose={() => setModalOpen(false)}
+        onSubmit={handleCreateWhiteboard}
+      />
+      <button onClick={openCreateWhiteboardModal}>+</button>
+      <h2>select a whiteboard</h2>
       <ul>
         {whiteboards.map((whiteboard) => (
           <li key={whiteboard.id}>
@@ -105,6 +98,6 @@ export function WhiteboardList() {
         </button>
         <button onClick={() => setPage(page + 1)}>Next</button>
       </div>
-    </div>
+    </Layout>
   );
-}
+};
