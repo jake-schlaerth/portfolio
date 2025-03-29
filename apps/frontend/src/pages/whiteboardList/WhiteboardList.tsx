@@ -70,7 +70,6 @@ export const WhiteboardList = () => {
       }
 
       const data: WhiteboardResponse = await response.json();
-      console.log(data);
       setWhiteboards(data.whiteboards);
       setTotalCount(data.total_count);
     } catch (error) {
