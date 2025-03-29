@@ -21,8 +21,13 @@ export function WhiteboardCanvas({ whiteboardId }: WhiteboardCanvasProps) {
   const { sendMessage } = useWebSocket(whiteboardId);
   const [drawing, setDrawing] = useState(false);
   const [color, setColor] = useState("white");
-  const [currentPoints, setCurrentPoints] = useState<{ x: number; y: number }[]>([]);
-  const [lastSentPoint, setLastSentPoint] = useState<{ x: number; y: number } | null>(null);
+  const [currentPoints, setCurrentPoints] = useState<
+    { x: number; y: number }[]
+  >([]);
+  const [lastSentPoint, setLastSentPoint] = useState<{
+    x: number;
+    y: number;
+  } | null>(null);
 
   useEffect(() => {
     history.forEach(drawOnCanvas);
@@ -69,7 +74,6 @@ export function WhiteboardCanvas({ whiteboardId }: WhiteboardCanvasProps) {
     const { offsetX, offsetY } = event.nativeEvent;
     const currentPoint = { x: offsetX, y: offsetY };
 
-    // Draw locally
     ctxRef.current!.strokeStyle = color;
     ctxRef.current!.lineWidth = 5;
     ctxRef.current!.lineCap = "round";
@@ -78,10 +82,11 @@ export function WhiteboardCanvas({ whiteboardId }: WhiteboardCanvasProps) {
 
     setCurrentPoints((prev) => [...prev, currentPoint]);
 
-    // Send live update if we've moved enough (to prevent too many messages)
-    if (lastSentPoint && 
-        (Math.abs(currentPoint.x - lastSentPoint.x) > 5 || 
-         Math.abs(currentPoint.y - lastSentPoint.y) > 5)) {
+    if (
+      lastSentPoint &&
+      (Math.abs(currentPoint.x - lastSentPoint.x) > 5 ||
+        Math.abs(currentPoint.y - lastSentPoint.y) > 5)
+    ) {
       sendMessage(
         JSON.stringify({
           whiteboardId,
@@ -89,7 +94,7 @@ export function WhiteboardCanvas({ whiteboardId }: WhiteboardCanvasProps) {
           payload: {
             color,
             points: [lastSentPoint, currentPoint],
-            isLive: true
+            isLive: true,
           },
         })
       );
@@ -101,7 +106,6 @@ export function WhiteboardCanvas({ whiteboardId }: WhiteboardCanvasProps) {
     setDrawing(false);
     ctxRef.current?.closePath();
 
-    // Send final line for persistence
     sendMessage(
       JSON.stringify({
         whiteboardId,
@@ -109,7 +113,7 @@ export function WhiteboardCanvas({ whiteboardId }: WhiteboardCanvasProps) {
         payload: {
           color,
           points: currentPoints,
-          isLive: false
+          isLive: false,
         },
       })
     );

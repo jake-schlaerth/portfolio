@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { Layout } from "../../components";
+import whiteboardScreenshot from "../../assets/whiteboard.png";
 
 export const Code = () => {
   return (
@@ -59,7 +60,17 @@ export const Code = () => {
       <div className="grid grid-cols-4 gap-8 p-8">
         <ul className="space-y-2 list-none">
           <li>
-            <Link to="/whiteboard">whiteboarding app</Link>
+            <Link
+              to="/whiteboard"
+              className="hover:opacity-80 transition-opacity"
+            >
+              <p className="text-center">whiteboarding app</p>
+              <img
+                src={whiteboardScreenshot}
+                alt="Whiteboard App Screenshot"
+                className="w-48 h-32 object-cover rounded-lg"
+              />
+            </Link>
           </li>
         </ul>
       </div>

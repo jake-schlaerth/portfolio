@@ -123,7 +123,6 @@ export const WhiteboardList = () => {
           </button>
         </div>
       </div>
-
       <CreateWhiteboardModal
         isOpen={modalOpen}
         onClose={() => setModalOpen(false)}
