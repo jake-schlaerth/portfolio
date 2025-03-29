@@ -1,7 +1,9 @@
+import { Page } from "../Page";
+
 export const Code = () => {
     return (
-        <div>
+        <Page>
             <p>code</p>
-        </div>
+        </Page>
     )
 } 

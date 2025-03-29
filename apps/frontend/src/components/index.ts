@@ -4,3 +4,4 @@ export * from "./whiteboardCanvas";
 export * from './portfolio'
 export * from './music'
 export * from './code'
+export * from './Page'

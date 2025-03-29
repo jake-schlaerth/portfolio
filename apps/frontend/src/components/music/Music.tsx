@@ -1,7 +1,9 @@
+import { Page } from "../Page";
+
 export const Music = () => {
     return (
-        <div>
+        <Page>
             <p>music</p>
-        </div>
+        </Page>
     )
 } 
