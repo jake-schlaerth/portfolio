@@ -1,9 +1,9 @@
-import { Page } from "../../components";
+import { Layout } from "../../components";
 
 export const Music = () => {
   return (
-    <Page>
+    <Layout>
       <p>music</p>
-    </Page>
+    </Layout>
   );
 };

@@ -1,14 +1,14 @@
 import { Link } from "react-router-dom";
-import { Page } from "../../components";
+import { Layout } from "../../components";
 
 export const Portfolio = () => {
   return (
-    <Page>
+    <Layout>
       <p>hi i'm jake</p>
       <p>
         i write <Link to="/code">code</Link> and make{" "}
         <Link to="/music">music</Link>
       </p>
-    </Page>
+    </Layout>
   );
 };

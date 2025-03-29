@@ -1,8 +1,8 @@
-import { Page } from "../../components";
+import { Layout } from "../../components";
 
 export const Code = () => {
   return (
-    <Page>
+    <Layout>
       <div className="grid grid-cols-4 gap-8 p-8">
         <div>
           <ul className="space-y-2 list-none">
@@ -68,6 +68,6 @@ export const Code = () => {
           </ul>
         </div>
       </div>
-    </Page>
+    </Layout>
   );
 };
