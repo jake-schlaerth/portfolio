@@ -1,10 +1,11 @@
 import { useAtomValue } from "jotai";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { messagesAtom } from "../../atoms";
 import { WhiteboardCanvas } from "../whiteboardCanvas/WhiteboardCanvas";
 
 export function Whiteboard() {
   const { id } = useParams<{ id: string }>();
+  const navigate = useNavigate();
   const messages = useAtomValue(messagesAtom);
 
   if (!id) {
@@ -13,6 +14,7 @@ export function Whiteboard() {
 
   return (
     <div>
+      <button onClick={() => navigate("/")}>← Back to Whiteboards</button>
       <WhiteboardCanvas whiteboardId={id} />
       <ul>
         {messages.map((message, index) => (
