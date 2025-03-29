@@ -38,10 +38,22 @@ export function WhiteboardCanvas({ whiteboardId }: WhiteboardCanvasProps) {
     if (!canvas) return;
 
     ctxRef.current = canvas.getContext("2d");
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
+
+    const resizeCanvas = () => {
+      const container = canvas.parentElement;
+      if (!container) return;
+
+      const rect = container.getBoundingClientRect();
+      canvas.width = rect.width;
+      canvas.height = rect.height;
+    };
+
+    resizeCanvas();
+
+    window.addEventListener("resize", resizeCanvas);
 
     return () => {
+      window.removeEventListener("resize", resizeCanvas);
       canvasRef.current = null;
       ctxRef.current = null;
     };
@@ -75,7 +87,6 @@ export function WhiteboardCanvas({ whiteboardId }: WhiteboardCanvasProps) {
   };
 
   const handleStart = (e: React.MouseEvent | React.TouchEvent) => {
-    e.preventDefault(); // Prevent scrolling on mobile
     setDrawing(true);
     const { x, y } = getCoordinates(e);
     setCurrentPoints([{ x, y }]);
@@ -163,7 +174,7 @@ export function WhiteboardCanvas({ whiteboardId }: WhiteboardCanvasProps) {
   };
 
   return (
-    <div>
+    <div className="flex flex-col h-full w-full">
       <canvas
         ref={canvasRef}
         onMouseDown={handleStart}
@@ -172,13 +183,9 @@ export function WhiteboardCanvas({ whiteboardId }: WhiteboardCanvasProps) {
         onTouchStart={handleStart}
         onTouchMove={handleMove}
         onTouchEnd={handleEnd}
-        style={{
-          border: "1px solid black",
-          background: "gray",
-          touchAction: "none",
-        }}
+        className="border border-black bg-gray-500 touch-none flex-1 w-full block"
       />
-      <div>
+      <div className="p-2 flex gap-2">
         <button onClick={() => setColor("white")}>🖊️ white</button>
         <button onClick={() => setColor("red")}>🖊️ red</button>
         <button onClick={() => setColor("blue")}>🖊️ blue</button>

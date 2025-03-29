@@ -43,7 +43,7 @@ export const Whiteboard = () => {
 
   return (
     <Layout>
-      <div className="relative w-full h-full">
+      <div className="relative w-full h-[calc(100vh-12rem)]">
         <button
           onClick={handleBack}
           className="absolute top-4 left-4 p-2 rounded-full hover:bg-gray-100 transition-colors"
