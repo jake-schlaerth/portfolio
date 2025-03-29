@@ -1,6 +1,6 @@
 use axum::{
     Router,
-    routing::{get, post},
+    routing::{get, post, delete},
 };
 use tower_http::cors::CorsLayer;
 use tower_http::trace::TraceLayer;
@@ -8,6 +8,7 @@ use tower_http::trace::TraceLayer;
 mod route_handlers {
     pub mod web_socket;
     pub mod whiteboard_create;
+    pub mod whiteboard_delete;
     pub mod whiteboard_history;
     pub mod whiteboard_list;
 }
@@ -26,6 +27,7 @@ impl AppRouter {
             .route("/web_socket", get(web_socket::handler))
             .route("/whiteboard", post(whiteboard_create::handler))
             .route("/whiteboard", get(whiteboard_list::handler))
+            .route("/whiteboard/{id}", delete(whiteboard_delete::handler))
             .route("/whiteboard/{id}/history", get(whiteboard_history::handler))
             .with_state(AppState::new())
             .layer(CorsLayer::permissive())
