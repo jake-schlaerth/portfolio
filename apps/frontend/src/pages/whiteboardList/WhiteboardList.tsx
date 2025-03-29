@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { Layout } from "../../components";
 import { CreateWhiteboardModal } from "./components";
 
@@ -76,28 +76,51 @@ export const WhiteboardList = () => {
 
   return (
     <Layout>
+      <div className="max-w-4xl mx-auto p-8">
+        <div className="flex justify-between items-center mb-8">
+          <h2 className="text-2xl font-bold">select a whiteboard</h2>
+          <button
+            onClick={openCreateWhiteboardModal}
+            className="px-4 py-2 text-sm font-medium bg-indigo-600 rounded-md hover:bg-indigo-700"
+          >
+            create new whiteboard
+          </button>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
+          {whiteboards.map((whiteboard) => (
+            <Link
+              key={whiteboard.id}
+              to={`/whiteboard/${whiteboard.id}`}
+              className="p-4 rounded-lg border border-gray-700 hover:border-gray-600 transition-colors"
+            >
+              {whiteboard.name}
+            </Link>
+          ))}
+        </div>
+
+        <div className="flex justify-center gap-4">
+          <button
+            disabled={page === 0}
+            onClick={() => setPage(page - 1)}
+            className="px-4 py-2 text-sm font-medium bg-gray-800 rounded-md hover:bg-gray-700 disabled:opacity-50"
+          >
+            previous
+          </button>
+          <button
+            onClick={() => setPage(page + 1)}
+            className="px-4 py-2 text-sm font-medium bg-gray-800 rounded-md hover:bg-gray-700"
+          >
+            next
+          </button>
+        </div>
+      </div>
+
       <CreateWhiteboardModal
         isOpen={modalOpen}
         onClose={() => setModalOpen(false)}
         onSubmit={handleCreateWhiteboard}
       />
-      <button onClick={openCreateWhiteboardModal}>+</button>
-      <h2>select a whiteboard</h2>
-      <ul>
-        {whiteboards.map((whiteboard) => (
-          <li key={whiteboard.id}>
-            <button onClick={() => navigate(`/whiteboard/${whiteboard.id}`)}>
-              {whiteboard.name}
-            </button>
-          </li>
-        ))}
-      </ul>
-      <div>
-        <button disabled={page === 0} onClick={() => setPage(page - 1)}>
-          Previous
-        </button>
-        <button onClick={() => setPage(page + 1)}>Next</button>
-      </div>
     </Layout>
   );
 };
