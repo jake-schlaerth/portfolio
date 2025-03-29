@@ -75,7 +75,6 @@ export function WhiteboardCanvas({ whiteboardId }: WhiteboardCanvasProps) {
   };
 
   const handleStart = (e: React.MouseEvent | React.TouchEvent) => {
-    e.preventDefault(); // Prevent scrolling on mobile
     setDrawing(true);
     const { x, y } = getCoordinates(e);
     setCurrentPoints([{ x, y }]);
