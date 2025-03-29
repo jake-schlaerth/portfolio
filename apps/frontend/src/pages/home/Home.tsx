@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { Layout } from "../../components";
 
-export const Portfolio = () => {
+export const Home = () => {
   return (
     <Layout>
       <p>hi i'm jake</p>

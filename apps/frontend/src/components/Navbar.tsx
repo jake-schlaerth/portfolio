@@ -5,6 +5,12 @@ export const Navbar = () => {
     <nav className="p-4 border-b border-white">
       <div className="flex justify-start gap-8">
         <Link
+          to="/"
+          className="text-white text-base lowercase hover:opacity-80"
+        >
+          home
+        </Link>
+        <Link
           to="/code"
           className="text-white text-base lowercase hover:opacity-80"
         >

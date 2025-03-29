@@ -56,7 +56,7 @@ export const Code = () => {
           <li>rds</li>
         </ul>
       </div>
-      <p>these are some of my projects</p>
+      <p>these are some things i've built</p>
       <div className="grid grid-cols-4 gap-8 p-8">
         <ul className="space-y-2 list-none">
           <li>
