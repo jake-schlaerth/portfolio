@@ -1,7 +1,7 @@
 import { useAtomValue } from "jotai";
 import { useNavigate, useParams } from "react-router-dom";
 import { messagesAtom } from "../../atoms";
-import { WhiteboardCanvas } from "../whiteboardCanvas/WhiteboardCanvas";
+import { WhiteboardCanvas } from "../whiteboardCanvas";
 
 export function Whiteboard() {
   const { id } = useParams<{ id: string }>();
