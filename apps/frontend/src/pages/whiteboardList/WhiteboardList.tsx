@@ -3,6 +3,11 @@ import { useNavigate, Link } from "react-router-dom";
 import { Layout } from "../../components";
 import { CreateWhiteboardModal } from "./components";
 
+interface WhiteboardResponse {
+  whiteboards: WhiteboardSummary[];
+  total_count: number;
+}
+
 interface WhiteboardSummary {
   id: string;
   name: string;
@@ -11,6 +16,7 @@ interface WhiteboardSummary {
 export const WhiteboardList = () => {
   const navigate = useNavigate();
   const [whiteboards, setWhiteboards] = useState<WhiteboardSummary[]>([]);
+  const [totalCount, setTotalCount] = useState(0);
   const [page, setPage] = useState(0);
   const [modalOpen, setModalOpen] = useState<boolean>(false);
   const limit = 10;
@@ -63,8 +69,10 @@ export const WhiteboardList = () => {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
 
-      const data: WhiteboardSummary[] = await response.json();
-      setWhiteboards(data);
+      const data: WhiteboardResponse = await response.json();
+      console.log(data);
+      setWhiteboards(data.whiteboards);
+      setTotalCount(data.total_count);
     } catch (error) {
       console.error("Failed to fetch whiteboards:", error);
     }
@@ -108,8 +116,9 @@ export const WhiteboardList = () => {
             previous
           </button>
           <button
+            disabled={page === Math.ceil(totalCount / limit) - 1}
             onClick={() => setPage(page + 1)}
-            className="px-4 py-2 text-sm font-medium bg-gray-800 rounded-md hover:bg-gray-700"
+            className="px-4 py-2 text-sm font-medium bg-gray-800 rounded-md hover:bg-gray-700 disabled:opacity-50"
           >
             next
           </button>
