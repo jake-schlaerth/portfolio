@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useAtom, useSetAtom } from "jotai";
-import { messagesAtom, webSocketAtom } from "../../../atoms";
+import { messagesAtom, webSocketAtom } from "../../../../../atoms";
 
 export function useWebSocket(whiteboardId: string) {
   const setMessages = useSetAtom(messagesAtom);

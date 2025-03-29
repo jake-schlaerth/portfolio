@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useAtomValue } from "jotai";
-import { messagesAtom } from "../../atoms";
+import { messagesAtom } from "../../../../atoms";
 import { useWebSocket, useWhiteboardHistory } from "./hooks";
 
 interface DrawData {

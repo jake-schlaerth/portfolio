@@ -1,7 +1,7 @@
-import { useAtom, useAtomValue, useSetAtom } from "jotai";
+import { useSetAtom } from "jotai";
 import { useNavigate, useParams } from "react-router-dom";
 import { messagesAtom } from "../../atoms";
-import { WhiteboardCanvas } from "../whiteboardCanvas";
+import { WhiteboardCanvas } from "./components";
 import { Layout } from "../../components";
 
 export const Whiteboard = () => {
@@ -20,8 +20,15 @@ export const Whiteboard = () => {
 
   return (
     <Layout>
-      <button onClick={handleBack}>← back to whiteboards</button>
-      <WhiteboardCanvas whiteboardId={id} />
+      <div className="relative w-full h-full">
+        <button
+          onClick={handleBack}
+          className="absolute top-4 left-4 p-2 rounded-full hover:bg-gray-100 transition-colors"
+        >
+          ←
+        </button>
+        <WhiteboardCanvas whiteboardId={id} />
+      </div>
     </Layout>
   );
 };
