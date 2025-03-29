@@ -58,26 +58,43 @@ export function WhiteboardCanvas({ whiteboardId }: WhiteboardCanvasProps) {
     });
   }, [messages]);
 
-  const handleMouseDown = (e: React.MouseEvent) => {
-    setDrawing(true);
-    const { offsetX, offsetY } = e.nativeEvent;
-    setCurrentPoints([{ x: offsetX, y: offsetY }]);
-    setLastSentPoint({ x: offsetX, y: offsetY });
-
-    ctxRef.current?.beginPath();
-    ctxRef.current?.moveTo(offsetX, offsetY);
+  const getCoordinates = (event: React.MouseEvent | React.TouchEvent) => {
+    if ("touches" in event) {
+      const touch = event.touches[0];
+      const rect = canvasRef.current?.getBoundingClientRect();
+      if (!rect) return { x: 0, y: 0 };
+      return {
+        x: touch.clientX - rect.left,
+        y: touch.clientY - rect.top,
+      };
+    }
+    return {
+      x: (event as React.MouseEvent).nativeEvent.offsetX,
+      y: (event as React.MouseEvent).nativeEvent.offsetY,
+    };
   };
 
-  const handleMouseMove = (event: React.MouseEvent) => {
+  const handleStart = (e: React.MouseEvent | React.TouchEvent) => {
+    e.preventDefault(); // Prevent scrolling on mobile
+    setDrawing(true);
+    const { x, y } = getCoordinates(e);
+    setCurrentPoints([{ x, y }]);
+    setLastSentPoint({ x, y });
+
+    ctxRef.current?.beginPath();
+    ctxRef.current?.moveTo(x, y);
+  };
+
+  const handleMove = (event: React.MouseEvent | React.TouchEvent) => {
     if (!drawing) return;
 
-    const { offsetX, offsetY } = event.nativeEvent;
-    const currentPoint = { x: offsetX, y: offsetY };
+    const { x, y } = getCoordinates(event);
+    const currentPoint = { x, y };
 
     ctxRef.current!.strokeStyle = color;
     ctxRef.current!.lineWidth = 5;
     ctxRef.current!.lineCap = "round";
-    ctxRef.current!.lineTo(offsetX, offsetY);
+    ctxRef.current!.lineTo(x, y);
     ctxRef.current!.stroke();
 
     setCurrentPoints((prev) => [...prev, currentPoint]);
@@ -102,7 +119,7 @@ export function WhiteboardCanvas({ whiteboardId }: WhiteboardCanvasProps) {
     }
   };
 
-  const handleMouseUp = () => {
+  const handleEnd = () => {
     setDrawing(false);
     ctxRef.current?.closePath();
 
@@ -149,10 +166,17 @@ export function WhiteboardCanvas({ whiteboardId }: WhiteboardCanvasProps) {
     <div>
       <canvas
         ref={canvasRef}
-        onMouseDown={handleMouseDown}
-        onMouseMove={handleMouseMove}
-        onMouseUp={handleMouseUp}
-        style={{ border: "1px solid black", background: "gray" }}
+        onMouseDown={handleStart}
+        onMouseMove={handleMove}
+        onMouseUp={handleEnd}
+        onTouchStart={handleStart}
+        onTouchMove={handleMove}
+        onTouchEnd={handleEnd}
+        style={{
+          border: "1px solid black",
+          background: "gray",
+          touchAction: "none",
+        }}
       />
       <div>
         <button onClick={() => setColor("white")}>🖊️ white</button>
