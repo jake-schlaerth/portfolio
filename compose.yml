@@ -1,5 +1,5 @@
 services:
-  backend:
+  whiteboard-backend:
     build: ./apps/backend
     ports:
       - "8080:8080"

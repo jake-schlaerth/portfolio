@@ -3,9 +3,9 @@ import { Layout } from "../../components";
 export const Music = () => {
   return (
     <Layout>
-      <div className="flex flex-col gap-12 p-16 mx-auto min-w-xl">
+      <div className="flex flex-col gap-12 p-16 mx-auto min-w-lg">
         <iframe
-          className="w-full h-[450px] border-0"
+          className="w-[600px] h-[450px] border-0"
           src="https://www.youtube.com/embed/BdtLK9pAh5k?si=Camjyvj7vEg1Q944"
           title="YouTube video player"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
@@ -13,7 +13,7 @@ export const Music = () => {
           allowFullScreen
         />
         <iframe
-          className="w-full h-[450px] border-0"
+          className="w-[600px] h-[450px] border-0"
           src="https://www.youtube.com/embed/6wTo_8-kz3k?si=aW-pF67RYkxyVxLE"
           title="YouTube video player"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
