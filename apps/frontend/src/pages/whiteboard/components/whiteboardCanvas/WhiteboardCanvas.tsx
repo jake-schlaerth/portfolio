@@ -38,7 +38,7 @@ export function WhiteboardCanvas({ whiteboardId }: WhiteboardCanvasProps) {
   useEffect(() => {
     const setupCanvas = (
       canvas: HTMLCanvasElement | null,
-      ctxRef: React.MutableRefObject<CanvasRenderingContext2D | null>
+      ctxRef: React.RefObject<CanvasRenderingContext2D | null>
     ) => {
       if (!canvas) return;
       ctxRef.current = canvas.getContext("2d");
@@ -172,29 +172,11 @@ export function WhiteboardCanvas({ whiteboardId }: WhiteboardCanvasProps) {
   };
 
   return (
-    <div className="canvas-container" style={{ position: "relative" }}>
-      <div
-        style={{
-          position: "absolute",
-          top: 0,
-          left: 0,
-          background: "gray",
-          width: "100%",
-          height: "90vh",
-        }}
-      />
+    <div className="relative">
+      <div className="absolute top-0 left-0 bg-gray-500 w-full h-[90vh]" />
       <canvas
         ref={remoteCanvasRef}
-        style={{
-          position: "absolute",
-          top: 0,
-          left: 0,
-          border: "1px solid black",
-          background: "transparent",
-          touchAction: "none",
-          zIndex: 1,
-          pointerEvents: "none",
-        }}
+        className="absolute top-0 left-0 border border-black bg-transparent touch-none z-[1] pointer-events-none"
       />
       <canvas
         ref={localCanvasRef}
@@ -204,23 +186,21 @@ export function WhiteboardCanvas({ whiteboardId }: WhiteboardCanvasProps) {
         onTouchStart={handleStart}
         onTouchMove={handleMove}
         onTouchEnd={handleEnd}
-        style={{
-          position: "absolute",
-          top: 0,
-          left: 0,
-          border: "1px solid black",
-          background: "transparent",
-          touchAction: "none",
-          zIndex: 2,
-        }}
+        className="absolute top-0 left-0 border border-black bg-transparent touch-none z-[2]"
       />
-      <div
-        style={{ position: "absolute", top: "calc(90vh + 10px)", zIndex: 3 }}
-      >
-        <button onClick={() => setColor("white")}>🖊️ white</button>
-        <button onClick={() => setColor("red")}>🖊️ red</button>
-        <button onClick={() => setColor("blue")}>🖊️ blue</button>
-        <button onClick={() => setColor("green")}>🖊️ green</button>
+      <div className="absolute top-[calc(90vh+10px)] z-[3] flex space-x-2">
+        <button className="px-3 py-1 rounded" onClick={() => setColor("white")}>
+          🖊️ white
+        </button>
+        <button className="px-3 py-1 rounded" onClick={() => setColor("red")}>
+          🖊️ red
+        </button>
+        <button className="px-3 py-1 rounded" onClick={() => setColor("blue")}>
+          🖊️ blue
+        </button>
+        <button className="px-3 py-1 rounded" onClick={() => setColor("green")}>
+          🖊️ green
+        </button>
       </div>
     </div>
   );

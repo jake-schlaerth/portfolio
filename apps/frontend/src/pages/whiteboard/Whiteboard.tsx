@@ -47,13 +47,13 @@ export const Whiteboard = () => {
       <div className="relative w-full h-[calc(100vh-8rem)]">
         <button
           onClick={handleBack}
-          className="absolute top-4 left-4 p-2 rounded-full hover:bg-gray-100 transition-colors"
+          className="absolute top-4 left-4 p-2 rounded-full hover:bg-gray-100 transition-colors z-3"
         >
           ←
         </button>
         <button
           onClick={() => setDeleteModalOpen(true)}
-          className="absolute top-4 right-4 p-2 rounded-full hover:bg-gray-100 transition-colors text-red-500 hover:text-red-600"
+          className="absolute top-4 right-4 p-2 rounded-full hover:bg-gray-100 transition-colors text-red-500 hover:text-red-600 z-3"
           aria-label="Delete whiteboard"
         >
           🗑️
