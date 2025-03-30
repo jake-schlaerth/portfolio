@@ -9,10 +9,7 @@ export function useWebSocket(whiteboardId: string) {
   useEffect(() => {
     if (!whiteboardId) return;
 
-    // Remove the '/api' prefix for WebSocket URL if it exists
-    const baseUrl = import.meta.env.VITE_BACKEND_BASE_URL.replace("/api", "");
-    const url = new URL("/web_socket", baseUrl);
-    // Use wss: for HTTPS connections and ws: for HTTP
+    const url = new URL("/web_socket", import.meta.env.VITE_BACKEND_BASE_URL);
     url.protocol = url.protocol === "https:" ? "wss:" : "ws:";
     url.searchParams.set("id", whiteboardId);
     const socket = new WebSocket(url);
