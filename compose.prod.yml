@@ -1,7 +1,7 @@
 services:
-  backend:
+  whiteboard-backend:
     build:
-      context: ./apps/backend
+      context: ./apps/whiteboard-backend
       dockerfile: Dockerfile.prod
     ports:
       - "8080"
