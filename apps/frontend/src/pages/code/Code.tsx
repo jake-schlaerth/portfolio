@@ -53,7 +53,6 @@ export const Code = () => {
           <li>mongodb</li>
           <li>redis</li>
           <li>aws</li>
-          <li>rds</li>
         </ul>
       </div>
       <p>these are some things i've built</p>
