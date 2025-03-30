@@ -7,7 +7,6 @@ interface DrawData {
   color: string;
   points: { x: number; y: number }[];
   isLive?: boolean;
-  userId?: string;
 }
 
 interface WhiteboardCanvasProps {
@@ -29,9 +28,6 @@ export function WhiteboardCanvas({ whiteboardId }: WhiteboardCanvasProps) {
     x: number;
     y: number;
   } | null>(null);
-
-  // Generate a unique ID for this user session
-  const userIdRef = useRef<string>(crypto.randomUUID());
 
   useEffect(() => {
     history.forEach(drawOnCanvas);
@@ -55,10 +51,7 @@ export function WhiteboardCanvas({ whiteboardId }: WhiteboardCanvasProps) {
     messages.forEach((message) => {
       try {
         const { payload } = JSON.parse(message);
-        // Only process drawings from other users
-        if (payload.userId !== userIdRef.current) {
-          drawOnCanvas(payload);
-        }
+        drawOnCanvas(payload);
       } catch (error) {
         console.error("Invalid message format:", error);
       }
@@ -118,7 +111,6 @@ export function WhiteboardCanvas({ whiteboardId }: WhiteboardCanvasProps) {
             color,
             points: [lastSentPoint, currentPoint],
             isLive: true,
-            userId: userIdRef.current,
           },
         })
       );
@@ -138,7 +130,6 @@ export function WhiteboardCanvas({ whiteboardId }: WhiteboardCanvasProps) {
           color,
           points: currentPoints,
           isLive: false,
-          userId: userIdRef.current,
         },
       })
     );
