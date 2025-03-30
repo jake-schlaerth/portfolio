@@ -14,8 +14,10 @@ interface WhiteboardCanvasProps {
 }
 
 export function WhiteboardCanvas({ whiteboardId }: WhiteboardCanvasProps) {
-  const canvasRef = useRef<HTMLCanvasElement | null>(null);
-  const ctxRef = useRef<CanvasRenderingContext2D | null>(null);
+  const localCanvasRef = useRef<HTMLCanvasElement | null>(null);
+  const remoteCanvasRef = useRef<HTMLCanvasElement | null>(null);
+  const localCtxRef = useRef<CanvasRenderingContext2D | null>(null);
+  const remoteCtxRef = useRef<CanvasRenderingContext2D | null>(null);
   const messages = useAtomValue(messagesAtom);
   const history = useWhiteboardHistory(whiteboardId);
   const { sendMessage } = useWebSocket(whiteboardId);
@@ -30,20 +32,28 @@ export function WhiteboardCanvas({ whiteboardId }: WhiteboardCanvasProps) {
   } | null>(null);
 
   useEffect(() => {
-    history.forEach(drawOnCanvas);
+    history.forEach(drawRemote);
   }, [history]);
 
   useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
+    const setupCanvas = (
+      canvas: HTMLCanvasElement | null,
+      ctxRef: React.MutableRefObject<CanvasRenderingContext2D | null>
+    ) => {
+      if (!canvas) return;
+      ctxRef.current = canvas.getContext("2d");
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight * 0.9;
+    };
 
-    ctxRef.current = canvas.getContext("2d");
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight * 0.9;
+    setupCanvas(localCanvasRef.current, localCtxRef);
+    setupCanvas(remoteCanvasRef.current, remoteCtxRef);
 
     return () => {
-      canvasRef.current = null;
-      ctxRef.current = null;
+      localCanvasRef.current = null;
+      localCtxRef.current = null;
+      remoteCanvasRef.current = null;
+      remoteCtxRef.current = null;
     };
   }, []);
 
@@ -51,7 +61,7 @@ export function WhiteboardCanvas({ whiteboardId }: WhiteboardCanvasProps) {
     messages.forEach((message) => {
       try {
         const { payload } = JSON.parse(message);
-        drawOnCanvas(payload);
+        drawRemote(payload);
       } catch (error) {
         console.error("Invalid message format:", error);
       }
@@ -61,7 +71,7 @@ export function WhiteboardCanvas({ whiteboardId }: WhiteboardCanvasProps) {
   const getCoordinates = (event: React.MouseEvent | React.TouchEvent) => {
     if ("touches" in event) {
       const touch = event.touches[0];
-      const rect = canvasRef.current?.getBoundingClientRect();
+      const rect = localCanvasRef.current?.getBoundingClientRect();
       if (!rect) return { x: 0, y: 0 };
       return {
         x: touch.clientX - rect.left,
@@ -80,8 +90,8 @@ export function WhiteboardCanvas({ whiteboardId }: WhiteboardCanvasProps) {
     setCurrentPoints([{ x, y }]);
     setLastSentPoint({ x, y });
 
-    ctxRef.current?.beginPath();
-    ctxRef.current?.moveTo(x, y);
+    localCtxRef.current?.beginPath();
+    localCtxRef.current?.moveTo(x, y);
   };
 
   const handleMove = (event: React.MouseEvent | React.TouchEvent) => {
@@ -90,11 +100,11 @@ export function WhiteboardCanvas({ whiteboardId }: WhiteboardCanvasProps) {
     const { x, y } = getCoordinates(event);
     const currentPoint = { x, y };
 
-    ctxRef.current!.strokeStyle = color;
-    ctxRef.current!.lineWidth = 5;
-    ctxRef.current!.lineCap = "round";
-    ctxRef.current!.lineTo(x, y);
-    ctxRef.current!.stroke();
+    localCtxRef.current!.strokeStyle = color;
+    localCtxRef.current!.lineWidth = 5;
+    localCtxRef.current!.lineCap = "round";
+    localCtxRef.current!.lineTo(x, y);
+    localCtxRef.current!.stroke();
 
     setCurrentPoints((prev) => [...prev, currentPoint]);
 
@@ -120,7 +130,7 @@ export function WhiteboardCanvas({ whiteboardId }: WhiteboardCanvasProps) {
 
   const handleEnd = () => {
     setDrawing(false);
-    ctxRef.current?.closePath();
+    localCtxRef.current?.closePath();
 
     sendMessage(
       JSON.stringify({
@@ -138,33 +148,56 @@ export function WhiteboardCanvas({ whiteboardId }: WhiteboardCanvasProps) {
     setLastSentPoint(null);
   };
 
-  const drawOnCanvas = (drawData: DrawData) => {
-    if (!ctxRef.current) return;
+  const drawRemote = (drawData: DrawData) => {
+    if (!remoteCtxRef.current) return;
 
     const { color, points, isLive } = drawData;
     if (!points?.length) return;
 
-    ctxRef.current.strokeStyle = color;
-    ctxRef.current.lineWidth = 5;
-    ctxRef.current.lineCap = "round";
+    remoteCtxRef.current.strokeStyle = color;
+    remoteCtxRef.current.lineWidth = 5;
+    remoteCtxRef.current.lineCap = "round";
 
-    ctxRef.current.beginPath();
-    ctxRef.current.moveTo(points[0].x, points[0].y);
+    remoteCtxRef.current.beginPath();
+    remoteCtxRef.current.moveTo(points[0].x, points[0].y);
 
     for (const point of points.slice(1)) {
-      ctxRef.current.lineTo(point.x, point.y);
+      remoteCtxRef.current.lineTo(point.x, point.y);
     }
 
-    ctxRef.current.stroke();
+    remoteCtxRef.current.stroke();
     if (!isLive) {
-      ctxRef.current.closePath();
+      remoteCtxRef.current.closePath();
     }
   };
 
   return (
-    <div>
+    <div className="canvas-container" style={{ position: "relative" }}>
+      <div
+        style={{
+          position: "absolute",
+          top: 0,
+          left: 0,
+          background: "gray",
+          width: "100%",
+          height: "90vh",
+        }}
+      />
       <canvas
-        ref={canvasRef}
+        ref={remoteCanvasRef}
+        style={{
+          position: "absolute",
+          top: 0,
+          left: 0,
+          border: "1px solid black",
+          background: "transparent",
+          touchAction: "none",
+          zIndex: 1,
+          pointerEvents: "none",
+        }}
+      />
+      <canvas
+        ref={localCanvasRef}
         onMouseDown={handleStart}
         onMouseMove={handleMove}
         onMouseUp={handleEnd}
@@ -172,12 +205,18 @@ export function WhiteboardCanvas({ whiteboardId }: WhiteboardCanvasProps) {
         onTouchMove={handleMove}
         onTouchEnd={handleEnd}
         style={{
+          position: "absolute",
+          top: 0,
+          left: 0,
           border: "1px solid black",
-          background: "gray",
+          background: "transparent",
           touchAction: "none",
+          zIndex: 2,
         }}
       />
-      <div>
+      <div
+        style={{ position: "absolute", top: "calc(90vh + 10px)", zIndex: 3 }}
+      >
         <button onClick={() => setColor("white")}>🖊️ white</button>
         <button onClick={() => setColor("red")}>🖊️ red</button>
         <button onClick={() => setColor("blue")}>🖊️ blue</button>
