@@ -4,7 +4,7 @@ services:
     ports:
       - "8080:8080"
     volumes:
-      - ./apps/backend:/app
+      - ./apps/whiteboard-backend:/app
     environment:
       RUST_LOG: "info"
     command: ["cargo", "watch", "-x", "run"]

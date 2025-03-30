@@ -51,7 +51,7 @@ async fn on_upgrade_callback(
 ) {
     let (sender, mut receiver) = web_socket.split();
 
-    client_list.add_client(&whiteboard_identifier, sender).await;
+    let client_id = client_list.add_client(&whiteboard_identifier, sender).await;
 
     while let Some(Ok(received_message)) = receiver.next().await {
         if let Message::Text(text) = received_message {
@@ -83,7 +83,7 @@ async fn on_upgrade_callback(
                         .expect("Error inserting session");
                 }
 
-                client_list.broadcast(&whiteboard_identifier, &text).await;
+                client_list.broadcast(&whiteboard_identifier, &text, client_id).await;
             } else {
                 println!("Failed to parse JSON");
             }
