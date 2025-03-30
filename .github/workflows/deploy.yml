@@ -24,4 +24,4 @@ jobs:
             cd /root/code/whiteboard
             git pull origin main
             docker-compose down
-            docker compose -f compose.prod.yml up --build
+            docker compose -f compose.prod.yml up --build -d
