@@ -7,6 +7,7 @@ interface DrawData {
   color: string;
   points: { x: number; y: number }[];
   isLive?: boolean;
+  userId?: string;
 }
 
 interface WhiteboardCanvasProps {
@@ -28,6 +29,8 @@ export function WhiteboardCanvas({ whiteboardId }: WhiteboardCanvasProps) {
     x: number;
     y: number;
   } | null>(null);
+  const userIdRef = useRef<string>(crypto.randomUUID());
+  const isDrawingRemote = useRef(false);
 
   useEffect(() => {
     history.forEach(drawOnCanvas);
@@ -51,7 +54,10 @@ export function WhiteboardCanvas({ whiteboardId }: WhiteboardCanvasProps) {
     messages.forEach((message) => {
       try {
         const { payload } = JSON.parse(message);
+
+        isDrawingRemote.current = true;
         drawOnCanvas(payload);
+        isDrawingRemote.current = false;
       } catch (error) {
         console.error("Invalid message format:", error);
       }
@@ -80,21 +86,29 @@ export function WhiteboardCanvas({ whiteboardId }: WhiteboardCanvasProps) {
     setCurrentPoints([{ x, y }]);
     setLastSentPoint({ x, y });
 
-    ctxRef.current?.beginPath();
-    ctxRef.current?.moveTo(x, y);
+    if (!ctxRef.current) return;
+
+    ctxRef.current.beginPath();
+    ctxRef.current.moveTo(x, y);
   };
 
   const handleMove = (event: React.MouseEvent | React.TouchEvent) => {
-    if (!drawing) return;
+    if (!drawing || !ctxRef.current) return;
 
     const { x, y } = getCoordinates(event);
     const currentPoint = { x, y };
 
-    ctxRef.current!.strokeStyle = color;
-    ctxRef.current!.lineWidth = 5;
-    ctxRef.current!.lineCap = "round";
-    ctxRef.current!.lineTo(x, y);
-    ctxRef.current!.stroke();
+    ctxRef.current.beginPath();
+    ctxRef.current.moveTo(
+      lastSentPoint?.x || currentPoints[currentPoints.length - 1].x,
+      lastSentPoint?.y || currentPoints[currentPoints.length - 1].y
+    );
+    ctxRef.current.strokeStyle = color;
+    ctxRef.current.lineWidth = 5;
+    ctxRef.current.lineCap = "round";
+    ctxRef.current.lineTo(x, y);
+    ctxRef.current.stroke();
+    ctxRef.current.closePath();
 
     setCurrentPoints((prev) => [...prev, currentPoint]);
 
@@ -111,6 +125,7 @@ export function WhiteboardCanvas({ whiteboardId }: WhiteboardCanvasProps) {
             color,
             points: [lastSentPoint, currentPoint],
             isLive: true,
+            userId: userIdRef.current,
           },
         })
       );
@@ -119,8 +134,10 @@ export function WhiteboardCanvas({ whiteboardId }: WhiteboardCanvasProps) {
   };
 
   const handleEnd = () => {
+    if (!ctxRef.current) return;
+
     setDrawing(false);
-    ctxRef.current?.closePath();
+    ctxRef.current.closePath();
 
     sendMessage(
       JSON.stringify({
@@ -130,6 +147,7 @@ export function WhiteboardCanvas({ whiteboardId }: WhiteboardCanvasProps) {
           color,
           points: currentPoints,
           isLive: false,
+          userId: userIdRef.current,
         },
       })
     );
@@ -141,14 +159,17 @@ export function WhiteboardCanvas({ whiteboardId }: WhiteboardCanvasProps) {
   const drawOnCanvas = (drawData: DrawData) => {
     if (!ctxRef.current) return;
 
-    const { color, points, isLive } = drawData;
+    const { color, points } = drawData;
     if (!points?.length) return;
 
+    if (drawing && isDrawingRemote.current) {
+      ctxRef.current.save();
+    }
+
+    ctxRef.current.beginPath();
     ctxRef.current.strokeStyle = color;
     ctxRef.current.lineWidth = 5;
     ctxRef.current.lineCap = "round";
-
-    ctxRef.current.beginPath();
     ctxRef.current.moveTo(points[0].x, points[0].y);
 
     for (const point of points.slice(1)) {
@@ -156,8 +177,10 @@ export function WhiteboardCanvas({ whiteboardId }: WhiteboardCanvasProps) {
     }
 
     ctxRef.current.stroke();
-    if (!isLive) {
-      ctxRef.current.closePath();
+    ctxRef.current.closePath();
+
+    if (drawing && isDrawingRemote.current) {
+      ctxRef.current.restore();
     }
   };
 
