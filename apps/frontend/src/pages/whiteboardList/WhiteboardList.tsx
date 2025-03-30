@@ -31,7 +31,10 @@ export const WhiteboardList = () => {
     const formData = new FormData(event.target as HTMLFormElement);
     const whiteboardName = formData.get("name");
 
-    const url = new URL("/whiteboard", import.meta.env.VITE_BACKEND_BASE_URL);
+    const url = new URL(
+      "/api/whiteboard",
+      import.meta.env.VITE_BACKEND_BASE_URL
+    );
     try {
       const response = await fetch(url, {
         method: "POST",
@@ -58,7 +61,10 @@ export const WhiteboardList = () => {
 
   const fetchWhiteboards = async () => {
     try {
-      const url = new URL("/whiteboard", import.meta.env.VITE_BACKEND_BASE_URL);
+      const url = new URL(
+        "/api/whiteboard",
+        import.meta.env.VITE_BACKEND_BASE_URL
+      );
       url.searchParams.append("limit", limit.toString());
       url.searchParams.append("offset", (page * limit).toString());
       const response = await fetch(url, {

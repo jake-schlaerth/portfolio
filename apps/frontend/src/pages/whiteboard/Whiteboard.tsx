@@ -22,7 +22,7 @@ export const Whiteboard = () => {
 
   const handleDelete = async () => {
     const url = new URL(
-      `/whiteboard/${id}`,
+      `/api/whiteboard/${id}`,
       import.meta.env.VITE_BACKEND_BASE_URL
     );
     try {

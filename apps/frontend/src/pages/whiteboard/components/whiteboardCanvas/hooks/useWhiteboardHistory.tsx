@@ -9,7 +9,7 @@ export const useWhiteboardHistory = (whiteboardId: string) => {
     const fetchHistory = async () => {
       try {
         const url = new URL(import.meta.env.VITE_BACKEND_BASE_URL);
-        url.pathname = `/whiteboard/${whiteboardId}/history`;
+        url.pathname = `/api/whiteboard/${whiteboardId}/history`;
 
         const response = await fetch(url);
 
