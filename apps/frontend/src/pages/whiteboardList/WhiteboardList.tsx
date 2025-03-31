@@ -61,9 +61,7 @@ export const WhiteboardList = () => {
       const url = new URL("/whiteboard", import.meta.env.VITE_BACKEND_BASE_URL);
       url.searchParams.append("limit", limit.toString());
       url.searchParams.append("offset", (page * limit).toString());
-      const response = await fetch(url, {
-        method: "GET",
-      });
+      const response = await fetch(url);
 
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
