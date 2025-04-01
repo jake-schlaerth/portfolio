@@ -108,9 +108,7 @@ export function WhiteboardCanvas({ whiteboardId }: WhiteboardCanvasProps) {
   };
 
   const handleStart = (event: React.MouseEvent | React.TouchEvent) => {
-    console.log("handleStart", event);
     if (event.nativeEvent instanceof MouseEvent) {
-      console.log("event.nativeEvent", event.nativeEvent);
       if (event.nativeEvent.button === 2) {
         setIsPanning(true);
         setLastPanPoint({
