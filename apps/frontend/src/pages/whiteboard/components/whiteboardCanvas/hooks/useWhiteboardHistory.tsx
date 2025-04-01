@@ -19,11 +19,9 @@ export const useWhiteboardHistory = (whiteboardId: string) => {
           throw new Error(`HTTP error! Status: ${response.status}`);
         }
 
-        const historyResponse = await response.json();
+        const history = await response.json();
 
-        setHistory(
-          historyResponse.map((whiteboardEvent: any) => whiteboardEvent.payload)
-        );
+        setHistory(history);
       } catch (err: any) {
         console.error("Failed to fetch history:", err);
       }

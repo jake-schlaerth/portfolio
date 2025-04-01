@@ -16,6 +16,23 @@ export function WhiteboardCanvas({ whiteboardId }: WhiteboardCanvasProps) {
     x: number;
     y: number;
   } | null>(null);
+  const [offset, setOffset] = useState({ x: 0, y: 0 });
+  const [isPanning, setIsPanning] = useState(false);
+  const [lastPanPoint, setLastPanPoint] = useState<{
+    x: number;
+    y: number;
+  } | null>(null);
+  const [currentDrawing, setCurrentDrawing] = useState<{
+    color: string;
+    points: { x: number; y: number }[];
+  } | null>(null);
+  const [localDrawings, setLocalDrawings] = useState<
+    Array<{
+      color: string;
+      points: { x: number; y: number }[];
+      isFinalPoint: boolean;
+    }>
+  >([]);
 
   useEffect(() => {
     if (!canvasRef.current) return;
@@ -29,32 +46,107 @@ export function WhiteboardCanvas({ whiteboardId }: WhiteboardCanvasProps) {
     };
   }, []);
 
-  const getCoordinates = (event: React.MouseEvent | React.TouchEvent) => {
-    if ("touches" in event) {
-      const touch = event.touches[0];
-      const rect = canvasRef.current?.getBoundingClientRect();
-      if (!rect) return { x: 0, y: 0 };
-      return {
-        x: touch.clientX - rect.left,
-        y: touch.clientY - rect.top,
-      };
+  useEffect(() => {
+    if (!contextRef.current || !canvasRef.current) return;
+
+    contextRef.current.setTransform(1, 0, 0, 1, 0, 0);
+    contextRef.current.clearRect(
+      0,
+      0,
+      canvasRef.current.width,
+      canvasRef.current.height
+    );
+    contextRef.current.setTransform(1, 0, 0, 1, offset.x, offset.y);
+
+    localDrawings.forEach((drawing) => {
+      contextRef.current!.strokeStyle = drawing.color;
+      contextRef.current!.lineWidth = 5;
+      contextRef.current!.lineCap = "round";
+      contextRef.current!.beginPath();
+      contextRef.current!.moveTo(drawing.points[0].x, drawing.points[0].y);
+      for (const point of drawing.points.slice(1)) {
+        contextRef.current!.lineTo(point.x, point.y);
+      }
+      contextRef.current!.stroke();
+      if (drawing.isFinalPoint) {
+        contextRef.current!.closePath();
+      }
+    });
+
+    if (currentDrawing) {
+      contextRef.current.strokeStyle = currentDrawing.color;
+      contextRef.current.lineWidth = 5;
+      contextRef.current.lineCap = "round";
+      contextRef.current.beginPath();
+      contextRef.current.moveTo(
+        currentDrawing.points[0].x,
+        currentDrawing.points[0].y
+      );
+      for (const point of currentDrawing.points.slice(1)) {
+        contextRef.current.lineTo(point.x, point.y);
+      }
+      contextRef.current.stroke();
     }
+  }, [offset, localDrawings, currentDrawing]);
+
+  const getCoordinates = (event: React.MouseEvent | React.TouchEvent) => {
+    let clientX, clientY;
+    if ("touches" in event) {
+      clientX = event.touches[0].clientX;
+      clientY = event.touches[0].clientY;
+    } else {
+      clientX = event.clientX;
+      clientY = event.clientY;
+    }
+
+    const rect = canvasRef.current?.getBoundingClientRect();
+    if (!rect) return { x: 0, y: 0 };
     return {
-      x: event.nativeEvent.offsetX,
-      y: event.nativeEvent.offsetY,
+      x: clientX - rect.left - offset.x,
+      y: clientY - rect.top - offset.y,
     };
   };
 
   const handleStart = (event: React.MouseEvent | React.TouchEvent) => {
+    if (event.nativeEvent instanceof MouseEvent) {
+      if (event.nativeEvent.button === 2) {
+        setIsPanning(true);
+        setLastPanPoint({
+          x: event.nativeEvent.clientX,
+          y: event.nativeEvent.clientY,
+        });
+        return;
+      }
+    }
     setIsDrawing(true);
     const { x, y } = getCoordinates(event);
     setLastSentPoint({ x, y });
+    setCurrentDrawing({
+      color,
+      points: [{ x, y }],
+    });
 
     contextRef.current?.beginPath();
     contextRef.current?.moveTo(x, y);
   };
 
   const handleMove = (event: React.MouseEvent | React.TouchEvent) => {
+    if (isPanning && lastPanPoint) {
+      let currentX, currentY;
+      if ("touches" in event) {
+        currentX = event.touches[0].clientX;
+        currentY = event.touches[0].clientY;
+      } else {
+        currentX = event.clientX;
+        currentY = event.clientY;
+      }
+      const deltaX = currentX - lastPanPoint.x;
+      const deltaY = currentY - lastPanPoint.y;
+      setOffset((prev) => ({ x: prev.x + deltaX, y: prev.y + deltaY }));
+      setLastPanPoint({ x: currentX, y: currentY });
+      return;
+    }
+
     if (!isDrawing) return;
 
     const { x, y } = getCoordinates(event);
@@ -66,6 +158,15 @@ export function WhiteboardCanvas({ whiteboardId }: WhiteboardCanvasProps) {
     contextRef.current!.lineTo(x, y);
     contextRef.current!.stroke();
 
+    setCurrentDrawing((prev) =>
+      prev
+        ? {
+            ...prev,
+            points: [...prev.points, currentPoint],
+          }
+        : null
+    );
+
     sendMessage(
       JSON.stringify({
         whiteboardId,
@@ -74,6 +175,7 @@ export function WhiteboardCanvas({ whiteboardId }: WhiteboardCanvasProps) {
           color,
           points: [lastSentPoint, currentPoint],
           isFinalPoint: false,
+          offset,
         },
       })
     );
@@ -81,8 +183,25 @@ export function WhiteboardCanvas({ whiteboardId }: WhiteboardCanvasProps) {
   };
 
   const handleEnd = (event: React.MouseEvent | React.TouchEvent) => {
+    if (isPanning) {
+      setIsPanning(false);
+      setLastPanPoint(null);
+      return;
+    }
+
     setIsDrawing(false);
     contextRef.current?.closePath();
+
+    if (currentDrawing) {
+      setLocalDrawings((prev) => [
+        ...prev,
+        {
+          ...currentDrawing,
+          isFinalPoint: true,
+        },
+      ]);
+      setCurrentDrawing(null);
+    }
 
     sendMessage(
       JSON.stringify({
@@ -92,6 +211,7 @@ export function WhiteboardCanvas({ whiteboardId }: WhiteboardCanvasProps) {
           color,
           points: [lastSentPoint],
           isFinalPoint: true,
+          offset,
         },
       })
     );
@@ -99,10 +219,14 @@ export function WhiteboardCanvas({ whiteboardId }: WhiteboardCanvasProps) {
     setLastSentPoint(null);
   };
 
+  const handleContextMenu = (event: React.MouseEvent) => {
+    event.preventDefault();
+  };
+
   return (
     <div className="relative">
       <div className="absolute top-0 left-0 bg-gray-500 w-full h-[90vh]" />
-      <RemoteCanvas whiteboardId={whiteboardId} />
+      <RemoteCanvas whiteboardId={whiteboardId} offset={offset} />
       <canvas
         ref={canvasRef}
         onMouseDown={handleStart}
@@ -111,6 +235,10 @@ export function WhiteboardCanvas({ whiteboardId }: WhiteboardCanvasProps) {
         onTouchStart={handleStart}
         onTouchMove={handleMove}
         onTouchEnd={handleEnd}
+        onContextMenu={handleContextMenu}
+        style={{
+          cursor: isPanning ? "grabbing" : "default",
+        }}
         className="absolute top-0 left-0 border border-black bg-transparent touch-none z-[2]"
       />
       <div className="absolute top-[calc(90vh+10px)] z-[3] flex space-x-2">
