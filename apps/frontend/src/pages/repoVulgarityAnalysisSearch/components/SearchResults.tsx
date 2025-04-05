@@ -1,4 +1,4 @@
-import { SearchResultsProps } from "../types/search";
+import { SearchResultsProps } from "../types";
 
 export const SearchResults = ({
   results,

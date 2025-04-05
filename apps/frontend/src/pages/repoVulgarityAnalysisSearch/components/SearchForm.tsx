@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { SearchFormProps } from "../types/search";
+import { SearchFormProps } from "../types";
 
 export const SearchForm = ({ onSearch }: SearchFormProps) => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -7,7 +7,9 @@ export const SearchForm = ({ onSearch }: SearchFormProps) => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    setIsLoading(true);
     onSearch(searchQuery);
+    setIsLoading(false);
   };
 
   return (
@@ -22,11 +24,7 @@ export const SearchForm = ({ onSearch }: SearchFormProps) => {
         placeholder="enter search term"
         className="p-2 border rounded border-gray-700 placeholder-gray-500"
       />
-      <button
-        type="submit"
-        // className="text-lg py-2 px-4 rounded cursor-pointer hover:bg-[#ff6340] disabled:opacity-50"
-        disabled={isLoading}
-      >
+      <button type="submit" disabled={isLoading}>
         {isLoading ? "searching..." : "search"}
       </button>
     </form>

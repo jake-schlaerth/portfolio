@@ -1,9 +1,8 @@
-import { Layout } from "../components";
-import { Header } from "../components/Header";
-import { SearchResults } from "../components/SearchResults";
-import { SearchResult } from "../types/search";
+import { Layout } from "../../components";
+import { Header } from "../../components/Header";
+import { SearchResult } from "../repoVulgarityAnalysisSearch/types";
 
-export const Favorites = () => {
+export const RepoVulgarityAnalysisCuratedResults = () => {
   const favoriteResults: SearchResult[] = [
     {
       repository: "example/repo",
@@ -20,11 +19,8 @@ export const Favorites = () => {
           <h2 className="text-2xl font-semibold mb-6 text-gray-300">
             my favorite results
           </h2>
-          <SearchResults
-            results={favoriteResults}
-            error={null}
-            isLoading={false}
-          />
+
+          <p>example</p>
         </div>
       </div>
     </Layout>

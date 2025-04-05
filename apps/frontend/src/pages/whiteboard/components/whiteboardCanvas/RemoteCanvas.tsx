@@ -26,8 +26,12 @@ export function RemoteCanvas({ whiteboardId, offset }: RemoteCanvasProps) {
     if (!canvas) return;
 
     contextRef.current = canvas.getContext("2d");
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight * 0.9;
+
+    const parent = canvas.parentElement;
+    if (parent) {
+      canvas.width = parent.clientWidth;
+      canvas.height = parent.clientHeight;
+    }
 
     return () => {
       canvasRef.current = null;
@@ -88,7 +92,7 @@ export function RemoteCanvas({ whiteboardId, offset }: RemoteCanvasProps) {
   return (
     <canvas
       ref={canvasRef}
-      className="absolute top-0 left-0 border border-black bg-transparent touch-none z-[1] pointer-events-none"
+      className="absolute top-0 left-0 bg-transparent touch-none z-[1] pointer-events-none"
     />
   );
 }

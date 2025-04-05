@@ -1,11 +1,10 @@
 import { useState } from "react";
-import { Header } from "../components/Header";
-import { SearchForm } from "../components/SearchForm";
-import { SearchResults } from "../components/SearchResults";
-import { SearchResult } from "../types/search";
-import { Layout } from "../components";
+import { Header } from "../../components/Header";
+import { SearchForm, SearchResults } from "./components";
+import { SearchResult } from "./types/search";
+import { Layout } from "../../components";
 
-export const Search = () => {
+export const RepoVulgarityAnalysisSearch = () => {
   const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);

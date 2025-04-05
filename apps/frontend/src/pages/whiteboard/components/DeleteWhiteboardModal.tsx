@@ -18,7 +18,7 @@ export const DeleteWhiteboardModal = ({
         <h2 className="text-xl font-bold mb-4">delete whiteboard</h2>
         <div className="space-y-4">
           <p className="text-gray-300">
-            Are you sure you want to delete this whiteboard? This action cannot
+            are you sure you want to delete this whiteboard? this action cannot
             be undone.
           </p>
           <div className="flex justify-end gap-2">

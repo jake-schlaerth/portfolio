@@ -37,8 +37,12 @@ export function WhiteboardCanvas({ whiteboardId }: WhiteboardCanvasProps) {
   useEffect(() => {
     if (!canvasRef.current) return;
     contextRef.current = canvasRef.current.getContext("2d");
-    canvasRef.current.width = window.innerWidth;
-    canvasRef.current.height = window.innerHeight * 0.9;
+
+    const parent = canvasRef.current.parentElement;
+    if (parent) {
+      canvasRef.current.width = parent.clientWidth;
+      canvasRef.current.height = parent.clientHeight;
+    }
 
     return () => {
       canvasRef.current = null;
@@ -225,22 +229,23 @@ export function WhiteboardCanvas({ whiteboardId }: WhiteboardCanvasProps) {
 
   return (
     <div className="relative">
-      <div className="absolute top-0 left-0 bg-gray-500 w-full h-[90vh]" />
-      <RemoteCanvas whiteboardId={whiteboardId} offset={offset} />
-      <canvas
-        ref={canvasRef}
-        onMouseDown={handleStart}
-        onMouseMove={handleMove}
-        onMouseUp={handleEnd}
-        onTouchStart={handleStart}
-        onTouchMove={handleMove}
-        onTouchEnd={handleEnd}
-        onContextMenu={handleContextMenu}
-        style={{
-          cursor: isPanning ? "grabbing" : "default",
-        }}
-        className="absolute top-0 left-0 border border-black bg-transparent touch-none z-[2]"
-      />
+      <div className="absolute top-0 left-0 bg-gray-500 w-full h-[90vh]">
+        <RemoteCanvas whiteboardId={whiteboardId} offset={offset} />
+        <canvas
+          ref={canvasRef}
+          onMouseDown={handleStart}
+          onMouseMove={handleMove}
+          onMouseUp={handleEnd}
+          onTouchStart={handleStart}
+          onTouchMove={handleMove}
+          onTouchEnd={handleEnd}
+          onContextMenu={handleContextMenu}
+          style={{
+            cursor: isPanning ? "grabbing" : "default",
+          }}
+          className="absolute top-0 left-0 bg-transparent touch-none z-[2]"
+        />
+      </div>
       <div className="absolute top-[calc(90vh+10px)] z-[3] flex space-x-2">
         <button className="px-3 py-1 rounded" onClick={() => setColor("white")}>
           🖊️ white

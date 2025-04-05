@@ -29,16 +29,10 @@ export const Navbar = () => {
           whiteboard
         </Link>
         <Link
-          to="/favorites"
+          to="/repo-vulgarity-analysis/search"
           className="text-white text-base lowercase hover:opacity-80"
         >
-          favorites
-        </Link>
-        <Link
-          to="/search"
-          className="text-white text-base lowercase hover:opacity-80"
-        >
-          search
+          repo vulgarity analysis
         </Link>
       </div>
     </nav>
