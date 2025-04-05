@@ -28,6 +28,18 @@ export const Navbar = () => {
         >
           whiteboard
         </Link>
+        <Link
+          to="/favorites"
+          className="text-white text-base lowercase hover:opacity-80"
+        >
+          favorites
+        </Link>
+        <Link
+          to="/search"
+          className="text-white text-base lowercase hover:opacity-80"
+        >
+          search
+        </Link>
       </div>
     </nav>
   );

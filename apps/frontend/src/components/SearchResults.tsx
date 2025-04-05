@@ -15,7 +15,7 @@ export const SearchResults = ({
   };
 
   if (error) {
-    return <p className="text-red-500 mt-4">{error}</p>;
+    return <p className="mt-4">{error}</p>;
   }
 
   if (results.length > 0) {
@@ -26,32 +26,26 @@ export const SearchResults = ({
           {results.map((result, index) => (
             <li
               key={index}
-              className="mb-4 p-4 border rounded text-left bg-gray-800 border-gray-700"
+              className="mb-4 p-4 border rounded text-left border-gray-700"
             >
               <div className="flex flex-col gap-3">
                 <div>
-                  <span className="text-gray-500 text-sm tracking-wide">
-                    repo
-                  </span>
+                  <span className="text-sm tracking-wide">repo</span>
                   <div className="text-gray-300 font-medium">
-                    {getRepoName(result.repositoryName)}
+                    {getRepoName(result.repository)}
                   </div>
                 </div>
                 <div>
-                  <span className="text-gray-500 text-sm tracking-wide">
-                    commit message
-                  </span>
-                  <div className="text-gray-300 mt-1">
-                    {result.commitMessage}
-                  </div>
+                  <span className=" text-sm tracking-wide">commit message</span>
+                  <div>{result.commitMessage}</div>
                 </div>
                 <a
                   href={`https://github.com/${getRepoPath(
-                    result.repositoryName
+                    result.repository
                   )}/commit/${result.commitHash}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-blue-400 hover:text-blue-300 underline text-sm mt-1"
+                  // className="text-blue-400 hover:text-blue-300 underline text-sm mt-1"
                 >
                   view commit
                 </a>

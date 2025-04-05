@@ -2,7 +2,10 @@ FROM node:22
 
 WORKDIR /app
 
+RUN apt-get update && apt-get install -y git
 RUN corepack enable && corepack prepare pnpm@10.7.1 --activate
+
+RUN mkdir -p repos
 
 COPY . .
 

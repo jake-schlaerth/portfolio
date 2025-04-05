@@ -3,6 +3,7 @@ import { Header } from "../components/Header";
 import { SearchForm } from "../components/SearchForm";
 import { SearchResults } from "../components/SearchResults";
 import { SearchResult } from "../types/search";
+import { Layout } from "../components";
 
 export const Search = () => {
   const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
@@ -39,17 +40,19 @@ export const Search = () => {
   };
 
   return (
-    <div className="text-center p-4 mx-auto">
-      <Header />
+    <Layout>
+      <div className="text-center p-4 mx-auto">
+        <Header />
 
-      <div className="p-8">
-        <SearchForm onSearch={handleSearch} />
-        <SearchResults
-          results={searchResults}
-          error={error}
-          isLoading={isLoading}
-        />
+        <div className="p-8">
+          <SearchForm onSearch={handleSearch} />
+          <SearchResults
+            results={searchResults}
+            error={error}
+            isLoading={isLoading}
+          />
+        </div>
       </div>
-    </div>
+    </Layout>
   );
 };

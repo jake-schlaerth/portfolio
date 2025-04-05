@@ -1,5 +1,5 @@
 export interface SearchResult {
-  repositoryName: string;
+  repository: string;
   commitMessage: string;
   commitHash: string;
 }
