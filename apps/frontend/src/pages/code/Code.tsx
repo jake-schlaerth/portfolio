@@ -63,7 +63,7 @@ export const Code = () => {
               to="/whiteboard"
               className="hover:opacity-80 transition-opacity"
             >
-              <p className="text-center">whiteboarding app</p>
+              <p>whiteboarding app</p>
               <img
                 src={whiteboardScreenshot}
                 alt="Whiteboard App Screenshot"

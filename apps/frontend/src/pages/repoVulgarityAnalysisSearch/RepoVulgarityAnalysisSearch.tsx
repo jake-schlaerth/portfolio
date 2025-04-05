@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Header } from "../../components/Header";
-import { SearchForm, SearchResults } from "./components";
+import { ProjectDescription, SearchForm, SearchResults } from "./components";
 import { SearchResult } from "./types/search";
 import { Layout } from "../../components";
 
@@ -40,7 +40,8 @@ export const RepoVulgarityAnalysisSearch = () => {
 
   return (
     <Layout>
-      <div className="text-center p-4 mx-auto">
+      <div className="p-4 mx-auto">
+        <ProjectDescription />
         <Header />
 
         <div className="p-8">
