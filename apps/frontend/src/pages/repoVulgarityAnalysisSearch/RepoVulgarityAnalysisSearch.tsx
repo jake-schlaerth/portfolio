@@ -15,7 +15,10 @@ export const RepoVulgarityAnalysisSearch = () => {
     setError(null);
     setSearchPerformed(true);
 
-    const url = new URL("/commit-analysis/search", "http://localhost:8081");
+    const url = new URL(
+      "/commit-analysis/search",
+      import.meta.env.VITE_REPO_VULGARITY_ANALYSIS_BACKEND_BASE_URL
+    );
     url.searchParams.set("profanity", query);
 
     try {

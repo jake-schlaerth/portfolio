@@ -10,7 +10,7 @@ export const useWhiteboardHistory = (whiteboardId: string) => {
       try {
         const url = new URL(
           `/whiteboard/${whiteboardId}/history`,
-          import.meta.env.VITE_BACKEND_BASE_URL
+          import.meta.env.VITE_WHITEBOARD_BACKEND_BASE_URL
         );
 
         const response = await fetch(url);
