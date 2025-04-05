@@ -4,6 +4,7 @@ export const SearchResults = ({
   results,
   error,
   isLoading,
+  searchPerformed = false,
 }: SearchResultsProps) => {
   const getRepoPath = (repoUrl: string): string => {
     return repoUrl.replace("https://github.com/", "").replace(".git", "");
@@ -56,7 +57,7 @@ export const SearchResults = ({
     );
   }
 
-  if (!isLoading && !error && results.length === 0) {
+  if (searchPerformed && !isLoading && !error && results.length === 0) {
     return <p className="mt-4 text-gray-500">no results found</p>;
   }
 

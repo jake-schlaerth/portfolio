@@ -8,10 +8,12 @@ export const RepoVulgarityAnalysisSearch = () => {
   const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [searchPerformed, setSearchPerformed] = useState(false);
 
   const handleSearch = async (query: string) => {
     setIsLoading(true);
     setError(null);
+    setSearchPerformed(true);
 
     const url = new URL("/commit-analysis/search", "http://localhost:8081");
     url.searchParams.set("profanity", query);
@@ -50,6 +52,7 @@ export const RepoVulgarityAnalysisSearch = () => {
             results={searchResults}
             error={error}
             isLoading={isLoading}
+            searchPerformed={searchPerformed}
           />
         </div>
       </div>

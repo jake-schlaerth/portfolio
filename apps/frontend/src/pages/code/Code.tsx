@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { Layout } from "../../components";
 import whiteboardScreenshot from "../../assets/whiteboard.png";
+import repoVulgarityAnalysisScreenshot from "../../assets/repo-vulgarity-analysis.png";
 
 export const Code = () => {
   return (
@@ -56,22 +57,37 @@ export const Code = () => {
         </ul>
       </div>
       <p>these are some things i've built</p>
-      <div className="grid grid-cols-4 gap-8 p-8">
-        <ul className="space-y-2 list-none">
-          <li>
-            <Link
-              to="/whiteboard"
-              className="hover:opacity-80 transition-opacity"
-            >
-              <p>whiteboarding app</p>
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-8 p-8">
+        <div className="flex flex-col items-center max-w-xs mx-auto">
+          <Link
+            to="/whiteboard"
+            className="hover:opacity-80 transition-opacity flex flex-col items-center"
+          >
+            <p className="mb-2">whiteboarding app</p>
+            <div className="max-w-full rounded-lg overflow-hidden">
               <img
                 src={whiteboardScreenshot}
                 alt="Whiteboard App Screenshot"
-                className="w-48 h-32 object-cover rounded-lg"
+                className="w-auto h-auto max-w-full max-h-32 object-contain"
               />
-            </Link>
-          </li>
-        </ul>
+            </div>
+          </Link>
+        </div>
+        <div className="flex flex-col items-center max-w-xs mx-auto">
+          <Link
+            to="/repo-vulgarity-analysis/search"
+            className="hover:opacity-80 transition-opacity flex flex-col items-center"
+          >
+            <p className="mb-2">repo vulgarity analysis</p>
+            <div className="max-w-full rounded-lg overflow-hidden">
+              <img
+                src={repoVulgarityAnalysisScreenshot}
+                alt="Repo Vulgarity Analysis Screenshot"
+                className="w-auto h-auto max-w-full max-h-32 object-contain"
+              />
+            </div>
+          </Link>
+        </div>
       </div>
     </Layout>
   );

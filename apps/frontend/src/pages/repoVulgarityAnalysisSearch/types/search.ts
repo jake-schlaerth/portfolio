@@ -12,4 +12,5 @@ export interface SearchResultsProps {
   results: SearchResult[];
   error: string | null;
   isLoading: boolean;
+  searchPerformed?: boolean;
 }
