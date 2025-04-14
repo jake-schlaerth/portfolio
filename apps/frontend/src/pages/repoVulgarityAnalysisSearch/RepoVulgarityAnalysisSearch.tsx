@@ -45,10 +45,9 @@ export const RepoVulgarityAnalysisSearch = () => {
 
   return (
     <Layout>
-      <div className="p-4 mx-auto">
+      <div className="text-center">
         <ProjectDescription />
         <Header />
-
         <div className="p-8">
           <SearchForm onSearch={handleSearch} />
           <SearchResults
