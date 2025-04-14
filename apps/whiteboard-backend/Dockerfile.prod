@@ -34,7 +34,7 @@ COPY --from=builder /usr/local/cargo/bin/diesel /usr/local/bin/diesel
 # Copy Diesel migrations directory
 COPY --from=builder /app/migrations ./migrations
 
-USER nobody
+# USER nobody
 
 ENV RUST_LOG=info
 EXPOSE 8080
