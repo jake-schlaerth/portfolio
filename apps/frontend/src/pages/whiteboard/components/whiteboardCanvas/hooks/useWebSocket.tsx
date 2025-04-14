@@ -9,7 +9,10 @@ export function useWebSocket(whiteboardId: string) {
   useEffect(() => {
     if (!whiteboardId) return;
 
-    const url = new URL("/web_socket", import.meta.env.VITE_BACKEND_BASE_URL);
+    const url = new URL(
+      "/web_socket",
+      import.meta.env.VITE_WHITEBOARD_BACKEND_BASE_URL
+    );
     url.protocol = url.protocol === "https:" ? "wss:" : "ws:";
     url.searchParams.set("id", whiteboardId);
     const socket = new WebSocket(url);
