@@ -5,3 +5,4 @@ export * from "./music";
 export * from "./code";
 export * from "./repoVulgarityAnalysisSearch";
 export * from "./repoVulgarityAnalysisCuratedResults";
+export * from "./vfxRenderer";
