@@ -42,6 +42,8 @@ services:
       - wasm-build:/app/pkg
     command: '/bin/sh -c ''while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g "daemon off;"'''
     restart: unless-stopped
+    depends_on:
+      - vfx-renderer
 
   vfx-renderer:
     build:
@@ -49,7 +51,8 @@ services:
       dockerfile: Dockerfile.prod
     volumes:
       - wasm-build:/app/pkg
-    restart: "no"
+    restart: unless-stopped
+    command: "/bin/sh -c 'tail -f /dev/null'"
 
   certbot:
     image: certbot/certbot

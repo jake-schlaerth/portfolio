@@ -18,5 +18,3 @@ RUN mkdir -p src && \
 
 COPY src/ src/
 RUN wasm-pack build --target web --out-dir ./pkg
-
-CMD ["sh", "-c", "true"]
