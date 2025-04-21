@@ -71,10 +71,15 @@ export const VFXRenderer = () => {
 
     handleResize();
 
+    // Prevent scrolling on body
+    document.body.style.overflow = "hidden";
+
     window.addEventListener("resize", handleResize);
 
     return () => {
       window.removeEventListener("resize", handleResize);
+      // Restore original body overflow
+      document.body.style.overflow = "";
     };
   }, []);
 
@@ -322,22 +327,15 @@ export const VFXRenderer = () => {
   };
 
   return (
-    <div>
+    <div className="overflow-hidden h-screen w-screen">
       <canvas
         id="webgl-canvas"
         ref={canvasRef}
         className="w-full h-full bg-black z-0"
       />
 
-      <button
-        className="fixed top-2.5 right-2.5 z-10 px-3 py-1.5 rounded text-white"
-        onClick={toggleControls}
-      >
-        {controlsVisible ? "hide controls" : "show controls"}
-      </button>
-
       <div
-        className={`fixed top-2.5 right-2.5 w-[280px] p-4 bg-black/70 rounded-lg text-white z-5 shadow-lg ${
+        className={`fixed bottom-2.5 right-2.5 w-[280px] p-4 bg-black/70 rounded-lg text-white z-5 shadow-lg ${
           controlsVisible ? "block" : "hidden"
         }`}
       >
@@ -350,7 +348,7 @@ export const VFXRenderer = () => {
                 onChange={(e) => handleDistortionToggle(e.target.checked)}
                 className="mr-1"
               />
-              <span>CRT Distortion</span>
+              <span>crt distortion</span>
             </label>
             <span className="w-8 text-right">{distortion.toFixed(2)}</span>
           </div>
@@ -375,7 +373,7 @@ export const VFXRenderer = () => {
                 onChange={(e) => handleScanlineToggle(e.target.checked)}
                 className="mr-1"
               />
-              <span>Scanlines</span>
+              <span>scanlines</span>
             </label>
             <span className="w-8 text-right">
               {scanlineIntensity.toFixed(2)}
@@ -402,7 +400,7 @@ export const VFXRenderer = () => {
                 onChange={(e) => handleGlitchToggle(e.target.checked)}
                 className="mr-1"
               />
-              <span>Glitch</span>
+              <span>glitch</span>
             </label>
             <span className="w-8 text-right">{glitchIntensity.toFixed(2)}</span>
           </div>
@@ -427,7 +425,7 @@ export const VFXRenderer = () => {
                 onChange={(e) => handleColorShiftToggle(e.target.checked)}
                 className="mr-1"
               />
-              <span>Color Shift</span>
+              <span>color shift</span>
             </label>
             <span className="w-8 text-right">{colorShift.toFixed(2)}</span>
           </div>
@@ -452,7 +450,7 @@ export const VFXRenderer = () => {
                 onChange={(e) => handleDotMatrixToggle(e.target.checked)}
                 className="mr-1"
               />
-              <span>LED/Dot Matrix</span>
+              <span>led/dot matrix</span>
             </label>
             <span className="w-8 text-right">
               {dotMatrixIntensity.toFixed(2)}
@@ -481,7 +479,7 @@ export const VFXRenderer = () => {
                 }
                 className="mr-1"
               />
-              <span>Chromatic Aberration</span>
+              <span>chromatic aberration</span>
             </label>
             <span className="w-8 text-right">
               {chromaticAberration.toFixed(2)}
@@ -508,7 +506,7 @@ export const VFXRenderer = () => {
                 onChange={(e) => handleVignetteToggle(e.target.checked)}
                 className="mr-1"
               />
-              <span>Vignette</span>
+              <span>vignette</span>
             </label>
             <span className="w-8 text-right">
               {vignetteIntensity.toFixed(2)}
@@ -537,7 +535,7 @@ export const VFXRenderer = () => {
                 }
                 className="mr-1"
               />
-              <span>Horizontal Distortion</span>
+              <span>horizontal distortion</span>
             </label>
             <span className="w-8 text-right">
               {horizontalDistortion.toFixed(2)}
@@ -566,7 +564,7 @@ export const VFXRenderer = () => {
                 onChange={(e) => handleTapeNoiseToggle(e.target.checked)}
                 className="mr-1"
               />
-              <span>Tape Noise</span>
+              <span>tape noise</span>
             </label>
             <span className="w-8 text-right">
               {tapeNoiseIntensity.toFixed(2)}
@@ -593,7 +591,7 @@ export const VFXRenderer = () => {
                 onChange={(e) => handleTrackingJitterToggle(e.target.checked)}
                 className="mr-1"
               />
-              <span>Tracking Jitter</span>
+              <span>tracking jitter</span>
             </label>
             <span className="w-8 text-right">
               {trackingJitterIntensity.toFixed(2)}
@@ -622,7 +620,7 @@ export const VFXRenderer = () => {
                 onChange={(e) => handleBloomToggle(e.target.checked)}
                 className="mr-1"
               />
-              <span>Bloom Glow</span>
+              <span>bloom glow</span>
             </label>
             <span className="w-8 text-right">{bloomIntensity.toFixed(2)}</span>
           </div>
@@ -655,7 +653,7 @@ export const VFXRenderer = () => {
               handleBloomToggle(true);
             }}
           >
-            Enable All
+            enable all
           </button>
           <button
             className="bg-purple-600/80 text-white border-none rounded px-1.5 py-1.5 text-xs flex-1 min-w-[80px]"
@@ -673,16 +671,31 @@ export const VFXRenderer = () => {
               handleBloomToggle(false);
             }}
           >
-            Disable All
+            disable all
           </button>
           <button
             className="bg-purple-600/80 text-white border-none rounded px-1.5 py-1.5 text-xs flex-1 min-w-[80px]"
             onClick={randomizeEffects}
           >
-            Randomize Effects
+            randomize effects
+          </button>
+          <button
+            className="bg-purple-600/80 text-white border-none rounded px-1.5 py-1.5 text-xs flex-1 min-w-[80px]"
+            onClick={toggleControls}
+          >
+            {controlsVisible ? "hide controls" : "show controls"}
           </button>
         </div>
       </div>
+
+      {!controlsVisible && (
+        <button
+          className="fixed bottom-2.5 right-2.5 z-10 px-3 py-1.5 rounded text-white bg-purple-600/80"
+          onClick={toggleControls}
+        >
+          show controls
+        </button>
+      )}
     </div>
   );
 };
