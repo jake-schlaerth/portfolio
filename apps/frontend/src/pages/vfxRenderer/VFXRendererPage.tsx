@@ -6,9 +6,7 @@ import { InfoModal } from "./InfoModal";
 export const VFXRendererPage = () => {
   const [isModalOpen, setIsModalOpen] = useState(true);
 
-  const closeModal = () => {
-    setIsModalOpen(false);
-  };
+  const closeModal = () => setIsModalOpen(false);
 
   return (
     <Layout>
