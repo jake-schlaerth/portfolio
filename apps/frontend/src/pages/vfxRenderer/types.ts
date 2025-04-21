@@ -24,7 +24,7 @@ export const sliderRanges: SliderRangesConfig = {
   glitch: { min: 0.1, max: 1, step: 0.1 },
   colorShift: { min: 1, max: 100, step: 1 },
   dotMatrix: { min: 0.1, max: 1, step: 0.1 },
-  chromaticAberration: { min: 1, max: 10, step: 1 },
+  chromaticAberration: { min: 0.1, max: 10, step: 0.1 },
   vignette: { min: 1, max: 100, step: 1 },
   horizontalDistortion: { min: 0.1, max: 1, step: 0.1 },
   tapeNoise: { min: 0.05, max: 0.5, step: 0.05 },

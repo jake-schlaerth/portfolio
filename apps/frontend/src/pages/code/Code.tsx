@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { Layout } from "../../components";
 import whiteboardScreenshot from "../../assets/whiteboard.png";
 import repoVulgarityAnalysisScreenshot from "../../assets/repo-vulgarity-analysis.png";
-
+import vfxRendererScreenshot from "../../assets/vfx-renderer.png";
 export const Code = () => {
   return (
     <Layout>
@@ -83,6 +83,21 @@ export const Code = () => {
               <img
                 src={repoVulgarityAnalysisScreenshot}
                 alt="Repo Vulgarity Analysis Screenshot"
+                className="w-auto h-auto max-w-full max-h-32 object-contain"
+              />
+            </div>
+          </Link>
+        </div>
+        <div className="flex flex-col items-center max-w-xs mx-auto">
+          <Link
+            to="/vfx-renderer"
+            className="hover:opacity-80 transition-opacity flex flex-col items-center"
+          >
+            <p className="mb-2">vfx renderer</p>
+            <div className="max-w-full rounded-lg overflow-hidden">
+              <img
+                src={vfxRendererScreenshot}
+                alt="VFX Renderer Screenshot"
                 className="w-auto h-auto max-w-full max-h-32 object-contain"
               />
             </div>
