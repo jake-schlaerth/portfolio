@@ -17,14 +17,14 @@ export const App = () => (
     <Route path="/whiteboard/:id" element={<Whiteboard />} />
     <Route path="/code" element={<Code />} />
     <Route path="/music" element={<Music />} />
-    <Route
+    {/* <Route
       path="/repo-vulgarity-analysis/search"
       element={<RepoVulgarityAnalysisSearch />}
     />
     <Route
       path="/repo-vulgarity-analysis/curated-results"
       element={<RepoVulgarityAnalysisCuratedResults />}
-    />
+    /> */}
     <Route path="/vfx-renderer" element={<VFXRendererPage />} />
   </Routes>
 );
