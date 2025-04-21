@@ -39,8 +39,17 @@ services:
     volumes:
       - ./ssl/certbot/conf:/etc/letsencrypt
       - ./ssl/certbot/www:/var/www/certbot
+      - wasm-build:/app/pkg
     command: '/bin/sh -c ''while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g "daemon off;"'''
     restart: unless-stopped
+
+  vfx-renderer:
+    build:
+      context: ./apps/vfx-renderer
+      dockerfile: Dockerfile.prod
+    volumes:
+      - wasm-build:/app/pkg
+    restart: "no"
 
   certbot:
     image: certbot/certbot
@@ -81,3 +90,4 @@ services:
 volumes:
   postgres_data:
   repo-vulgarity-analysis-database-data:
+  wasm-build:

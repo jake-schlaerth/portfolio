@@ -19,6 +19,9 @@ export const Navbar = () => {
         <Link to="/repo-vulgarity-analysis/search" className="hover:opacity-80">
           repo vulgarity analysis
         </Link>
+        <Link to="/vfx-renderer" className="hover:opacity-80">
+          vfx renderer
+        </Link>
       </div>
     </nav>
   );

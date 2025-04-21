@@ -1,0 +1,31 @@
+[package]
+name = "vfx-renderer"
+version = "0.1.0"
+edition = "2021"
+description = "Audio generator library that compiles to WebAssembly"
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[dependencies]
+wasm-bindgen = "0.2.87"
+js-sys = "0.3.64"
+console_error_panic_hook = "0.1.7"
+web-sys = { version = "0.3.64", features = [
+    "Document",
+    "Element",
+    "HtmlCanvasElement",
+    "WebGlBuffer",
+    "WebGlProgram",
+    "WebGlRenderingContext",
+    "WebGlShader",
+    "WebGlUniformLocation",
+    "Window",
+]}
+
+[dev-dependencies]
+wasm-bindgen-test = "0.3.37"
+
+[profile.release]
+opt-level = 3
+lto = true

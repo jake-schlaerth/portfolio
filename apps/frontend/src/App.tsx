@@ -7,7 +7,8 @@ import {
   WhiteboardList,
   RepoVulgarityAnalysisSearch,
   RepoVulgarityAnalysisCuratedResults,
-} from "./pages";
+  VFXRendererPage,
+} from "./pages/index";
 
 export const App = () => (
   <Routes>
@@ -24,5 +25,6 @@ export const App = () => (
       path="/repo-vulgarity-analysis/curated-results"
       element={<RepoVulgarityAnalysisCuratedResults />}
     />
+    <Route path="/vfx-renderer" element={<VFXRendererPage />} />
   </Routes>
 );

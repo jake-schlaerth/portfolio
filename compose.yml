@@ -15,6 +15,7 @@ services:
       - "5173:5173"
     volumes:
       - ./apps/frontend:/app
+      - wasm-build:/app/pkg
 
   repo-vulgarity-analysis-backend:
     build: ./apps/repo-vulgarity-analysis-backend
@@ -52,6 +53,17 @@ services:
     volumes:
       - repo-vulgarity-analysis-database-data:/var/lib/postgresql/data
 
+  vfx-renderer:
+    build:
+      context: ./apps/vfx-renderer
+      dockerfile: Dockerfile
+    volumes:
+      - ./apps/vfx-renderer/src:/app/src
+      - wasm-build:/app/pkg
+    environment:
+      - RUST_BACKTRACE=1
+
 volumes:
   postgres_data:
   repo-vulgarity-analysis-database-data:
+  wasm-build:
