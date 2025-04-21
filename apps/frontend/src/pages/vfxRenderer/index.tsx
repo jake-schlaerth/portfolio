@@ -1,1 +1,1 @@
-export * from "./vfxRenderer";
+export * from "./VFXRendererPage";

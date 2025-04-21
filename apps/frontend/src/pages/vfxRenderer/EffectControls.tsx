@@ -1,136 +1,69 @@
-import { useState, useEffect, useRef } from "react";
-// todo: this works but the ide can't see the contents of the docker volume with the wasm build artifacts
-// @ts-ignore
-import init, { init_webgl, render_scene } from "../../../pkg";
-import { Layout } from "../../components";
+import { sliderRanges } from "./types";
 
-export const VFXRenderer = () => {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-  const contextRef = useRef<any>(null);
-  const animationRef = useRef<number>(0);
-  const lastFrameTimeRef = useRef<number>(0);
-  const [isWasmLoaded, setIsWasmLoaded] = useState(false);
-  const [controlsVisible, setControlsVisible] = useState(true);
-  const targetFPS = 30;
-  const frameInterval = 1000 / targetFPS;
-
-  const [distortion, setDistortion] = useState(0.1);
-  const [scanlineIntensity, setScanlineIntensity] = useState(0.02);
-  const [glitchIntensity, setGlitchIntensity] = useState(0.03);
-  const [colorShift, setColorShift] = useState(0.01);
-  const [dotMatrixIntensity, setDotMatrixIntensity] = useState(0.02);
-  const [chromaticAberration, setChromaticAberration] = useState(1.5);
-  const [vignetteIntensity, setVignetteIntensity] = useState(0.4);
-  const [horizontalDistortion, setHorizontalDistortion] = useState(0.5);
-  const [tapeNoiseIntensity, setTapeNoiseIntensity] = useState(0.3);
-  const [trackingJitterIntensity, setTrackingJitterIntensity] = useState(0.4);
-  const [bloomIntensity, setBloomIntensity] = useState(0.5);
-
-  const sliderRanges = {
-    distortion: { min: 0.1, max: 5, step: 0.1 },
-    scanline: { min: 0.1, max: 1, step: 0.1 },
-    glitch: { min: 0.1, max: 1, step: 0.1 },
-    colorShift: { min: 1, max: 100, step: 1 },
-    dotMatrix: { min: 0.1, max: 1, step: 0.1 },
-    chromaticAberration: { min: 1, max: 10, step: 1 },
-    vignette: { min: 1, max: 100, step: 1 },
-    horizontalDistortion: { min: 0.1, max: 1, step: 0.1 },
-    tapeNoise: { min: 0.05, max: 0.5, step: 0.05 },
-    trackingJitter: { min: 0.1, max: 3, step: 0.1 },
-    bloom: { min: 1, max: 100, step: 1 },
+interface EffectControlsProps {
+  effectStates: {
+    distortion: number;
+    distortionEnabled: boolean;
+    scanlineIntensity: number;
+    scanlineEnabled: boolean;
+    glitchIntensity: number;
+    glitchEnabled: boolean;
+    colorShift: number;
+    colorShiftEnabled: boolean;
+    dotMatrixIntensity: number;
+    dotMatrixEnabled: boolean;
+    chromaticAberration: number;
+    chromaticAberrationEnabled: boolean;
+    vignetteIntensity: number;
+    vignetteEnabled: boolean;
+    horizontalDistortion: number;
+    horizontalDistortionEnabled: boolean;
+    tapeNoiseIntensity: number;
+    tapeNoiseEnabled: boolean;
+    trackingJitterIntensity: number;
+    trackingJitterEnabled: boolean;
+    bloomIntensity: number;
+    bloomEnabled: boolean;
   };
+  controlHandlers: {
+    handleDistortionChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+    handleScanlineChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+    handleGlitchChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+    handleColorShiftChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+    handleDotMatrixChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+    handleChromaticAberrationChange: (
+      e: React.ChangeEvent<HTMLInputElement>
+    ) => void;
+    setVignetteIntensity: (value: number) => void;
+    setHorizontalDistortion: (value: number) => void;
+    setTapeNoiseIntensity: (value: number) => void;
+    setTrackingJitterIntensity: (value: number) => void;
+    setBloomIntensity: (value: number) => void;
+    handleDistortionToggle: (checked: boolean) => void;
+    handleScanlineToggle: (checked: boolean) => void;
+    handleGlitchToggle: (checked: boolean) => void;
+    handleColorShiftToggle: (checked: boolean) => void;
+    handleDotMatrixToggle: (checked: boolean) => void;
+    handleChromaticAberrationToggle: (checked: boolean) => void;
+    handleVignetteToggle: (checked: boolean) => void;
+    handleHorizontalDistortionToggle: (checked: boolean) => void;
+    handleTapeNoiseToggle: (checked: boolean) => void;
+    handleTrackingJitterToggle: (checked: boolean) => void;
+    handleBloomToggle: (checked: boolean) => void;
+  };
+  controlsVisible: boolean;
+  toggleControls: () => void;
+  randomizeEffects: () => void;
+}
 
-  const [distortionEnabled, setDistortionEnabled] = useState(true);
-  const [scanlineEnabled, setScanlineEnabled] = useState(true);
-  const [glitchEnabled, setGlitchEnabled] = useState(true);
-  const [colorShiftEnabled, setColorShiftEnabled] = useState(true);
-  const [dotMatrixEnabled, setDotMatrixEnabled] = useState(true);
-  const [chromaticAberrationEnabled, setChromaticAberrationEnabled] =
-    useState(true);
-  const [vignetteEnabled, setVignetteEnabled] = useState(true);
-  const [horizontalDistortionEnabled, setHorizontalDistortionEnabled] =
-    useState(true);
-  const [tapeNoiseEnabled, setTapeNoiseEnabled] = useState(true);
-  const [trackingJitterEnabled, setTrackingJitterEnabled] = useState(true);
-  const [bloomEnabled, setBloomEnabled] = useState(true);
-
-  useEffect(() => {
-    const loadWasm = async () => {
-      await init();
-      console.log("WASM loaded");
-      setIsWasmLoaded(true);
-    };
-    loadWasm();
-
-    const handleResize = () => {
-      if (canvasRef.current) {
-        canvasRef.current.width = window.innerWidth;
-        canvasRef.current.height = window.innerHeight;
-      }
-    };
-
-    handleResize();
-
-    // Prevent scrolling on body
-    document.body.style.overflow = "hidden";
-
-    window.addEventListener("resize", handleResize);
-
-    return () => {
-      window.removeEventListener("resize", handleResize);
-      // Restore original body overflow
-      document.body.style.overflow = "";
-    };
-  }, []);
-
-  useEffect(() => {
-    if (isWasmLoaded && canvasRef.current) {
-      try {
-        const context = init_webgl("webgl-canvas");
-        contextRef.current = context;
-
-        const animate = (currentTime: number) => {
-          const elapsed = currentTime - lastFrameTimeRef.current;
-
-          if (elapsed >= frameInterval) {
-            lastFrameTimeRef.current = currentTime - (elapsed % frameInterval);
-
-            if (contextRef.current) {
-              render_scene(
-                contextRef.current,
-                currentTime / 1000,
-                distortionEnabled ? distortion : 0,
-                scanlineEnabled ? scanlineIntensity : 0,
-                glitchEnabled ? glitchIntensity : 0,
-                colorShiftEnabled ? colorShift : 0,
-                dotMatrixEnabled ? dotMatrixIntensity : 0,
-                chromaticAberrationEnabled ? chromaticAberration : 0,
-                vignetteEnabled ? vignetteIntensity : 0,
-                horizontalDistortionEnabled ? horizontalDistortion : 0,
-                tapeNoiseEnabled ? tapeNoiseIntensity : 0,
-                trackingJitterEnabled ? trackingJitterIntensity : 0,
-                bloomEnabled ? bloomIntensity : 0
-              );
-            }
-          }
-
-          animationRef.current = requestAnimationFrame(animate);
-        };
-
-        lastFrameTimeRef.current = performance.now();
-        animationRef.current = requestAnimationFrame(animate);
-      } catch (error) {
-        console.error("Error initializing WebGL:", error);
-      }
-    }
-
-    return () => {
-      if (animationRef.current) {
-        cancelAnimationFrame(animationRef.current);
-      }
-    };
-  }, [
-    isWasmLoaded,
+export const EffectControls = ({
+  effectStates,
+  controlHandlers,
+  controlsVisible,
+  toggleControls,
+  randomizeEffects,
+}: EffectControlsProps) => {
+  const {
     distortion,
     distortionEnabled,
     scanlineIntensity,
@@ -153,187 +86,35 @@ export const VFXRenderer = () => {
     trackingJitterEnabled,
     bloomIntensity,
     bloomEnabled,
-  ]);
+  } = effectStates;
 
-  const handleDistortionChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setDistortion(parseFloat(e.target.value));
-  };
-
-  const handleScanlineChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setScanlineIntensity(parseFloat(e.target.value));
-  };
-
-  const handleGlitchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setGlitchIntensity(parseFloat(e.target.value));
-  };
-
-  const handleColorShiftChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setColorShift(parseFloat(e.target.value));
-  };
-
-  const handleDotMatrixChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setDotMatrixIntensity(parseFloat(e.target.value));
-  };
-
-  const handleChromaticAberrationChange = (
-    e: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    setChromaticAberration(parseFloat(e.target.value));
-  };
-
-  const toggleControls = () => {
-    setControlsVisible(!controlsVisible);
-  };
-
-  const handleDistortionToggle = (checked: boolean) => {
-    setDistortionEnabled(checked);
-    if (checked && distortion < sliderRanges.distortion.min) {
-      setDistortion(sliderRanges.distortion.min);
-    }
-  };
-
-  const handleScanlineToggle = (checked: boolean) => {
-    setScanlineEnabled(checked);
-    if (checked && scanlineIntensity < sliderRanges.scanline.min) {
-      setScanlineIntensity(sliderRanges.scanline.min);
-    }
-  };
-
-  const handleGlitchToggle = (checked: boolean) => {
-    setGlitchEnabled(checked);
-    if (checked && glitchIntensity < sliderRanges.glitch.min) {
-      setGlitchIntensity(sliderRanges.glitch.min);
-    }
-  };
-
-  const handleColorShiftToggle = (checked: boolean) => {
-    setColorShiftEnabled(checked);
-    if (checked && colorShift < sliderRanges.colorShift.min) {
-      setColorShift(sliderRanges.colorShift.min);
-    }
-  };
-
-  const handleDotMatrixToggle = (checked: boolean) => {
-    setDotMatrixEnabled(checked);
-    if (checked && dotMatrixIntensity < sliderRanges.dotMatrix.min) {
-      setDotMatrixIntensity(sliderRanges.dotMatrix.min);
-    }
-  };
-
-  const handleChromaticAberrationToggle = (checked: boolean) => {
-    setChromaticAberrationEnabled(checked);
-    if (checked && chromaticAberration < sliderRanges.chromaticAberration.min) {
-      setChromaticAberration(sliderRanges.chromaticAberration.min);
-    }
-  };
-
-  const handleVignetteToggle = (checked: boolean) => {
-    setVignetteEnabled(checked);
-    if (checked && vignetteIntensity < sliderRanges.vignette.min) {
-      setVignetteIntensity(sliderRanges.vignette.min);
-    }
-  };
-
-  const handleHorizontalDistortionToggle = (checked: boolean) => {
-    setHorizontalDistortionEnabled(checked);
-    if (
-      checked &&
-      horizontalDistortion < sliderRanges.horizontalDistortion.min
-    ) {
-      setHorizontalDistortion(sliderRanges.horizontalDistortion.min);
-    }
-  };
-
-  const handleTapeNoiseToggle = (checked: boolean) => {
-    setTapeNoiseEnabled(checked);
-    if (checked && tapeNoiseIntensity < sliderRanges.tapeNoise.min) {
-      setTapeNoiseIntensity(sliderRanges.tapeNoise.min);
-    }
-  };
-
-  const handleTrackingJitterToggle = (checked: boolean) => {
-    setTrackingJitterEnabled(checked);
-    if (checked && trackingJitterIntensity < sliderRanges.trackingJitter.min) {
-      setTrackingJitterIntensity(sliderRanges.trackingJitter.min);
-    }
-  };
-
-  const handleBloomToggle = (checked: boolean) => {
-    setBloomEnabled(checked);
-    if (checked && bloomIntensity < sliderRanges.bloom.min) {
-      setBloomIntensity(sliderRanges.bloom.min);
-    }
-  };
-
-  const randomizeEffects = () => {
-    handleDistortionToggle(Math.random() > 0.3);
-    handleScanlineToggle(Math.random() > 0.3);
-    handleGlitchToggle(Math.random() > 0.3);
-    handleColorShiftToggle(Math.random() > 0.3);
-    handleDotMatrixToggle(Math.random() > 0.3);
-    handleChromaticAberrationToggle(Math.random() > 0.3);
-    handleVignetteToggle(Math.random() > 0.3);
-    handleHorizontalDistortionToggle(Math.random() > 0.3);
-    handleTapeNoiseToggle(Math.random() > 0.3);
-    handleTrackingJitterToggle(Math.random() > 0.3);
-    handleBloomToggle(Math.random() > 0.3);
-
-    setDistortion(
-      randomInRange(sliderRanges.distortion.min, sliderRanges.distortion.max)
-    );
-    setScanlineIntensity(
-      randomInRange(sliderRanges.scanline.min, sliderRanges.scanline.max)
-    );
-    setGlitchIntensity(
-      randomInRange(sliderRanges.glitch.min, sliderRanges.glitch.max)
-    );
-    setColorShift(
-      randomInRange(sliderRanges.colorShift.min, sliderRanges.colorShift.max)
-    );
-    setDotMatrixIntensity(
-      randomInRange(sliderRanges.dotMatrix.min, sliderRanges.dotMatrix.max)
-    );
-    setChromaticAberration(
-      randomInRange(
-        sliderRanges.chromaticAberration.min,
-        sliderRanges.chromaticAberration.max
-      )
-    );
-    setVignetteIntensity(
-      randomInRange(sliderRanges.vignette.min, sliderRanges.vignette.max)
-    );
-    setHorizontalDistortion(
-      randomInRange(
-        sliderRanges.horizontalDistortion.min,
-        sliderRanges.horizontalDistortion.max
-      )
-    );
-    setTapeNoiseIntensity(
-      randomInRange(sliderRanges.tapeNoise.min, sliderRanges.tapeNoise.max)
-    );
-    setTrackingJitterIntensity(
-      randomInRange(
-        sliderRanges.trackingJitter.min,
-        sliderRanges.trackingJitter.max
-      )
-    );
-    setBloomIntensity(
-      randomInRange(sliderRanges.bloom.min, sliderRanges.bloom.max)
-    );
-  };
-
-  const randomInRange = (min: number, max: number) => {
-    return min + Math.random() * (max - min);
-  };
+  const {
+    handleDistortionChange,
+    handleScanlineChange,
+    handleGlitchChange,
+    handleColorShiftChange,
+    handleDotMatrixChange,
+    handleChromaticAberrationChange,
+    setVignetteIntensity,
+    setHorizontalDistortion,
+    setTapeNoiseIntensity,
+    setTrackingJitterIntensity,
+    setBloomIntensity,
+    handleDistortionToggle,
+    handleScanlineToggle,
+    handleGlitchToggle,
+    handleColorShiftToggle,
+    handleDotMatrixToggle,
+    handleChromaticAberrationToggle,
+    handleVignetteToggle,
+    handleHorizontalDistortionToggle,
+    handleTapeNoiseToggle,
+    handleTrackingJitterToggle,
+    handleBloomToggle,
+  } = controlHandlers;
 
   return (
-    <div className="overflow-hidden h-screen w-screen">
-      <canvas
-        id="webgl-canvas"
-        ref={canvasRef}
-        className="w-full h-full bg-black z-0"
-      />
-
+    <>
       <div
         className={`fixed bottom-2.5 right-2.5 w-[280px] p-4 bg-black/70 rounded-lg text-white z-5 shadow-lg ${
           controlsVisible ? "block" : "hidden"
@@ -696,14 +477,6 @@ export const VFXRenderer = () => {
           show controls
         </button>
       )}
-    </div>
-  );
-};
-
-export const VFXRendererPage = () => {
-  return (
-    <Layout>
-      <VFXRenderer />
-    </Layout>
+    </>
   );
 };
