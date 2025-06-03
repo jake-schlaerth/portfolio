@@ -73,7 +73,7 @@ export const Code = () => {
             </div>
           </Link>
         </div>
-        {/* <div className="flex flex-col items-center max-w-xs mx-auto">
+        <div className="flex flex-col items-center max-w-xs mx-auto">
           <Link
             to="/repo-vulgarity-analysis/search"
             className="hover:opacity-80 transition-opacity flex flex-col items-center"
@@ -87,7 +87,7 @@ export const Code = () => {
               />
             </div>
           </Link>
-        </div> */}
+        </div>
         <div className="flex flex-col items-center max-w-xs mx-auto">
           <Link
             to="/vfx-renderer"
