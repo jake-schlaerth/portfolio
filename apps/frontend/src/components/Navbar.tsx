@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 export const Navbar = () => {
   return (
     <nav className="p-4 border-b border-white">
-      <div className="flex justify-start gap-8">
+      <div className="flex flex-col sm:flex-row justify-start gap-2 sm:gap-4 lg:gap-8">
         <Link to="/" className="hover:opacity-80">
           home
         </Link>
@@ -17,7 +17,8 @@ export const Navbar = () => {
           whiteboard
         </Link>
         <Link to="/repo-vulgarity-analysis/search" className="hover:opacity-80">
-          repo vulgarity analysis
+          <span className="sm:hidden">repo analysis</span>
+          <span className="hidden sm:inline">repo vulgarity analysis</span>
         </Link>
         <Link to="/vfx-renderer" className="hover:opacity-80">
           vfx renderer

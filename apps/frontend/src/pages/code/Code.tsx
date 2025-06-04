@@ -7,7 +7,7 @@ export const Code = () => {
   return (
     <Layout>
       <p>these are some of the technologies i use</p>
-      <div className="grid grid-cols-4 gap-8 p-8">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 sm:gap-6 lg:gap-8 p-4 sm:p-6 lg:p-8 w-full max-w-6xl">
         <ul className="space-y-2 list-none">
           <li>typescript</li>
           <li>php</li>
@@ -36,6 +36,8 @@ export const Code = () => {
           <li>chai</li>
           <li>phpunit</li>
           <li>pest</li>
+        </ul>
+        <ul className="space-y-2 list-none">
           <li>tailwind</li>
           <li>emotion</li>
           <li>vite</li>
@@ -57,7 +59,7 @@ export const Code = () => {
         </ul>
       </div>
       <p>these are some things i've built</p>
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-8 p-8">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8 p-4 sm:p-6 lg:p-8 w-full max-w-6xl">
         <div className="flex flex-col items-center max-w-xs mx-auto">
           <Link
             to="/whiteboard"

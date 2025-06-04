@@ -50,9 +50,7 @@ export const WhiteboardList = () => {
 
       const data = await response.json();
       setCreateModalOpen(false);
-      // Navigate to the new whiteboard
       navigate(`/whiteboard/${data.id}`);
-      // refresh the list of whiteboards
       await fetchWhiteboards();
     } catch (error) {
       console.error("Failed to create whiteboard:", error);
