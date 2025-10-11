@@ -4,13 +4,15 @@ export const Music = () => {
   return (
     <Layout>
       <iframe
-        className="w-[800px] h-[450px] border-0"
-        src="https://www.youtube.com/embed/6wTo_8-kz3k?si=aW-pF67RYkxyVxLE"
-        title="YouTube video player"
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-        referrerPolicy="strict-origin-when-cross-origin"
-        allowFullScreen
-      />
+        style={{ border: 0, width: "600px", height: "1003px" }}
+        src="https://bandcamp.com/EmbeddedPlayer/album=211853850/size=large/bgcol=181a1b/linkcol=056cc4/transparent=true/"
+        seamless
+        title="Pictures of Snakes"
+      >
+        <a href="https://picturesofsnakes.bandcamp.com/album/pictures-of-snakes">
+          Pictures of Snakes
+        </a>
+      </iframe>
     </Layout>
   );
 };
