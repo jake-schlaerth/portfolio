@@ -3,7 +3,7 @@ services:
     build:
       context: ./apps/whiteboard-backend
       dockerfile: Dockerfile.prod
-    ports:
+    expose:
       - "8080"
     env_file:
       - .env
@@ -18,7 +18,7 @@ services:
     build:
       context: ./apps/repo-vulgarity-analysis-backend
       dockerfile: Dockerfile.prod
-    ports:
+    expose:
       - "8081"
     env_file:
       - .env
@@ -52,8 +52,8 @@ services:
 
   database:
     image: postgres:17-alpine
-    ports:
-      - "5432:5432"
+    expose:
+      - "5432"
     env_file:
       - .env
     environment:
@@ -66,8 +66,8 @@ services:
 
   repo-vulgarity-analysis-database:
     image: postgres:17-alpine
-    ports:
-      - "5433:5433"
+    expose:
+      - "5433"
     env_file:
       - .env
     environment:
@@ -77,6 +77,7 @@ services:
     command: -p 5433
     volumes:
       - repo-vulgarity-analysis-database-data:/var/lib/postgresql/data
+    restart: unless-stopped
 
 volumes:
   postgres_data:
