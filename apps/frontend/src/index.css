@@ -1,8 +1,8 @@
 @import "tailwindcss";
 
 #root {
-  font-family: "Courier New", Courier, monospace, Avenir, Helvetica, Arial,
-    sans-serif;
+  font-family:
+    "Courier New", Courier, monospace, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
 
@@ -58,17 +58,4 @@ button:hover {
 button:focus,
 button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
-}
-
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  body {
-    background-color: #ffffff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
 }
