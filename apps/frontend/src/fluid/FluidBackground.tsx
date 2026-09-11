@@ -25,7 +25,9 @@ const IDLE_TIMEOUT_MS = 1500;
 /**
  * Fixed, full-viewport WebGL2 fluid sim rendered behind page content.
  * Ignores pointer events itself (the page stays fully clickable) but reacts
- * to the cursor moving anywhere on the window.
+ * to the cursor moving anywhere on the window. On touch devices, dragging a
+ * finger around to scroll/tap made the sim spasm, so touch input is ignored
+ * there entirely and it just runs its ambient autopilot motion instead.
  */
 export const FluidBackground = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -37,6 +39,8 @@ export const FluidBackground = () => {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
       return;
     }
+
+    const isTouchDevice = window.matchMedia("(pointer: coarse)").matches;
 
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
@@ -80,8 +84,10 @@ export const FluidBackground = () => {
       lastMoveTime = 0;
       setBrush(renderer, -1, -1, false);
     }
-    window.addEventListener("pointermove", handlePointerMove);
-    window.addEventListener("pointerleave", handlePointerLeave);
+    if (!isTouchDevice) {
+      window.addEventListener("pointermove", handlePointerMove);
+      window.addEventListener("pointerleave", handlePointerLeave);
+    }
 
     let autopilotFrame = requestAnimationFrame(function autopilot(ts) {
       autopilotFrame = requestAnimationFrame(autopilot);
@@ -99,8 +105,10 @@ export const FluidBackground = () => {
 
     return () => {
       window.removeEventListener("resize", handleResize);
-      window.removeEventListener("pointermove", handlePointerMove);
-      window.removeEventListener("pointerleave", handlePointerLeave);
+      if (!isTouchDevice) {
+        window.removeEventListener("pointermove", handlePointerMove);
+        window.removeEventListener("pointerleave", handlePointerLeave);
+      }
       cancelAnimationFrame(autopilotFrame);
       stop(renderer);
       destroy(renderer);
