@@ -11,6 +11,8 @@ export const Code = () => {
           <li>rust</li>
           <li>python</li>
           <li>dart</li>
+          <li>gdscript</li>
+          <li>glsl</li>
         </ul>
         <ul className="space-y-2 list-none">
           <li>nestjs</li>
@@ -24,11 +26,14 @@ export const Code = () => {
           <li>flutter</li>
           <li>axum</li>
           <li>django</li>
+          <li>godot</li>
+          <li>webgl</li>
         </ul>
         <ul className="space-y-2 list-none">
           <li>cypress</li>
           <li>playwright</li>
           <li>jest</li>
+          <li>vitest</li>
           <li>mocha</li>
           <li>chai</li>
           <li>phpunit</li>
@@ -44,6 +49,7 @@ export const Code = () => {
           <li>diesel</li>
           <li>prisma</li>
           <li>sequelize</li>
+          <li>bullmq</li>
         </ul>
         <ul className="space-y-2 list-none">
           <li>postgresql</li>
