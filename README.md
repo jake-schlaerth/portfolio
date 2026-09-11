@@ -1,16 +1,10 @@
-# Personal Projects Monorepo
+# Portfolio
 
-A collection of personal projects built with modern web technologies, including a collaborative whiteboard, repository analysis tools, and visual effects rendering.
+A simple personal site: "hi i'm jake, i write code and make music," with links to more on each.
 
 ## Applications
 
-**Frontend** - React application serving as the main interface for all projects
-
-**Whiteboard Backend** - Real-time collaborative whiteboard API built with Rust and WebSockets
-
-**VFX Renderer** - WebAssembly-based visual effects library compiled from Rust
-
-**Repository Vulgarity Analysis** - NestJS API for analyzing GitHub repositories for profanity
+**Frontend** - React application serving the site
 
 ## Running the Project
 
@@ -27,7 +21,3 @@ docker compose -f compose.prod.yml up -d
 ```
 
 The frontend will be available at http://localhost:5173 in development mode.
-
-## Environment Configuration
-
-Create a `.env` file in the root directory with your database credentials and service configuration.

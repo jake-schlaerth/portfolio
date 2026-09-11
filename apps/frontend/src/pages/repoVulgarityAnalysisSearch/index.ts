@@ -1,1 +1,0 @@
-export { RepoVulgarityAnalysisSearch } from "./RepoVulgarityAnalysisSearch";

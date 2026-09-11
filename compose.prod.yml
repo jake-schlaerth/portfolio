@@ -1,34 +1,4 @@
 services:
-  whiteboard-backend:
-    build:
-      context: ./apps/whiteboard-backend
-      dockerfile: Dockerfile.prod
-    expose:
-      - "8080"
-    env_file:
-      - .env
-    environment:
-      RUST_LOG: "info"
-      DATABASE_URL: "postgres://${DATABASE_USER}:${DATABASE_PASSWORD}@database/${DATABASE_NAME}"
-    depends_on:
-      - database
-    restart: unless-stopped
-
-  repo-vulgarity-analysis-backend:
-    build:
-      context: ./apps/repo-vulgarity-analysis-backend
-      dockerfile: Dockerfile.prod
-    expose:
-      - "8081"
-    env_file:
-      - .env
-    environment:
-      RUST_LOG: "info"
-      DATABASE_URL: "postgres://${REPO_VULGARITY_ANALYSIS_DATABASE_USER}:${REPO_VULGARITY_ANALYSIS_DATABASE_PASSWORD}@repo-vulgarity-analysis-database:5433/${REPO_VULGARITY_ANALYSIS_DATABASE_NAME}"
-    depends_on:
-      - repo-vulgarity-analysis-database
-    restart: unless-stopped
-
   frontend:
     build:
       context: .
@@ -49,36 +19,3 @@ services:
       - ./ssl/certbot/www:/var/www/certbot
     entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
     restart: unless-stopped
-
-  database:
-    image: postgres:17-alpine
-    expose:
-      - "5432"
-    env_file:
-      - .env
-    environment:
-      POSTGRES_USER: "${DATABASE_USER}"
-      POSTGRES_PASSWORD: "${DATABASE_PASSWORD}"
-      POSTGRES_DB: "${DATABASE_NAME}"
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-    restart: unless-stopped
-
-  repo-vulgarity-analysis-database:
-    image: postgres:17-alpine
-    expose:
-      - "5433"
-    env_file:
-      - .env
-    environment:
-      POSTGRES_USER: "${REPO_VULGARITY_ANALYSIS_DATABASE_USER}"
-      POSTGRES_PASSWORD: "${REPO_VULGARITY_ANALYSIS_DATABASE_PASSWORD}"
-      POSTGRES_DB: "${REPO_VULGARITY_ANALYSIS_DATABASE_NAME}"
-    command: -p 5433
-    volumes:
-      - repo-vulgarity-analysis-database-data:/var/lib/postgresql/data
-    restart: unless-stopped
-
-volumes:
-  postgres_data:
-  repo-vulgarity-analysis-database-data:
