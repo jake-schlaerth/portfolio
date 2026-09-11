@@ -20,13 +20,19 @@
 }
 
 a {
-  text-decoration: none;
-  color: goldenrod;
+  color: #7dd3fc;
+  text-decoration: underline;
+  text-decoration-color: rgba(125, 211, 252, 0.45);
+  text-underline-offset: 3px;
+  text-shadow:
+    0 1px 3px rgba(0, 0, 0, 0.85),
+    0 0 10px rgba(0, 0, 0, 0.6);
 }
 
 a:hover {
   cursor: pointer;
-  text-decoration: underline;
+  color: #bae6fd;
+  text-decoration-color: currentColor;
 }
 
 body {
