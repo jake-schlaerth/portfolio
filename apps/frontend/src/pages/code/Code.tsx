@@ -1,8 +1,7 @@
-import { Layout } from "../../components";
 
 export const Code = () => {
   return (
-    <Layout>
+    <>
       <p>these are some of the technologies i use</p>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 sm:gap-6 lg:gap-8 p-4 sm:p-6 lg:p-8 w-full max-w-6xl">
         <ul className="space-y-2 list-none">
@@ -61,6 +60,6 @@ export const Code = () => {
           <li>aws</li>
         </ul>
       </div>
-    </Layout>
+    </>
   );
 };

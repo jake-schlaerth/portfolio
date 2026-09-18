@@ -1,5 +1,4 @@
 import { useLayoutEffect, useRef, useState } from "react";
-import { Layout } from "../../components";
 
 // Bandcamp's embedded player is a fixed-size document, not a responsive one.
 // At its native size it overflows a phone screen and only the cover art
@@ -27,7 +26,7 @@ export const Music = () => {
   }, []);
 
   return (
-    <Layout>
+    <>
       <div
         style={{
           width: "100%",
@@ -58,6 +57,6 @@ export const Music = () => {
           </iframe>
         </div>
       </div>
-    </Layout>
+    </>
   );
 };
